@@ -119,7 +119,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
       <Sidebar /> {/* Render the Sidebar component */}
-      <div className="text-lg font-bold">Domain Of Weebs</div>
+      <div className="text-lg font-bold">Doki Watch</div>
       <div className="flex-1 mx-4">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -155,7 +155,7 @@ const App = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
       <div className="p-8">
-        <h1 className="text-4xl font-bold">Welcome to Domain of Weebs</h1>
+        <h1 className="text-4xl font-bold">Welcome to Doki Watch</h1>
         <p className="mt-2">Explore your favorite anime & manga here.</p>
       </div>
     </div>
