@@ -7,28 +7,31 @@ const Navbar = () => {
   const [profilePic, setProfilePic] = useState("");
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.has("code")) {
-      const codeValue = queryParams.get("code");
-      console.log("Code:", codeValue);
-      const requestData = {
-        grant_type: "authorization_code",
-        client_id: "19753",
-        client_secret: "iXrwVRzUZ0uO7oDxYudpLLBAlJtXsK7jXEVyhqKH",
-        redirect_uri: "https://domainofweeb.netlify.app/",
-        code: codeValue,
-      };
-      console.log("Request Data:", requestData);
+    if (queryParams.has("access_token")) {
+      const accessToken = queryParams.get("access_token");
+      console.log("Code:", accessToken);
+      // const requestData = {
+      //   grant_type: "authorization_code",
+      //   client_id: "19753",
+      //   client_secret: "iXrwVRzUZ0uO7oDxYudpLLBAlJtXsK7jXEVyhqKH",
+      //   redirect_uri: "https://domainofweeb.netlify.app/",
+      //   code: codeValue,
+      // };
+      // console.log("Request Data:", requestData);
       fetch("https://anilist.co/api/v2/oauth/token", {
         method: "POST",
         headers: {
+          Authorization: "Bearer " + accessToken,
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify({
+          query: "query",
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Access Token:", data.access_token);
+          console.log("Access Token:", data);
           localStorage.setItem(
             "AccessToken",
             JSON.stringify(data.access_token)
