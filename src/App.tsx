@@ -26,7 +26,7 @@ const Navbar = () => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          query: "query",
+          Viewer: "id",
         }),
       })
         .then((response) => response.json())
