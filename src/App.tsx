@@ -6,47 +6,27 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [profilePic, setProfilePic] = useState("");
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.has("access_token")) {
-      const accessToken = queryParams.get("access_token");
-      console.log("Code:", accessToken);
+    const fetchUserData = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      if (queryParams.has("access_token")) {
+        const accessToken = queryParams.get("access_token");
+        console.log("Code:", accessToken);
 
-      const fetchData = async () => {
-        //   const query1 = `
-        //   query {
-        //     Viewer {
-        //       id
-        //       avatar {
-        //         large
-        //       }
-        //     }
-        //   }
-        // `;
         const query = `
-                  query ($name: String) { # Define which variables will be used in the query (id)
-                    User(name: $name){
-                      id
-                      name
-                      avatar {
-                        large}
-                      }
-                  }
-                  `;
+          query ($name: String) {
+            User(name: $name) {
+              id
+              name
+              avatar {
+                large
+              }
+            }
+          }
+        `;
+
         const variables = {
           name: "eshandas",
         };
-        //{
-        //   User(
-        //     name: "eshandas"
-        //   ) {
-        //     id
-        //     name
-        //     avatar {
-        //       large
-        //       medium
-        //     }
-        //   }
-        // }
 
         try {
           const response = await fetch("https://graphql.anilist.co", {
@@ -57,20 +37,24 @@ const Navbar = () => {
               Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
             },
             body: JSON.stringify({
-              query: query,
-              variables: variables,
+              query,
+              variables,
             }),
           });
 
           const { data } = await response.json();
-          setProfilePic(data.Viewer.avatar.large); // Assuming setProfilePic is a function to set the profile picture URL in your application's state
+          console.log(data);
+
+          if (data && data.User && data.User.avatar) {
+            setProfilePic(data.User.avatar.large);
+          }
         } catch (error) {
           console.error("Error fetching AniList profile:", error);
         }
-      };
+      }
+    };
 
-      fetchData();
-    }
+    fetchUserData();
   }, []);
 
   // useEffect(() => {
