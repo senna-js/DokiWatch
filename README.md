@@ -1,10 +1,10 @@
-# Domains-of-Weeb
+# Doki Watch
 
 Welcome to Domains-of-Weeb, an anime platform designed to enhance your anime watching experience. Just like AniList, our platform leverages the AniList API for comprehensive anime metadata and the Consumet API for streaming capabilities.
 
 # Deployed URL
 
-[Domain-of-Weebs](https://domain-of-weeb.netlify.app)
+[Doki-Watch](https://doki-watch.netlify.app)
 
 ## Features
 
@@ -28,8 +28,8 @@ Before you begin, ensure you have the following:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/domains-of-weeb.git
-   cd domains-of-weeb
+   git clone https://github.com/yourusername/Doki-Watch.git
+   cd Doki-watch
    ```
 
 2. **Install dependencies:**
