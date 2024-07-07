@@ -28,8 +28,8 @@ Before you begin, ensure you have the following:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/domains-of-weeb.git
-   cd domains-of-weeb
+   git clone https://github.com/yourusername/Doki-Watch.git
+   cd Doki-watch
    ```
 
 2. **Install dependencies:**
