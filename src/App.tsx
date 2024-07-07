@@ -12,27 +12,27 @@ const Navbar = () => {
       console.log("Code:", accessToken);
 
       const fetchData = async () => {
-        const query1 = `
-  query {
-    Viewer {
-      id
-      avatar {
-        large
-      }
-    }
-  }
-`;
-        var query = `
-query ($name: String) { # Define which variables will be used in the query (id)
-  User(name: $name){
-    id
-    name
-    avatar {
-      large}
-    }
-}
- `;
-        var variables = {
+        //   const query1 = `
+        //   query {
+        //     Viewer {
+        //       id
+        //       avatar {
+        //         large
+        //       }
+        //     }
+        //   }
+        // `;
+        const query = `
+                  query ($name: String) { # Define which variables will be used in the query (id)
+                    User(name: $name){
+                      id
+                      name
+                      avatar {
+                        large}
+                      }
+                  }
+                  `;
+        const variables = {
           name: "eshandas",
         };
         //{
@@ -73,40 +73,40 @@ query ($name: String) { # Define which variables will be used in the query (id)
     }
   }, []);
 
-  useEffect(() => {
-    const fetchAniListProfile = async () => {
-      const query = `
-        query {
-          User(name: "YOUR_ANILIST_USERNAME")
-          {
-            avatar {
-              large
-            }
-          }
-        }
-      `;
+  // useEffect(() => {
+  //   const fetchAniListProfile = async () => {
+  //     const query = `
+  //       query {
+  //         User(name: "YOUR_ANILIST_USERNAME")
+  //         {
+  //           avatar {
+  //             large
+  //           }
+  //         }
+  //       }
+  //     `;
 
-      try {
-        const response = await fetch("https://graphql.anilist.co", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            query,
-          }),
-        });
+  //     try {
+  //       const response = await fetch("https://graphql.anilist.co", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           query,
+  //         }),
+  //       });
 
-        const { data } = await response.json();
-        setProfilePic(data.User.avatar.large);
-      } catch (error) {
-        console.error("Error fetching AniList profile:", error);
-      }
-    };
+  //       const { data } = await response.json();
+  //       setProfilePic(data.User.avatar.large);
+  //     } catch (error) {
+  //       console.error("Error fetching AniList profile:", error);
+  //     }
+  //   };
 
-    fetchAniListProfile();
-  }, []);
+  //   fetchAniListProfile();
+  // }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
