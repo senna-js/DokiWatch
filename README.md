@@ -48,7 +48,7 @@ Before you begin, ensure you have the following:
 
 4. **Run the application:**
    ```bash
-   npm start
+   npm run dev
    ```
 
 ### Backend Documentation
