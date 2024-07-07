@@ -12,7 +12,7 @@ const Navbar = () => {
       console.log("Code:", accessToken);
 
       const fetchData = async () => {
-        const query = `
+        const query1 = `
   query {
     Viewer {
       id
@@ -22,6 +22,31 @@ const Navbar = () => {
     }
   }
 `;
+        var query = `
+query ($name: String) { # Define which variables will be used in the query (id)
+  User(name: $name){
+    id
+    name
+    avatar {
+      large}
+    }
+}
+ `;
+        var variables = {
+          name: "eshandas",
+        };
+        //{
+        //   User(
+        //     name: "eshandas"
+        //   ) {
+        //     id
+        //     name
+        //     avatar {
+        //       large
+        //       medium
+        //     }
+        //   }
+        // }
 
         try {
           const response = await fetch("https://graphql.anilist.co", {
@@ -32,7 +57,8 @@ const Navbar = () => {
               Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
             },
             body: JSON.stringify({
-              query,
+              query: query,
+              variables: variables,
             }),
           });
 
