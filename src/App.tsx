@@ -10,6 +10,33 @@ const Navbar = () => {
     if (queryParams.has("code")) {
       const codeValue = queryParams.get("code");
       console.log("Code:", codeValue);
+      const requestData = {
+        grant_type: "authorization_code",
+        client_id: "your_client_id",
+        client_secret: "your_client_secret",
+        redirect_uri: "your_redirect_uri", // http://example.com/callback
+        code: codeValue,
+      };
+
+      fetch("https://anilist.co/api/v2/oauth/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Access Token:", data.access_token);
+          localStorage.setItem(
+            "AccessToken",
+            JSON.stringify(data.access_token)
+          );
+        })
+        .catch((error) => {
+          console.error("Error fetching access token:", error);
+        });
     }
   }, []);
 
