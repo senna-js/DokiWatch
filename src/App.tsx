@@ -17,7 +17,7 @@ const Navbar = () => {
         redirect_uri: "https://domainofweeb.netlify.app/",
         code: codeValue,
       };
-
+      console.log("Request Data:", requestData);
       fetch("https://anilist.co/api/v2/oauth/token", {
         method: "POST",
         headers: {
