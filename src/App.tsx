@@ -10,36 +10,40 @@ const Navbar = () => {
     if (queryParams.has("access_token")) {
       const accessToken = queryParams.get("access_token");
       console.log("Code:", accessToken);
-      // const requestData = {
-      //   grant_type: "authorization_code",
-      //   client_id: "19753",
-      //   client_secret: "iXrwVRzUZ0uO7oDxYudpLLBAlJtXsK7jXEVyhqKH",
-      //   redirect_uri: "https://domainofweeb.netlify.app/",
-      //   code: codeValue,
-      // };
-      // console.log("Request Data:", requestData);
-      fetch("https://anilist.co/api/v2/oauth/token", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + accessToken,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          Viewer: "id",
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Access Token:", data);
-          localStorage.setItem(
-            "AccessToken",
-            JSON.stringify(data.access_token)
-          );
-        })
-        .catch((error) => {
-          console.error("Error fetching access token:", error);
-        });
+
+      const fetchData = async () => {
+        const query = `
+  query {
+    Viewer {
+      id
+      avatar {
+        large
+      }
+    }
+  }
+`;
+
+        try {
+          const response = await fetch("https://graphql.anilist.co", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+            },
+            body: JSON.stringify({
+              query,
+            }),
+          });
+
+          const { data } = await response.json();
+          setProfilePic(data.Viewer.avatar.large); // Assuming setProfilePic is a function to set the profile picture URL in your application's state
+        } catch (error) {
+          console.error("Error fetching AniList profile:", error);
+        }
+      };
+
+      fetchData();
     }
   }, []);
 
