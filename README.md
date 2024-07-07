@@ -4,7 +4,7 @@ Welcome to Domains-of-Weeb, an anime platform designed to enhance your anime wat
 
 # Deployed URL
 
-[Domain-of-Weebs](https://doki-watch.netlify.app)
+[Doki-Watch](https://doki-watch.netlify.app)
 
 ## Features
 
