@@ -12,9 +12,9 @@ const Navbar = () => {
       console.log("Code:", codeValue);
       const requestData = {
         grant_type: "authorization_code",
-        client_id: "your_client_id",
-        client_secret: "your_client_secret",
-        redirect_uri: "your_redirect_uri", // http://example.com/callback
+        client_id: "19753",
+        client_secret: "iXrwVRzUZ0uO7oDxYudpLLBAlJtXsK7jXEVyhqKH",
+        redirect_uri: "https://domainofweeb.netlify.app/",
         code: codeValue,
       };
 
