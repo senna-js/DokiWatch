@@ -1,10 +1,10 @@
-# Domains-of-Weeb
+# Doki Watch
 
 Welcome to Domains-of-Weeb, an anime platform designed to enhance your anime watching experience. Just like AniList, our platform leverages the AniList API for comprehensive anime metadata and the Consumet API for streaming capabilities.
 
 # Deployed URL
 
-[Domain-of-Weebs](https://domain-of-weeb.netlify.app)
+[Domain-of-Weebs](https://doki-watch.netlify.app)
 
 ## Features
 
