@@ -113,7 +113,7 @@ const Sidebar = () => {
           spacing={2} // Adjust spacing between items as needed
         >
           {isSignedIn && (
-            <Tooltip title="Connect to anilist" placement="right">
+            <Tooltip title="Connect to Anilist" placement="right">
               {/* Step 2: Pass the handleClick function to the onClick prop */}
               <IconButton onClick={handleClickOpen}>
                 <ConnectIcon className="text-white" />
