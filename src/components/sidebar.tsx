@@ -4,6 +4,7 @@ import { Link as ConnectIcon, Home as HomeIcon, CollectionsBookmark as MangaIcon
 import styled from '@mui/material/styles/styled';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'; // For the toggle button
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // For the toggle button
+import { useUser } from '@clerk/clerk-react'; // Import the useUser hook from the Clerk SDK
 
 
 // Styled components using the `styled` API change according to the theme preferences
@@ -55,6 +56,7 @@ const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const { isSignedIn } = useUser(); // Use the isSignedIn property from the useUser hook
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -103,19 +105,21 @@ const Sidebar = () => {
 
   return (
     <>
-      
+
       {isOpen && (
         <Stack
           direction="column" // Set direction to column for vertical layout
           className="fixed top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
           spacing={2} // Adjust spacing between items as needed
         >
-          <Tooltip title="Connect to anilist" placement="right">
-            {/* Step 2: Pass the handleClick function to the onClick prop */}
-            <IconButton onClick={handleClickOpen}>
-              <ConnectIcon className="text-white" />
-            </IconButton>
-          </Tooltip>
+          {isSignedIn && (
+            <Tooltip title="Connect to anilist" placement="right">
+              {/* Step 2: Pass the handleClick function to the onClick prop */}
+              <IconButton onClick={handleClickOpen}>
+                <ConnectIcon className="text-white" />
+              </IconButton>
+            </Tooltip>
+          )}
           {/* TODO: @Eshan276 connected the form in the middle */}
           <AnimeDialog open={open} onClose={handleClose}>
             <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
@@ -149,12 +153,12 @@ const Sidebar = () => {
         </Stack>
       )}
       <Tooltip title="Toggle Sidebar" placement='right'>
-      <IconButton onClick={toggleSidebar} className="fixed top-[90vh] left-0 z-50 transform -translate-y-1/2 mx-4"
-        style={{ transition: 'transform 0.3s' }}
-      >
-        {isOpen ? <ChevronLeftIcon className="text-white" /> : <ChevronRightIcon className="text-white" />}
-      </IconButton>
-    </Tooltip>
+        <IconButton onClick={toggleSidebar} className="fixed top-[90vh] left-0 z-50 transform -translate-y-1/2 mx-4"
+          style={{ transition: 'transform 0.3s' }}
+        >
+          {isOpen ? <ChevronLeftIcon className="text-white" /> : <ChevronRightIcon className="text-white" />}
+        </IconButton>
+      </Tooltip>
     </>
   );
 };
