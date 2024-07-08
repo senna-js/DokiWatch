@@ -15,20 +15,31 @@ export const AnimeStack = (props: AnimeStackProps) => {
         Progress: string;
       }[]
   >(null); // State to hold the data
-  let accessToken;
-  //const user = localStorage.getItem("user");
+  let accessToken: unknown;
+  const user = localStorage.getItem("user");
   ///////////////////////////////
-  let username = JSON.parse(
-    localStorage.getItem("user") as string
-  ).access_token;
-  const hashParams = new URLSearchParams(window.location.hash.substring(1));
-  accessToken = hashParams.get("access_token");
+  let username: string | undefined;
+  if (user) {
+    username = JSON.parse(localStorage.getItem("user") as string).username;
+    if (JSON.parse(localStorage.getItem("user") as string).access_token) {
+      accessToken = JSON.parse(
+        localStorage.getItem("user") as string
+      ).access_token;
+    }
+  } else {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    accessToken = hashParams.get("access_token");
+    if (!accessToken) {
+      console.log("No access token found or its over,connect to anilist");
+    }
+  }
+
   // accessToken = "hi";
   // let username = "itzKirito";
   useEffect(() => {
     if (accessToken) {
       // Assuming you have a function to make the POST request
-      fetchYourData(accessToken).then((data) => {
+      fetchYourData(accessToken as string).then((data) => {
         return setAnimeData(data); // Update state with the data received
       });
     }
@@ -75,7 +86,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
   }
   }`;
     const variables = {
-      name: username,
+      name: username as string,
     };
     const response = await fetch("https://graphql.anilist.co", {
       method: "POST",
