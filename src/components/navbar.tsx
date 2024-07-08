@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Sidebar from "./sidebar";
-import { SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+} from "@clerk/clerk-react";
 
 export const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,11 +20,13 @@ export const Navbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const accessToken = getAccessTokenFromHash();
+      let username: string | undefined;
       if (accessToken) {
         console.log("Access Token:", accessToken);
         const user = localStorage.getItem("user");
         if (user) {
           const userData = JSON.parse(user);
+          username = userData["username"];
           userData["access_token"] = accessToken;
           localStorage.setItem("user", JSON.stringify(userData));
         } else {
@@ -38,7 +45,7 @@ export const Navbar = () => {
           `;
 
         const variables = {
-          name: "itzKirito",
+          name: username as string,
         };
 
         try {
@@ -127,15 +134,19 @@ export const Navbar = () => {
           />
         </div>
       </div>
-      <div>
-      </div>
+      <div></div>
       <div className="flex gap-4 items-center">
-
         <SignedIn>
           <div>
-            {profilePic ?
-              <img src={profilePic || ""} alt="Profile" className="h-10 w-10 rounded-full" />
-              : <DefaultProfileIcon />}
+            {profilePic ? (
+              <img
+                src={profilePic || ""}
+                alt="Profile"
+                className="h-10 w-10 rounded-full"
+              />
+            ) : (
+              <DefaultProfileIcon />
+            )}
           </div>
           <SignOutButton />
         </SignedIn>
