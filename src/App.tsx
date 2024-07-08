@@ -55,6 +55,8 @@ const Navbar = () => {
         } catch (error) {
           console.error("Error fetching AniList profile:", error);
         }
+      } else {
+        console.log("No access token found");
       }
     };
 
