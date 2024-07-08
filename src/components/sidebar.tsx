@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { IconButton, Tooltip, Stack, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
 import { Link as ConnectIcon, Home as HomeIcon, CollectionsBookmark as MangaIcon } from "@mui/icons-material";
 import styled from '@mui/material/styles/styled';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'; // For the toggle button
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // For the toggle button
 
 
 // Styled components using the `styled` API change according to the theme preferences
@@ -47,9 +49,16 @@ const AnimeTextField = styled(TextField)({
   },
 });
 
+
+
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -91,48 +100,60 @@ const Sidebar = () => {
   };
 
   return (
-    <Stack
-      direction="column" // Set direction to column for vertical layout
-      className="fixed top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
-      spacing={2} // Adjust spacing between items as needed
-    >
-      <Tooltip title="Connect to anilist" placement="right">
-        {/* Step 2: Pass the handleClick function to the onClick prop */}
-        <IconButton onClick={handleClickOpen}>
-          <ConnectIcon className="text-white" />
-        </IconButton>
-      </Tooltip>
-      {/* TODO: @Eshan276 connected the form in the middle */}
-      <AnimeDialog open={open} onClose={handleClose}>
-        <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
-        <AnimeDialogContent >
-          <AnimeTextField 
-            autoFocus
-            margin="dense"
-            id="username"
-            label="AniList Username"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={handleUsernameChange}
-          />
-        </AnimeDialogContent>
-        <DialogActions className='bg-[#9fadbd]'>
-          <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
-          <AnimeButton onClick={handleSubmit}>Submit</AnimeButton>
-        </DialogActions>
-      </AnimeDialog>
-      <Tooltip title="Home" placement="right">
-        <IconButton onClick={handleHomeClick}>
-          <HomeIcon className="text-white" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Manga" placement="right">
-        <IconButton onClick={handleMangaClick}>
-          <MangaIcon className="text-white" />
-        </IconButton>
-      </Tooltip>
-    </Stack>
+    <>
+      
+      {isOpen && (
+        <Stack
+          direction="column" // Set direction to column for vertical layout
+          className="fixed top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
+          spacing={2} // Adjust spacing between items as needed
+        >
+          <Tooltip title="Connect to anilist" placement="right">
+            {/* Step 2: Pass the handleClick function to the onClick prop */}
+            <IconButton onClick={handleClickOpen}>
+              <ConnectIcon className="text-white" />
+            </IconButton>
+          </Tooltip>
+          {/* TODO: @Eshan276 connected the form in the middle */}
+          <AnimeDialog open={open} onClose={handleClose}>
+            <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
+            <AnimeDialogContent >
+              <AnimeTextField
+                autoFocus
+                margin="dense"
+                id="username"
+                label="AniList Username"
+                type="text"
+                fullWidth
+                variant="outlined"
+                onChange={handleUsernameChange}
+              />
+            </AnimeDialogContent>
+            <DialogActions className='bg-[#9fadbd]'>
+              <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
+              <AnimeButton onClick={handleSubmit}>Submit</AnimeButton>
+            </DialogActions>
+          </AnimeDialog>
+          <Tooltip title="Home" placement="right">
+            <IconButton onClick={handleHomeClick}>
+              <HomeIcon className="text-white" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Manga" placement="right">
+            <IconButton onClick={handleMangaClick}>
+              <MangaIcon className="text-white" />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      )}
+      <Tooltip title="Toggle Sidebar" placement='right'>
+      <IconButton onClick={toggleSidebar} className="fixed top-[90vh] left-0 z-50 transform -translate-y-1/2 mx-4"
+        style={{ transition: 'transform 0.3s' }}
+      >
+        {isOpen ? <ChevronLeftIcon className="text-white" /> : <ChevronRightIcon className="text-white" />}
+      </IconButton>
+    </Tooltip>
+    </>
   );
 };
 
