@@ -2,6 +2,9 @@ import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
 
 const App = () => {
+  if (localStorage.getItem("user")) {
+    console.log(JSON.parse(localStorage.getItem("user") as string));
+  }
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
@@ -10,8 +13,8 @@ const App = () => {
         <p className="mt-2">Explore your favorite anime & manga here.</p>
       </div>
       <div className="mt-16 ml-24">
-        <AnimeStack type="Airing"/>
-        <AnimeStack type="Watching"/>
+        <AnimeStack type="Airing" />
+        <AnimeStack type="Watching" />
       </div>
     </div>
   );
