@@ -5,9 +5,13 @@ import Sidebar from "./components/sidebar"; // Import the Sidebar component
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [profilePic, setProfilePic] = useState("");
+
   useEffect(() => {
     const fetchUserData = async () => {
       const queryParams = new URLSearchParams(window.location.search);
+      // const testac =
+      //   "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjJkNDlhNTRiMmE3OTkyNGI5NjA0M2UxN2U1YzA5YTI2ZWYyMGM4MmM5MmU4Y2E1ZmY4MTdkNzMyMTgyNjY0MDYzZjg3YjljOTg5ZTk2YzFiIn0.eyJhdWQiOiIxOTc1MyIsImp0aSI6IjJkNDlhNTRiMmE3OTkyNGI5NjA0M2UxN2U1YzA5YTI2ZWYyMGM4MmM5MmU4Y2E1ZmY4MTdkNzMyMTgyNjY0MDYzZjg3YjljOTg5ZTk2YzFiIiwiaWF0IjoxNzIwMzc0NzEzLCJuYmYiOjE3MjAzNzQ3MTMsImV4cCI6MTc1MTkxMDcxMywic3ViIjoiNjAzMDIyOCIsInNjb3BlcyI6W119.ULB4iev5uk4LWUFZCozkl-x-PzyRYa_l8lb4GlbKaHjDX_wrZNsCf3AcA-UhbaY7ttKmYKGXN8RNI_G6mzvG3p_P-UARnHl5p6l_YCMg63_AFPgw0Dm_JNHzpdeNn_CwraerjWgfKLD1gaq54dssAm3JLRXyQfPDEY07gVKU87gGGK7sUcIS4ScurYVYEDhku-hsqOL3-E-kfcuPubHwBG5Rk-9-ffmSr_EZdlg-IaZ4_vWc-EE3mlMR7c1mQgW7H1CM8MmQpTV4Wc8K91wQFrD2yojbYpkIIFU1ZipYqZA2W1zYc_19S7u82FueYhIv38VBWs3Von8JU3PIxgcU0NROZxGwUIpKGqVyAIZaoTjqZyGux9MnGPLWb5Prw_H8WIADFAUqXybJma5gGhNTd38Nx8DYLQXALGLQOecifkRqO4X5rLZjWyX39JTJKt76--RaQL6-m-rlTtE6qcGVRxOOyXMeudGHiW1BN4qFRP65eA4dW_fAoe3vvFYJrcIRTHbOrgG2YJNH14Ad9tj9dCucuTzEz6gmCOQ74H0UkrmbrhAS4DTVqeW77BCDNXxrnAei4Jn-vYzjz7UAfaYD77-Nc8IgXmcFLaGdq8HknukabzsXIPCBt4Gww5gx09PHns6nzLKrpWPl15at-nGSBGH63B42wLFCsVWukNcJo8s";
+      //queryParams.has("access_token")
       if (queryParams.has("access_token")) {
         const accessToken = queryParams.get("access_token");
         console.log("Code:", accessToken);
@@ -55,50 +59,13 @@ const Navbar = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, []); // Empty dependency array to run only on initial load
 
-  // useEffect(() => {
-  //   const fetchAniListProfile = async () => {
-  //     const query = `
-  //       query {
-  //         User(name: "YOUR_ANILIST_USERNAME")
-  //         {
-  //           avatar {
-  //             large
-  //           }
-  //         }
-  //       }
-  //     `;
-
-  //     try {
-  //       const response = await fetch("https://graphql.anilist.co", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           query,
-  //         }),
-  //       });
-
-  //       const { data } = await response.json();
-  //       setProfilePic(data.User.avatar.large);
-  //     } catch (error) {
-  //       console.error("Error fetching AniList profile:", error);
-  //     }
-  //   };
-
-  //   fetchAniListProfile();
-  // }, []);
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleSearchKeyDown = (event) => {
     if (event.key === "Enter") {
       executeSearch();
     }
