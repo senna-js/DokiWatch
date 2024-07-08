@@ -9,7 +9,7 @@ const App = () => {
   }
   return (
     <div className="min-h-screen bg-gray-900 text-white relative">
-      <video autoPlay muted loop id="background-video" className="absolute z-0 w-full h-full object-cover">
+      <video autoPlay muted loop id="background-video" className="absolute z-0 w-full h-full object-cover opacity-25">
         <source src={scene} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
