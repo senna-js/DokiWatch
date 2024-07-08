@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import Sidebar from "./sidebar"; // Import the Sidebar component
+import Sidebar from "./sidebar";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export const Navbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
