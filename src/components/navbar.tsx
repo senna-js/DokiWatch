@@ -119,6 +119,14 @@ export const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center">
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+        </div>
+        <div className="flex items-center">
           {profilePic ? (
             <img
               className="h-10 w-10 rounded-full"
