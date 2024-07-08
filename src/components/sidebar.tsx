@@ -9,42 +9,42 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // For the toggle
 // Styled components using the `styled` API change according to the theme preferences
 //TODO: Change the theme of the DialogBox/Form, make a bit anime themed @karan8404 and @Gadzrux
 const AnimeDialog = styled(Dialog)({
-  '& .MuiDialog-paper': {
-    backgroundColor: '#fafafa', // Light grey background for the dialog
+  "& .MuiDialog-paper": {
+    backgroundColor: "#fafafa", // Light grey background for the dialog
   },
 });
 
 const AnimeDialogTitle = styled(DialogTitle)({
-  backgroundColor: '#151F2E', // title background colour
-  color: '#3DB4F2', // light blue colour for title
+  backgroundColor: "#151F2E", // title background colour
+  color: "#3DB4F2", // light blue colour for title
 });
 
 const AnimeDialogContent = styled(DialogContent)({
-  backgroundColor: '#9FADBD', // Off-white background for content
-  color: 'white',
+  backgroundColor: "#9FADBD", // Off-white background for content
+  color: "white",
 });
 
 const AnimeButton = styled(Button)({
-  backgroundColor: '#4CC9F0', // Sky blue button background
-  color: 'white', // White text for buttons
-  '&:hover': {
-    backgroundColor: '#4895EF', // Darker blue on hover
+  backgroundColor: "#4CC9F0", // Sky blue button background
+  color: "white", // White text for buttons
+  "&:hover": {
+    backgroundColor: "#4895EF", // Darker blue on hover
   },
 });
 
 const AnimeTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: '#3A0CA3', // Dark purple text when focused
+  "& label.Mui-focused": {
+    color: "#3A0CA3", // Dark purple text when focused
   },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: 'lightgrey', // Default state border color
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "lightgrey", // Default state border color
     },
-    '&:hover fieldset': {
-      borderColor: '#4CC9F0', // Sky blue border on hover
+    "&:hover fieldset": {
+      borderColor: "#4CC9F0", // Sky blue border on hover
     },
-    '&.Mui-focused fieldset': {
-      borderColor: '#4CC9F0', // Sky blue border for focused state
+    "&.Mui-focused fieldset": {
+      borderColor: "#4CC9F0", // Sky blue border for focused state
     },
   },
 });
@@ -70,6 +70,8 @@ const Sidebar = () => {
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
+    const user = { username: event.target.value };
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   // Step 1: Define the click event handler function
