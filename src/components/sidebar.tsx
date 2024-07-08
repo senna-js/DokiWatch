@@ -1,21 +1,77 @@
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import ConnectIcon from "@mui/icons-material/Link"; // Assuming 'Link' icon is used as 'Connect'
-import HomeIcon from "@mui/icons-material/Home"; // Import Home icon
-import MangaIcon from "@mui/icons-material/CollectionsBookmark"; // Assuming 'CollectionsBookmark' is used as 'MangaStack'
-import Stack from "@mui/material/Stack";
+import React, { useState } from 'react';
+import { IconButton, Tooltip, Stack, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
+import { Link as ConnectIcon, Home as HomeIcon, CollectionsBookmark as MangaIcon } from "@mui/icons-material";
+import styled from '@mui/material/styles/styled';
+
+
+// Styled components using the `styled` API change according to the theme preferences
+//TODO: Change the theme of the DialogBox/Form, make a bit anime themed @karan8404 and @Gadzrux
+const AnimeDialog = styled(Dialog)({
+  '& .MuiDialog-paper': {
+    backgroundColor: '#fafafa', // Light grey background for the dialog
+  },
+});
+
+const AnimeDialogTitle = styled(DialogTitle)({
+  backgroundColor: '#FFB6C1', // Light pink background for the title
+  color: '#3A0CA3', // Dark purple text
+});
+
+const AnimeDialogContent = styled(DialogContent)({
+  backgroundColor: '#FAF9F6', // Off-white background for content
+});
+
+const AnimeButton = styled(Button)({
+  backgroundColor: '#4CC9F0', // Sky blue button background
+  color: 'white', // White text for buttons
+  '&:hover': {
+    backgroundColor: '#4895EF', // Darker blue on hover
+  },
+});
+
+const AnimeTextField = styled(TextField)({
+  '& label.Mui-focused': {
+    color: '#3A0CA3', // Dark purple text when focused
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'lightgrey', // Default state border color
+    },
+    '&:hover fieldset': {
+      borderColor: '#4CC9F0', // Sky blue border on hover
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#4CC9F0', // Sky blue border for focused state
+    },
+  },
+});
 
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
   // Step 1: Define the click event handler function
-  const handleClick = () => {
-    console.log("IconButton clicked");
+  const handleSubmit = () => {
+    console.log("Username submitted:", username);
     // Add your logic here
 
     window.open(
       "https://anilist.co/api/v2/oauth/authorize?client_id=19753&response_type=token",
       "_blank"
     );
-
+    setOpen(false); // Close the dialog after submission
     //https://anilist.co/api/v2/oauth/authorize?client_id=19753&redirect_uri=https://domainofweeb.netlify.app/&response_type=code
   };
 
@@ -26,6 +82,7 @@ const Sidebar = () => {
     window.location.href = "/";
   };
 
+  //TODO: @Gadzrux We need to implement the Manga Stack
   // Define the click event handler function for Manga Stack
   const handleMangaClick = () => {
     console.log("Manga IconButton clicked");
@@ -40,10 +97,30 @@ const Sidebar = () => {
     >
       <Tooltip title="Connect to anilist" placement="right">
         {/* Step 2: Pass the handleClick function to the onClick prop */}
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClickOpen}>
           <ConnectIcon className="text-white" />
         </IconButton>
       </Tooltip>
+      {/* TODO: @Eshan276 connected the form in the middle */}
+      <AnimeDialog open={open} onClose={handleClose}>
+        <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
+        <AnimeDialogContent>
+          <AnimeTextField
+            autoFocus
+            margin="dense"
+            id="username"
+            label="AniList Username"
+            type="text"
+            fullWidth
+            variant="outlined"
+            onChange={handleUsernameChange}
+          />
+        </AnimeDialogContent>
+        <DialogActions>
+          <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
+          <AnimeButton onClick={handleSubmit}>Submit</AnimeButton>
+        </DialogActions>
+      </AnimeDialog>
       <Tooltip title="Home" placement="right">
         <IconButton onClick={handleHomeClick}>
           <HomeIcon className="text-white" />
