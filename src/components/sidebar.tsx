@@ -13,12 +13,13 @@ const AnimeDialog = styled(Dialog)({
 });
 
 const AnimeDialogTitle = styled(DialogTitle)({
-  backgroundColor: '#FFB6C1', // Light pink background for the title
-  color: '#3A0CA3', // Dark purple text
+  backgroundColor: '#151F2E', // title background colour
+  color: '#3DB4F2', // light blue colour for title
 });
 
 const AnimeDialogContent = styled(DialogContent)({
-  backgroundColor: '#FAF9F6', // Off-white background for content
+  backgroundColor: '#9FADBD', // Off-white background for content
+  color: 'white',
 });
 
 const AnimeButton = styled(Button)({
@@ -104,8 +105,8 @@ const Sidebar = () => {
       {/* TODO: @Eshan276 connected the form in the middle */}
       <AnimeDialog open={open} onClose={handleClose}>
         <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
-        <AnimeDialogContent>
-          <AnimeTextField
+        <AnimeDialogContent >
+          <AnimeTextField 
             autoFocus
             margin="dense"
             id="username"
@@ -116,7 +117,7 @@ const Sidebar = () => {
             onChange={handleUsernameChange}
           />
         </AnimeDialogContent>
-        <DialogActions>
+        <DialogActions className='bg-[#9fadbd]'>
           <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
           <AnimeButton onClick={handleSubmit}>Submit</AnimeButton>
         </DialogActions>
