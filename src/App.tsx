@@ -30,7 +30,7 @@ const Navbar = () => {
         `;
 
         const variables = {
-          name: "eshandas",
+          name: "itzKirito",
         };
 
         try {
@@ -62,11 +62,11 @@ const Navbar = () => {
     fetchUserData();
   }, [window.location.hash]); // Trigger useEffect when the URL hash changes
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchKeyDown = (event) => {
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       executeSearch();
     }
