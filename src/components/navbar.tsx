@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Sidebar from "./sidebar";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/clerk-react";
 
 export const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -127,16 +127,23 @@ export const Navbar = () => {
           />
         </div>
       </div>
+      <div>
+      </div>
       <div className="flex items-center">
-        {profilePic ? (
-          <img
-            className="h-10 w-10 rounded-full"
-            src={profilePic}
-            alt="Profile"
-          />
-        ) : (
-          <DefaultProfileIcon /> // Use the SVG component as fallback
-        )}
+
+        <SignedIn>
+          <div>
+            {profilePic ?
+              <img src={profilePic || ""} alt="Profile" className="h-10 w-10 rounded-full" />
+              : <DefaultProfileIcon />}
+          </div>
+          <SignOutButton />
+        </SignedIn>
+
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+
       </div>
     </div>
   );
