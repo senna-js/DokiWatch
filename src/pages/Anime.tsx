@@ -89,7 +89,7 @@ export const Anime = () => {
                     <hr />
                     <div className="ml-2 items-center flex gap-2">
                         {animeData?.genres.map((genre: any) => (
-                            <span key={genre.mal_id} className="bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            <span key={genre.mal_id} className="bg-transparent bg-red-500 font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
                                 {genre.name}
                             </span>
                         ))}
@@ -104,7 +104,10 @@ export const Anime = () => {
                     </div>
                     <div className="ml-2 flex gap-2">
                         <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
-                            Episodes: {animeData?.episodes}
+                            Episodes: {animeData?.episodes || "To be decided"}
+                        </span>
+                        <span className="font-poppins bg-transparent bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                             {animeData?.year}
                         </span>
                     </div>
                     <div className="ml-2 flex gap-2">
@@ -112,7 +115,7 @@ export const Anime = () => {
                             Duration: {animeData?.duration}
                         </span>
                         <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
-                            Status: {animeData?.status}
+                            {animeData?.status}
                         </span>
                     </div>
 
