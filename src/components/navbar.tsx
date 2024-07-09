@@ -7,10 +7,12 @@ import {
   SignInButton,
   SignOutButton,
 } from "@clerk/clerk-react";
+import { useAnimeContext } from "../AnimeContext"; // Import the context
 
 export const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [profilePic, setProfilePic] = useState("");
+  const { setTriggerFetch } = useAnimeContext(); // Use the context
 
   const getAccessTokenFromHash = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -19,30 +21,35 @@ export const Navbar = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const accessToken = getAccessTokenFromHash();
+      console.log("fetch user data is called");
+      var accessToken = getAccessTokenFromHash();
       let username: string | undefined;
+
+      const user = localStorage.getItem("user");
+      if (user) {
+        const userobj = JSON.parse(user);
+        username = userobj.username;
+        if (!accessToken) {
+          accessToken = userobj.access_token;
+        }
+      } else {
+        console.log("No user found in localstorage");
+        return;
+      }
+
       if (accessToken) {
         console.log("Access Token:", accessToken);
-        const user = localStorage.getItem("user");
-        if (user) {
-          const userData = JSON.parse(user);
-          username = userData["username"];
-          userData["access_token"] = accessToken;
-          localStorage.setItem("user", JSON.stringify(userData));
-        } else {
-          console.log("User not found in localstorage");
-        }
         const query = `
-            query ($name: String) {
-              User(name: $name) {
-                id
-                name
-                avatar {
-                  large
-                }
+          query ($name: String) {
+            User(name: $name) {
+              id
+              name
+              avatar {
+                large
               }
             }
-          `;
+          }
+        `;
 
         const variables = {
           name: username as string,
@@ -70,6 +77,9 @@ export const Navbar = () => {
             user["avatar"] = data.User.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));
             setProfilePic(data.User.avatar.large);
+
+            // Update anime data in the context
+            setTriggerFetch(true);
           }
         } catch (error) {
           console.error("Error fetching AniList profile:", error);
@@ -78,7 +88,7 @@ export const Navbar = () => {
     };
 
     fetchUserData();
-  }, [window.location.hash]); // Trigger useEffect when the URL hash changes
+  }, []); // Run only once after the initial render
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
