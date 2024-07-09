@@ -4,10 +4,15 @@ import { AnimeStack } from "./components/AnimeStack";
 import { Routes, Route } from "react-router-dom";
 import scene from "./assests/scene3.mp4";
 import { AnimeProvider } from "./AnimeContext"; // Import the AnimeProvider
-
+import { useAnimeContext } from "./AnimeContext";
 const App = () => {
-  if (localStorage.getItem("user")) {
+  const { setTriggerFetch } = useAnimeContext();
+  if (
+    localStorage.getItem("user") &&
+    JSON.parse(localStorage.getItem("user") as string).access_token
+  ) {
     console.log(JSON.parse(localStorage.getItem("user") as string));
+    setTriggerFetch(true);
   }
 
   return (
