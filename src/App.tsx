@@ -4,6 +4,7 @@ import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
 import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
+import { Anime } from "./pages/Anime";
 
 const App = () => {
   return (
@@ -41,7 +42,7 @@ const App = () => {
                 </div>
               }
             />
-            <Route path="/anime" element={<div>anime</div>} />
+            <Route path="/anime/:id" element={<Anime/>} />
             <Route path="/landingPage" element={<LandingPage />} />
         </Routes>
         </div>
