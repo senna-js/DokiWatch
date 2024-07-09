@@ -23,4 +23,5 @@ interface AnimeCardProps {
     name: string
     romaji: string
     image: string
+    mediaID : string
 }

@@ -142,6 +142,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
                   name={anime.titleEng}
                   romaji={anime.titleRom}
                   image={anime.image}
+                  mediaID={anime.mediaID}
                 />
                 {/* More anime details */}
               </div>
