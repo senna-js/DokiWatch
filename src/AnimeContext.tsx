@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface AnimeContextType {
   triggerFetch: boolean;
@@ -7,7 +7,17 @@ interface AnimeContextType {
 
 const AnimeContext = createContext<AnimeContextType | undefined>(undefined);
 
-export const AnimeProvider = ({ children }: { children: ReactNode }) => {
+export const useAnimeContext = () => {
+  const context = useContext(AnimeContext);
+  if (!context) {
+    throw new Error("useAnimeContext must be used within an AnimeProvider");
+  }
+  return context;
+};
+
+export const AnimeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [triggerFetch, setTriggerFetch] = useState(false);
 
   return (
@@ -15,12 +25,4 @@ export const AnimeProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AnimeContext.Provider>
   );
-};
-
-export const useAnimeContext = () => {
-  const context = useContext(AnimeContext);
-  if (context === undefined) {
-    throw new Error("useAnimeContext must be used within an AnimeProvider");
-  }
-  return context;
 };
