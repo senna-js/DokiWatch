@@ -5,6 +5,7 @@ import { AnimeStack } from "./components/AnimeStack";
 import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
+import { Watch } from "./pages/Watch";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
               }
             />
             <Route path="/anime/:id" element={<Anime/>} />
+            <Route path="/watch/:id" element={<Watch/>} />
             <Route path="/landingPage" element={<LandingPage />} />
         </Routes>
         </div>

@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom"
+import { useParams,useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Content from "../components/ReadMore"
+import { Button } from "@mui/material"
 
 export const Anime = () => {
-    let params = useParams()
+    const params = useParams()
+    const navigate = useNavigate()
     const [animeData, setAnimeData] = useState<any>()
     const [englishTitle, setEnglishTitle] = useState(true)
 
@@ -16,6 +18,11 @@ export const Anime = () => {
             })
     }, [params.id])
 
+    const handleWatch = () => {
+        const romajiName = animeData?.title.toLowerCase().replace(/\s+/g, '-');
+        const navString=`/watch/${romajiName}-episode-1`
+        navigate(navString)
+    }
 
     return (
         <div className="flex flex-col gap-6 mx-24 my-6">
@@ -37,7 +44,12 @@ export const Anime = () => {
 
             <div className="flex gap-4">
                 <img src={animeData?.images.jpg.large_image_url} alt={animeData?.title} />
-                <Content text={animeData?.synopsis} />
+                <div className="flex flex-col gap-4">
+                    <Content text={animeData?.synopsis} />
+                    <div>
+                        <Button variant="contained" color="primary" onClick={handleWatch}>Watch</Button>
+                    </div>
+                </div>
                 {/* <p>{animeData?.synopsis}</p> */}
             </div>
 
