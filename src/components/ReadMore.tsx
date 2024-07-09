@@ -12,7 +12,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({ children }) => {
         return (<p className="text">Loading...</p>)
 
     if (text.length <= 100) {
-        return <p className="text">{text}</p>;
+        return <p className="text cursor-default">{text}</p>;
     }
     
     const [isReadMore, setIsReadMore] = useState(true);
@@ -20,11 +20,11 @@ const ReadMore: React.FC<ReadMoreProps> = ({ children }) => {
         setIsReadMore(!isReadMore);
     };
     return (
-        <p className="text">
+        <p className="text cursor-default">
             {isReadMore ? text.slice(0, 100) : text}
             <span
                 onClick={toggleReadMore}
-                className="read-or-hide"
+                className="read-or-hide cursor-pointer"
                 style={{ color: "green" }}
             >
                 {isReadMore ? "...read more" : " show less"}
