@@ -29,6 +29,13 @@ export const AnimeStack = (props: AnimeStackProps) => {
         localStorage.getItem("user") as string
       ).access_token;
     }
+    else {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      accessToken = hashParams.get("access_token");
+      if (!accessToken) {
+        console.log("No access token found or its over,connect to anilist");
+      }
+    }
   } else {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     accessToken = hashParams.get("access_token");
@@ -75,6 +82,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
       };
 
       try {
+        console.log("fetching anime list",accessToken);
         const response = await fetch("https://graphql.anilist.co", {
           method: "POST",
           headers: {
