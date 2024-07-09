@@ -5,7 +5,7 @@ export const AnimeCard = (props: AnimeCardProps) => {
     const navigate = useNavigate();
 
     const navigateToPage = () => {
-        navigate(`/some-path/${props.mediaId}`); // Update the path as needed
+        navigate(`/anime/${props.malID}`); // Update the path as needed
     };
 
     return (
@@ -18,7 +18,7 @@ export const AnimeCard = (props: AnimeCardProps) => {
                         alt={props.name}
                         className="w-full h-76 object-cover transition-transform duration-200 ease-in-out hover:scale-105"
                     />
-                     <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
                     <button
                         onClick={navigateToPage}
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
@@ -48,5 +48,5 @@ interface AnimeCardProps {
     name: string;
     romaji: string;
     image: string;
-    mediaId: string;
+    malID: string;
 }

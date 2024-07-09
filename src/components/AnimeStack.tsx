@@ -82,7 +82,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
       };
 
       try {
-        console.log("fetching anime list",accessToken);
+        console.log("fetching anime list", accessToken);
         const response = await fetch("https://graphql.anilist.co", {
           method: "POST",
           headers: {
@@ -142,7 +142,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
                   name={anime.titleEng}
                   romaji={anime.titleRom}
                   image={anime.image}
-                  mediaID={anime.mediaID}
+                  malID={anime.malID}
                 />
                 {/* More anime details */}
               </div>
