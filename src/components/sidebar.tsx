@@ -130,7 +130,6 @@ const Sidebar = () => {
               </IconButton>
             </Tooltip>
           )}
-          {/* TODO: @Eshan276 connected the form in the middle */}
           <AnimeDialog open={open} onClose={handleClose}>
             <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
             <AnimeDialogContent>
