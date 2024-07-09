@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
-import { Routes, Route } from "react-router-dom";
 import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
 
