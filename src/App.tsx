@@ -8,8 +8,6 @@ import scene from "./assests/scene3.mp4";
 const App = () => {
   return (
     <AnimeProvider>
-      {" "}
-      {/* Wrap your App with AnimeProvider */}
       <div className="min-h-screen bg-gray-900 text-white relative">
         <video
           autoPlay
@@ -22,31 +20,29 @@ const App = () => {
           Your browser does not support the video tag.
         </video>
         <div className="relative z-10">
-          <Router>
-            <Navbar />
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <div>
-                    <div className="p-8">
-                      <h1 className="text-4xl font-bold">
-                        Welcome to Doki Watch
-                      </h1>
-                      <p className="mt-2">
-                        Explore your favorite anime & manga here.
-                      </p>
-                    </div>
-                    <div className="mt-16 ml-24">
-                      <AnimeStack type="Airing" />
-                      <AnimeStack type="Watching" />
-                    </div>
+          <Navbar />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div>
+                  <div className="p-8">
+                    <h1 className="text-4xl font-bold">
+                      Welcome to Doki Watch
+                    </h1>
+                    <p className="mt-2">
+                      Explore your favorite anime & manga here.
+                    </p>
                   </div>
-                }
-              />
-              <Route path="/anime" element={<div>anime</div>} />
-            </Routes>
-          </Router>
+                  <div className="mt-16 ml-24">
+                    <AnimeStack type="Airing" />
+                    <AnimeStack type="Watching" />
+                  </div>
+                </div>
+              }
+            />
+            <Route path="/anime" element={<div>anime</div>} />
+          </Routes>
         </div>
       </div>
     </AnimeProvider>
