@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
@@ -26,7 +25,7 @@ const App = () => {
               path="/"
               element={
                 <div>
-                  <div className="p-8">
+                  <div className="p-8 ml-24">
                     <h1 className="text-4xl font-bold">
                       Welcome to Doki Watch
                     </h1>
