@@ -6,6 +6,7 @@ import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
+import { Search } from "./pages/Search";
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
             />
             <Route path="/anime/:id" element={<Anime/>} />
             <Route path="/watch/:id" element={<Watch/>} />
+            <Route path="/search/:term" element={<Search/>} />
             <Route path="/landingPage" element={<LandingPage />} />
         </Routes>
         </div>
