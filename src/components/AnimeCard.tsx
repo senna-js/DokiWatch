@@ -16,7 +16,8 @@ export const AnimeCard = (props: AnimeCardProps) => {
                         component="img"
                         image={props.image}
                         alt={props.name}
-                        className="w-full h-76 object-cover transition-transform duration-200 ease-in-out hover:scale-105"
+                        style={{ width: '100%', height: '250px', objectFit: 'cover' }} // Fixed size with object-fit
+                        className="transition-transform duration-200 ease-in-out hover:scale-105"
                     />
                     <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
                     <button
