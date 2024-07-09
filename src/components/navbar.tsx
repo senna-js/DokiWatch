@@ -8,8 +8,10 @@ import {
   SignOutButton,
 } from "@clerk/clerk-react";
 import { useAnimeContext } from "../AnimeContext"; // Import the context
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const { setTriggerFetch } = useAnimeContext(); // Use the context
@@ -105,7 +107,7 @@ export const Navbar = () => {
   const executeSearch = () => {
     console.log("Searching for:", searchTerm);
     // Implement your search logic here
-
+    navigate(`/search/${searchTerm}`);
     // Clear the search term state after executing the search
     setSearchTerm("");
   };
