@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { start } from "repl";
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+// import { start } from "repl";
 
 export const AnimeStack = (props: AnimeStackProps) => {
   const [animeData, setAnimeData] = useState<
     | null
     | {
-        image: string;
-        mediaID: string;
-        malID: string;
-        titleEng: string;
-        titleRom: string;
-        //startDate: string;
-        //endDate: string;
-        Progress: string;
-      }[]
+      image: string;
+      mediaID: string;
+      malID: string;
+      titleEng: string;
+      titleRom: string;
+      //startDate: string;
+      //endDate: string;
+      Progress: string;
+    }[]
   >(null); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
