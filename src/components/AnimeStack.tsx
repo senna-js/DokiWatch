@@ -121,20 +121,20 @@ export const AnimeStack = (props: AnimeStackProps) => {
 
   // Render the component
   return (
-    <div>
-      {animeData ? (
-        <div>
-          {animeData.map((anime) => (
-            <div key={anime.mediaID}>
-              <img src={anime.image} alt={anime.titleEng} />
-              <p>{anime.titleEng || anime.titleRom}</p>
-              <p>{anime.Progress}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="flex-row p-4 m-6 rounded-md bg-gray-800 ">
+      <h2 className="text-xl">Anime {props.type}</h2>
+      <hr className="my-4" />
+      {animeData &&
+        // Assuming animeData is an array. Adjust according to the actual structure.
+        animeData.map((anime) => (
+          <div key={anime.mediaID}>
+            {/* Populate with your data */}
+            <h3>{anime.titleEng}</h3>
+            <h3>{anime.titleRom}</h3>
+            <img src={anime.image} alt={anime.titleEng} />
+            {/* More anime details */}
+          </div>
+        ))}
     </div>
   );
 };
