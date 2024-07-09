@@ -66,6 +66,9 @@ export const Navbar = () => {
           console.log(data);
 
           if (data && data.User && data.User.avatar) {
+            let user = JSON.parse(localStorage.getItem("user") || "{}");
+            user["avatar"] = data.User.avatar.large;
+            localStorage.setItem("user", JSON.stringify(user));
             setProfilePic(data.User.avatar.large);
           }
         } catch (error) {

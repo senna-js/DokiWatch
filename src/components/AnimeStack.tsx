@@ -110,8 +110,8 @@ export const AnimeStack = (props: AnimeStackProps) => {
       titleEng: any;
       titleRom: any;
       // Uncomment and adjust if needed
-      // startDate: element.media.startDate,
-      // endDate: element.media.endDate,
+      startDate: any; //element.media.startDate,
+      endDate: any; //element.media.endDate,
       Progress: any;
     }[] = []; // Initialize as an array
 
@@ -124,8 +124,8 @@ export const AnimeStack = (props: AnimeStackProps) => {
         titleEng: element.media.title.english,
         titleRom: element.media.title.romaji,
         // Uncomment and adjust if needed
-        // startDate: element.media.startDate,
-        // endDate: element.media.endDate,
+        startDate: element.media.startDate,
+        endDate: element.media.endDate,
         Progress: element.progress,
       };
 
