@@ -7,10 +7,12 @@ import {
   SignInButton,
   SignOutButton,
 } from "@clerk/clerk-react";
+import { useAnimeContext } from "../AnimeContext"; // Import the context
 
 export const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [profilePic, setProfilePic] = useState("");
+  const { setTriggerFetch } = useAnimeContext(); // Use the context
 
   const getAccessTokenFromHash = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -70,6 +72,9 @@ export const Navbar = () => {
             user["avatar"] = data.User.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));
             setProfilePic(data.User.avatar.large);
+
+            // Update anime data in the context
+            setTriggerFetch(true);
           }
         } catch (error) {
           console.error("Error fetching AniList profile:", error);
