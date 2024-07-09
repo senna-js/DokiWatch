@@ -162,17 +162,18 @@ const Sidebar = () => {
         </Stack>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
-        <IconButton
-          onClick={toggleSidebar}
-          className="fixed top-[90vh] left-0 z-50 -translate-y-1/2 mx-4"
-          style={{ backgroundColor: "#212529" }}
-        >
-          {isOpen ? (
-            <ChevronLeftIcon className="text-white" />
-          ) : (
-            <ChevronRightIcon className="text-white" />
-          )}
-        </IconButton>
+        <div className="fixed top-[90vh] left-0 z-50 -translate-y-1/2 mx-4">
+          <IconButton
+            onClick={toggleSidebar}
+            style={{ backgroundColor: "#212529" }}
+          >
+            {isOpen ? (
+              <ChevronLeftIcon className="text-white" />
+            ) : (
+              <ChevronRightIcon className="text-white" />
+            )}
+          </IconButton>
+        </div>
       </Tooltip>
     </>
   );
