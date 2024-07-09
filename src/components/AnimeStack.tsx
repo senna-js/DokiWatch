@@ -32,6 +32,10 @@ export const AnimeStack = (props: AnimeStackProps) => {
     else {
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       accessToken = hashParams.get("access_token");
+      const user = JSON.parse(localStorage.getItem("user") as string);
+      user["access_token"] = accessToken;
+      localStorage.setItem("user", JSON.stringify(user));
+      
       if (!accessToken) {
         console.log("No access token found or its over,connect to anilist");
       }
@@ -39,6 +43,10 @@ export const AnimeStack = (props: AnimeStackProps) => {
   } else {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     accessToken = hashParams.get("access_token");
+    const user = JSON.parse(localStorage.getItem("user") as string);
+    user["access_token"] = accessToken;
+    localStorage.setItem("user", JSON.stringify(user));
+
     if (!accessToken) {
       console.log("No access token found or its over,connect to anilist");
     }
