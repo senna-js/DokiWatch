@@ -1,22 +1,20 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import
+import { Card, CardContent, CardHeader } from '@mui/material';
 
 
-export const AnimeCard = (props : AnimeCardProps) => {
-  return (
-    <div>
-        <Card className="bg-gray-800 text-white">
-            <CardContent>
-
-            </CardContent>
-        </Card>
-    </div>
-  )
+export const AnimeCard = (props: AnimeCardProps) => {
+    return (
+        <div>
+            <Card className="bg-gray-800 text-white">
+                <CardContent>
+                    
+                </CardContent>
+            </Card>
+        </div>
+    )
 }
 
 interface AnimeCardProps {
-    name : string
-    romaji : string
-    image : string
+    name: string
+    romaji: string
+    image: string
 }
