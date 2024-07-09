@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
-import scene from "./assests/scene3.mp4";
+import scene from "./assests/scene5.mp4"
+import LandingPage from "./pages/landingPage";
 
 const App = () => {
   return (
@@ -41,7 +42,8 @@ const App = () => {
               }
             />
             <Route path="/anime" element={<div>anime</div>} />
-          </Routes>
+            <Route path="/landingPage" element={<LandingPage />} />
+        </Routes>
         </div>
       </div>
     </AnimeProvider>
