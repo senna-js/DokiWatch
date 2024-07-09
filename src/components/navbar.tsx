@@ -66,7 +66,7 @@ export const Navbar = () => {
           console.log(data);
 
           if (data && data.User && data.User.avatar) {
-            let user = JSON.parse(localStorage.getItem("user") || "{}");
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
             user["avatar"] = data.User.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));
             setProfilePic(data.User.avatar.large);
@@ -151,13 +151,13 @@ export const Navbar = () => {
               <DefaultProfileIcon />
             )}
           </div>
-          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block">
+          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-pink-400 hover:scale-105 transform transition duration-150 ease-in-out">
             <SignOutButton />
           </div>
         </SignedIn>
 
         <SignedOut>
-          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block">
+          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-pink-400 hover:scale-105 transform transition duration-150 ease-in-out">
             <SignInButton />
           </div>
         </SignedOut>
