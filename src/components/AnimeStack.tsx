@@ -3,19 +3,20 @@
 import { useEffect, useState } from "react";
 // import { start } from "repl";
 import { useAnimeContext } from "../AnimeContext";
+import { AnimeCard } from "./AnimeCard";
 export const AnimeStack = (props: AnimeStackProps) => {
   const [animeData, setAnimeData] = useState<
     | null
     | {
-        image: string;
-        mediaID: string;
-        malID: string;
-        titleEng: string;
-        titleRom: string;
-        //startDate: string;
-        //endDate: string;
-        Progress: string;
-      }[]
+      image: string;
+      mediaID: string;
+      malID: string;
+      titleEng: string;
+      titleRom: string;
+      //startDate: string;
+      //endDate: string;
+      Progress: string;
+    }[]
   >(null); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
@@ -124,17 +125,22 @@ export const AnimeStack = (props: AnimeStackProps) => {
     <div className="flex-row p-4 m-6 rounded-md bg-gray-800 ">
       <h2 className="text-xl">Anime {props.type}</h2>
       <hr className="my-4" />
-      {animeData &&
-        // Assuming animeData is an array. Adjust according to the actual structure.
-        animeData.map((anime) => (
-          <div key={anime.mediaID}>
-            {/* Populate with your data */}
-            <h3>{anime.titleEng}</h3>
-            <h3>{anime.titleRom}</h3>
-            <img src={anime.image} alt={anime.titleEng} />
-            {/* More anime details */}
-          </div>
-        ))}
+      {animeData && (
+        <div className="flex gap-4">
+          {
+            animeData.map((anime) => (
+              <div key={anime.mediaID}>
+                <AnimeCard
+                  name={anime.titleEng}
+                  romaji={anime.titleRom}
+                  image={anime.image}
+                />
+                {/* More anime details */}
+              </div>
+            ))
+          }
+        </div>
+      )}
     </div>
   );
 };
