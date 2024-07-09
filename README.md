@@ -27,12 +27,14 @@ Before you begin, ensure you have the following:
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/yourusername/Doki-Watch.git
    cd Doki-watch
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -43,7 +45,7 @@ Before you begin, ensure you have the following:
 
    ```env
    ANILIST_API_KEY=your_anilist_api_key
-   CONSUMET_API_ENDPOINT=https://consumnetapieshan.vercel.app/
+   CONSUMET_API_ENDPOINT=
    ```
 
 4. **Run the application:**
@@ -94,4 +96,3 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 If you have any questions, feel free to open an issue or reach out to us at octagramnexus@gmail.com.
 
 Happy watching!
-
