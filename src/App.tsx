@@ -1,7 +1,7 @@
 import { Navbar } from "./components/navbar";
 import { AnimeStack } from "./components/AnimeStack";
 import { Routes, Route } from "react-router-dom";
-import scene from "./assests/scene.mp4"
+import scene from "./assests/scene3.mp4"
 
 const App = () => {
   if (localStorage.getItem("user")) {

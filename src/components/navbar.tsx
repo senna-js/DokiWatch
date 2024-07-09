@@ -151,11 +151,15 @@ export const Navbar = () => {
               <DefaultProfileIcon />
             )}
           </div>
-          <SignOutButton />
+          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block">
+            <SignOutButton />
+          </div>
         </SignedIn>
 
         <SignedOut>
-          <SignInButton />
+          <div className="bg-pink-300 text-white border-2 border-black rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block">
+            <SignInButton />
+          </div>
         </SignedOut>
       </div>
     </div>

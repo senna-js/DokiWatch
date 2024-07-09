@@ -14,7 +14,8 @@ export default {
         // Add more colors as needed
       },
       fontFamily: {
-        'anime': ['"Roboto Condensed"', 'sans-serif'],
+        anime: ['"Roboto Condensed"', 'sans-serif'],
+        comicSans: ['"Comic Sans MS"', 'cursive', 'sans-serif'],
       },
       keyframes: {
         wiggle: {
