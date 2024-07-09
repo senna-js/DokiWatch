@@ -23,7 +23,7 @@ export const Anime = () => {
     }, [params.id])
 
     const handleWatch = () => {
-        const romajiName = animeData?.title.toLowerCase().replace(/\s+/g, '-');
+        const romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/\s+/g, '-').replace(/:/g, '').replace(/,/g, '');
         const navString = `/watch/${romajiName}-episode-1`
         navigate(navString)
     }
@@ -84,7 +84,7 @@ export const Anime = () => {
                 <div className="flex flex-col gap-4">
 
                     <div className="flex items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
-                        <Content text={animeData?.synopsis.replace(/\[Written by MAL Rewrite\]/g, '').trim()} />
+                        <Content text={animeData?.synopsis?.replace(/\[Written by MAL Rewrite\]/g, '').trim()} />
                     </div>
                     <hr />
                     <div className="ml-2 items-center flex gap-2">
@@ -120,14 +120,16 @@ export const Anime = () => {
                 </div>
 
             </div>
-            <div className="video-container" style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
-                <iframe
-                    src={animeData?.trailer.embed_url}
-                    className="absolute top-0 left-0 w-full h-full"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                ></iframe>
-            </div>
+            {(animeData?.trailer && animeData?.trailer.embed_url) &&
+                (<div className="video-container" style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                    <iframe
+                        src={animeData?.trailer.embed_url}
+                        className="absolute top-0 left-0 w-full h-full"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                </div>)
+            }
         </div>
     )
 }
