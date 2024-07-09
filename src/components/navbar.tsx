@@ -18,23 +18,29 @@ export const Navbar = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     return hashParams.get("access_token");
   };
+  const fetchUserData = async () => {
+    console.log("fetch user data is called");
+    var accessToken = getAccessTokenFromHash();
+    let username: string | undefined;
+    if (!accessToken) {
+      const userobj = JSON.parse(localStorage.getItem("user") as string);
+      username = userobj.username;
+      accessToken = userobj.access_token;
+    }
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const accessToken = getAccessTokenFromHash();
-      let username: string | undefined;
-      if (accessToken) {
-        console.log("Access Token:", accessToken);
-        const user = localStorage.getItem("user");
-        if (user) {
-          const userData = JSON.parse(user);
-          username = userData["username"];
-          userData["access_token"] = accessToken;
-          localStorage.setItem("user", JSON.stringify(userData));
-        } else {
-          console.log("User not found in localstorage");
-        }
-        const query = `
+    if (accessToken) {
+      console.log("Access Token:", accessToken);
+      const user = localStorage.getItem("user");
+      if (user) {
+        const userData = JSON.parse(user);
+        username = userData["username"];
+        userData["access_token"] = accessToken;
+        localStorage.setItem("user", JSON.stringify(userData));
+      } else {
+        console.log("User not found in localstorage");
+      }
+      console.log("fetch user data is called");
+      const query = `
             query ($name: String) {
               User(name: $name) {
                 id
@@ -46,42 +52,53 @@ export const Navbar = () => {
             }
           `;
 
-        const variables = {
-          name: username as string,
-        };
+      const variables = {
+        name: username as string,
+      };
 
-        try {
-          const response = await fetch("https://graphql.anilist.co", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
-            },
-            body: JSON.stringify({
-              query,
-              variables,
-            }),
-          });
+      try {
+        const response = await fetch("https://graphql.anilist.co", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
+          },
+          body: JSON.stringify({
+            query,
+            variables,
+          }),
+        });
 
-          const { data } = await response.json();
-          console.log(data);
+        const { data } = await response.json();
+        console.log(data);
 
-          if (data && data.User && data.User.avatar) {
-            let user = JSON.parse(localStorage.getItem("user") || "{}");
-            user["avatar"] = data.User.avatar.large;
-            localStorage.setItem("user", JSON.stringify(user));
-            setProfilePic(data.User.avatar.large);
+        if (data && data.User && data.User.avatar) {
+          let user = JSON.parse(localStorage.getItem("user") || "{}");
+          user["avatar"] = data.User.avatar.large;
+          localStorage.setItem("user", JSON.stringify(user));
+          setProfilePic(data.User.avatar.large);
 
-            // Update anime data in the context
-            setTriggerFetch(true);
-          }
-        } catch (error) {
-          console.error("Error fetching AniList profile:", error);
+          // Update anime data in the context
+          setTriggerFetch(true);
         }
+      } catch (error) {
+        console.error("Error fetching AniList profile:", error);
       }
-    };
+    } else {
+      const userobj = JSON.parse(localStorage.getItem("user") as string);
+      const username = userobj.username;
+      const access_token = userobj.access_token;
+    }
+  };
 
+  if (localStorage.getItem("user")) {
+    console.log(localStorage.getItem("user"));
+    fetchUserData();
+  } else {
+    console.log("No user found in localstorage");
+  }
+  useEffect(() => {
     fetchUserData();
   }, [window.location.hash]); // Trigger useEffect when the URL hash changes
 
