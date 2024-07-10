@@ -82,7 +82,7 @@ export const Search = () => {
 
     return (
         <div>
-            <Stack spacing={2} direction="row">
+            <Stack spacing={2} direction="row" flexWrap="wrap">
                 {
                     anime.map((anime) => (
                         <div key={anime.mal_id}>

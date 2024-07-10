@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardMedia } from '@mui/material';
+import { Card, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
 import { AnimeData } from '../interfaces/AnimeData';
 
-export const AnimeCard: React.FC<AnimeCardProps> = ({anime}) => {
+export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     const navigate = useNavigate();
 
     const navigateToPage = () => {
@@ -10,17 +10,16 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({anime}) => {
     };
 
     return (
-        <div className="w-full rounded overflow-hidden shadow-lg bg-gray-800 text-white m-4">
+        <div className="text-white my-10 mx-6 w-[300px] h-[400px]">
             <Card>
                 <div className="relative group">
                     <CardMedia
                         component="img"
                         image={anime?.image.large}
                         alt={anime?.title.english}
-                        style={{ width: '100%', height: '250px', objectFit: 'cover' }} // Fixed size with object-fit
-                        className="transition-transform duration-200 ease-in-out hover:scale-105"
+                        className="transition-transform duration-200 ease-in-out hover:scale-105 w-[225px] h-[400px]"
                     />
-                    <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
+                    <div className="hover:bg-black absolute top-0 left-0 w-full h-full group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
                     <button
                         onClick={navigateToPage}
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
@@ -33,15 +32,10 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({anime}) => {
                     </button>
                 </div>
             </Card>
-            <Card className='mt-4'>
-                <CardContent>
-                    <CardHeader
-                        title={<div className="text-lg text-white font-bold">{anime?.title.english}</div>}
-                        subheader={<div className="text-md text-gray-400">{anime?.title.romaji}</div>}
-                        className="bg-gray-700"
-                    />
-                </CardContent>
-            </Card>
+            {
+                anime?.title.romaji ? (<div className="text-lg text-white font-bold text-center">{anime?.title.romaji}</div>) :
+                    (<div className="text-lg text-white font-bold text-center">{anime?.title.english}</div>)
+            }
         </div>
     )
 }
