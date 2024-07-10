@@ -6,7 +6,7 @@ import { useAnimeContext } from "../AnimeContext";
 import { AnimeCard } from "./AnimeCard";
 import { AnimeData } from "../interfaces/AnimeData";
 
-export const AnimeAiringStack = (props: AnimeStackProps) => {
+export const AnimeAiringStack = () => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
@@ -148,6 +148,4 @@ export const AnimeAiringStack = (props: AnimeStackProps) => {
     </div>
   );
 };
-interface AnimeStackProps {
-  type: string;
-}
+
