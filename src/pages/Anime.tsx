@@ -112,9 +112,11 @@ export const Anime = () => {
                         <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
                             Episodes: {animeData?.episodes || "To be decided"}
                         </span>
-                        <span className="font-poppins bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
-                            {animeData?.year}
-                        </span>
+                        {animeData?.year && (
+                            <span className="font-poppins bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                                {animeData.year}
+                            </span>
+                        )}
                     </div>
                     <div className="ml-2 flex gap-2">
                         <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
@@ -129,18 +131,20 @@ export const Anime = () => {
                 </div>
 
             </div>
-            {(animeData?.trailer && animeData?.trailer.embed_url) ?
-                (<div className="video-container" style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+            {animeData?.trailer && animeData?.trailer.embed_url ? (
+                <div className="video-container" style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
                     <iframe
                         src={animeData?.trailer.embed_url}
                         className="absolute top-0 left-0 w-full h-full"
                         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     ></iframe>
-                </div>)
-                :
-                (<div>No trailer available</div>)
-            }
+                </div>
+            ) : (
+                <div className="flex justify-center items-center h-screen">
+                    <p className="text-4xl text-center font-poppins">No Trailer Available</p>
+                </div>
+            )}
         </div>
     )
 }
