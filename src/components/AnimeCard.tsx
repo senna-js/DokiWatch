@@ -1,11 +1,12 @@
 import { Card, CardContent, CardHeader, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
+import { AnimeData } from '../interfaces/AnimeData';
 
-export const AnimeCard = (props: AnimeCardProps) => {
+export const AnimeCard: React.FC<AnimeCardProps> = ({anime}) => {
     const navigate = useNavigate();
 
     const navigateToPage = () => {
-        navigate(`/anime/${props.malID}`); // Update the path as needed
+        navigate(`/anime/${anime?.mal_id}`); // Update the path as needed
     };
 
     return (
@@ -14,8 +15,8 @@ export const AnimeCard = (props: AnimeCardProps) => {
                 <div className="relative group">
                     <CardMedia
                         component="img"
-                        image={props.image}
-                        alt={props.name}
+                        image={anime?.image.large}
+                        alt={anime?.title.english}
                         style={{ width: '100%', height: '250px', objectFit: 'cover' }} // Fixed size with object-fit
                         className="transition-transform duration-200 ease-in-out hover:scale-105"
                     />
@@ -35,8 +36,8 @@ export const AnimeCard = (props: AnimeCardProps) => {
             <Card className='mt-4'>
                 <CardContent>
                     <CardHeader
-                        title={<div className="text-lg text-white font-bold">{props.name}</div>}
-                        subheader={<div className="text-md text-gray-400">{props.romaji}</div>}
+                        title={<div className="text-lg text-white font-bold">{anime?.title.english}</div>}
+                        subheader={<div className="text-md text-gray-400">{anime?.title.romaji}</div>}
                         className="bg-gray-700"
                     />
                 </CardContent>
@@ -46,8 +47,5 @@ export const AnimeCard = (props: AnimeCardProps) => {
 }
 
 interface AnimeCardProps {
-    name: string;
-    romaji: string;
-    image: string;
-    malID: string;
+    anime: AnimeData;
 }

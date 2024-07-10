@@ -4,20 +4,10 @@ import { useEffect, useState } from "react";
 // import { start } from "repl";
 import { useAnimeContext } from "../AnimeContext";
 import { AnimeCard } from "./AnimeCard";
+import { AnimeData } from "../interfaces/AnimeData";
+
 export const AnimeStack = (props: AnimeStackProps) => {
-  const [animeData, setAnimeData] = useState<
-    | null
-    | {
-      image: string;
-      mediaID: string;
-      malID: string;
-      titleEng: string;
-      titleRom: string;
-      //startDate: string;
-      //endDate: string;
-      Progress: string;
-    }[]
-  >(null); // State to hold the data
+  const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
   ///////////////////////////////
@@ -35,7 +25,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
       const user = JSON.parse(localStorage.getItem("user") as string);
       user["access_token"] = accessToken;
       localStorage.setItem("user", JSON.stringify(user));
-      
+
       if (!accessToken) {
         console.log("No access token found or its over,connect to anilist");
       }
@@ -116,16 +106,17 @@ export const AnimeStack = (props: AnimeStackProps) => {
           data.MediaListCollection.lists
         ) {
           const lists = data.MediaListCollection.lists;
-          const animeList = lists.flatMap((list: any) =>
+          const animeList: AnimeData[] = lists.flatMap((list: any) =>
             list.entries.map((entry: any) => ({
-              image: entry.media.coverImage.large,
-              mediaID: entry.mediaId,
-              malID: entry.media.idMal,
-              titleEng: entry.media.title.english,
-              titleRom: entry.media.title.romaji,
-              //startDate: entry.startedAt,
-              //endDate: entry.completedAt,
-              Progress: entry.progress,
+              mal_id: entry.media.idMal,
+              title: {
+                romaji: entry.media.title.romaji,
+                english: entry.media.title.english
+              },
+              image: {
+                large: entry.media.coverImage.large,
+                color: entry.media.coverImage.color
+              }
             }))
           );
           setAnimeData(animeList); // Set the fetched data
@@ -148,13 +139,8 @@ export const AnimeStack = (props: AnimeStackProps) => {
         <div className="flex gap-4">
           {
             animeData.map((anime) => (
-              <div key={anime.mediaID}>
-                <AnimeCard
-                  name={anime.titleEng}
-                  romaji={anime.titleRom}
-                  image={anime.image}
-                  malID={anime.malID}
-                />
+              <div key={anime?.mal_id}>
+                <AnimeCard anime={anime} />
                 {/* More anime details */}
               </div>
             ))
