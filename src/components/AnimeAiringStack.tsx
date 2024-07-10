@@ -130,11 +130,11 @@ export const AnimeAiringStack = () => {
 
   // Render the component
   return (
-    <div className="flex-row p-4 m-6 rounded-md bg-gray-800 ">
-      <h2 className="text-xl">Anime Airing</h2>
+    <div className="flex-row p-4 m-3 rounded-md bg-gray-800 ">
+      <h2 className="text-2xl font-poppins pl-3">Anime Airing</h2>
       <hr className="my-4" />
       {animeData && (
-        <div className="flex gap-4 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
           {
             animeData.map((anime) => (
               <div key={anime?.mal_id}>

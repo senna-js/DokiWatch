@@ -34,14 +34,14 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                 },
             }}
         >
-            <div className="text-white my-10 mx-6 w-[300px] h-[400px]">
+            <div className="text-white my-7 mx-4 w-[201px] h-[268px]">
                 <Card>
                     <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
                         <CardMedia
                             component="img"
                             image={anime?.image.large}
                             alt={anime?.title.english}
-                            className="rounded-sm shadow-xl mx-auto object-cover w-[225px] h-[400px]"
+                            className="rounded-sm shadow-xl mx-auto object-cover w-[150px] h-[268px]"
                         />
                         <div className="rounded-sm mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out" onClick={navigateToPage}></div>
 

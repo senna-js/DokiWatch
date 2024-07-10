@@ -44,8 +44,8 @@ const App = () => {
                   </div>
                   {isSignedIn && (
                     <div className="mt-16 ml-24">
-                      <AnimeAiringStack type="Airing" />
-                      <AnimeWatchingStack type="Watching" />
+                      <AnimeAiringStack  />
+                      <AnimeWatchingStack />
                     </div>
                   )}
                 </div>
