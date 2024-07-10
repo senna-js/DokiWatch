@@ -78,6 +78,9 @@ export const AnimeStack = (props: AnimeStackProps) => {
                     coverImage {
                       large
                     }
+                    status(version: 1)
+                    season
+                    episodes
                   }
                 }
               }
