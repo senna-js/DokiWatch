@@ -40,7 +40,7 @@ export const Navbar = () => {
       }
 
       if (accessToken) {
-        console.log("Access Token:", accessToken);
+        // console.log("Access Token:", accessToken);
         const query = `
           query ($name: String) {
             User(name: $name) {
@@ -72,7 +72,7 @@ export const Navbar = () => {
           });
 
           const { data } = await response.json();
-          console.log(data);
+          // console.log(data);
 
           if (data && data.User && data.User.avatar) {
             const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -130,7 +130,8 @@ export const Navbar = () => {
   return (
     <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
       <Sidebar /> {/* Render the Sidebar component */}
-      <div className="text-lg font-bold">Doki Watch</div>
+      <div className="text-lg font-bold cursor-pointer"
+      onClick={()=>{window.location.href="/"}}>Doki Watch</div>
       <div className="flex-1 mx-4">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3">
