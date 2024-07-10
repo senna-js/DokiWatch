@@ -1,6 +1,6 @@
 import { Card, CardContent, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
-import { AnimeData } from '../interfaces/AnimeData';
+import { AnimeData } from '../interfaces/AnimeWatchingData';
 
 export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     const navigate = useNavigate();

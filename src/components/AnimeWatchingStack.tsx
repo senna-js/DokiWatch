@@ -6,7 +6,7 @@ import { useAnimeContext } from "../AnimeContext";
 import { AnimeCard } from "./AnimeCard";
 import { AnimeData } from "../interfaces/AnimeData";
 
-export const AnimeStack = (props: AnimeStackProps) => {
+export const AnimeWatchingStack = (props: AnimeStackProps) => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
@@ -68,6 +68,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
                     coverImage {
                       large
                     }
+                    bannerImage
                     status(version: 1)
                     season
                     episodes
@@ -83,7 +84,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
       };
 
       try {
-        console.log("fetching anime list", accessToken);
+        // console.log("fetching anime list", accessToken);
         const response = await fetch("https://graphql.anilist.co", {
           method: "POST",
           headers: {
@@ -98,7 +99,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
         });
 
         const { data } = await response.json();
-        console.log(data);
+        // console.log(data);
 
         if (
           data &&
@@ -107,7 +108,8 @@ export const AnimeStack = (props: AnimeStackProps) => {
         ) {
           const lists = data.MediaListCollection.lists;
           const animeList: AnimeData[] = lists.flatMap((list: any) =>
-            list.entries.map((entry: any) => ({
+            list.entries.filter((entry:any)=>(entry.media.status === "FINISHED"))
+            .map((entry: any) => ({
               mal_id: entry.media.idMal,
               title: {
                 romaji: entry.media.title.romaji,
