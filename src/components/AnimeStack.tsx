@@ -51,7 +51,7 @@ export const AnimeStack = (props: AnimeStackProps) => {
 
       const query = `
           query ($username: String) {
-            MediaListCollection(userName: $username, type: ANIME) {
+            MediaListCollection(userName: $username, type: ANIME, status: CURRENT) {
               lists {
                 name
                 entries {
