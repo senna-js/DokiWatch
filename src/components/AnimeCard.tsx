@@ -1,6 +1,6 @@
-import { Card, CardContent, CardMedia } from '@mui/material';
+import { Card, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using react-router for navigation
-import { AnimeData } from '../interfaces/AnimeWatchingData';
+import { AnimeData } from '../interfaces/AnimeData';
 
 export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                         alt={anime?.title.english}
                         className="transition-transform duration-200 ease-in-out hover:scale-105 w-[225px] h-[400px]"
                     />
-                    <div className="absolute top-0 left-0 w-full h-full group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
+                    <div className="hover:bg-black absolute top-0 left-0 w-full h-full group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
                     <button
                         onClick={navigateToPage}
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
