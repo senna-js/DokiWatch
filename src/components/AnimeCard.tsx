@@ -33,8 +33,15 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                 </div>
             </Card>
             {
-                anime?.title.romaji ? (<div className="text-lg text-white font-bold text-center">{anime?.title.romaji}</div>) :
-                    (<div className="text-lg text-white font-bold text-center">{anime?.title.english}</div>)
+                anime?.title.romaji ? (
+                    <div className="text-lg text-white font-bold text-center truncate mx-2 pt-2 font-poppins">
+                        {anime?.title.romaji}
+                    </div>
+                ) : (
+                    <div className="text-lg text-white font-bold text-center truncate mx-2 pt-2 font-poppins">
+                        {anime?.title.english}
+                    </div>
+                )
             }
         </div>
     )
