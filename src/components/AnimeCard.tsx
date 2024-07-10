@@ -34,7 +34,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                 },
             }}
         >
-            <div className="text-white my-7 mx-4 w-[201px] h-[268px]">
+            <div className="text-white my-7 mx-4 w-[201px] h-[280px]">
                 <Card>
                     <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
                         <CardMedia
@@ -57,17 +57,20 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                         </button>
                     </div>
                 </Card>
+                <div>
                 {
                     anime?.title.english ? (
-                        <div className="text-lg text-white font-bold text-center truncate mx-2 pt-2 font-poppins">
+                        <div className="text-md  text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
                             {anime?.title.english}
                         </div>
                     ) : (
-                        <div className="text-lg text-white font-bold text-center truncate mx-2 pt-2 font-poppins">
+                        <div className="text-md text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
                             {anime?.title.romaji}
                         </div>
                     )
                 }
+                </div>
+               
             </div>
         </Tooltip>
     );
