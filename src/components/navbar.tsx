@@ -107,7 +107,7 @@ export const Navbar = () => {
   const executeSearch = () => {
     console.log("Searching for:", searchTerm);
     // Implement your search logic here
-    navigate(`/search?q=${searchTerm}`);
+    navigate(`/search?search=${searchTerm}`);
     // Clear the search term state after executing the search
     setSearchTerm("");
   };

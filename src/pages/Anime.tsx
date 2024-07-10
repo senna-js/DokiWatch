@@ -30,7 +30,7 @@ export const Anime = () => {
 
     const handleGenreClick = (e: any) => {
         const genreName = e.target.innerText.toLowerCase()
-        const navString = `/search?genres=${genreName}`
+        const navString = `/search?genre=${genreName}`
         navigate(navString)
     }
 

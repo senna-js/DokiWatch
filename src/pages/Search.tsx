@@ -6,19 +6,17 @@ import { AnimeCard } from "../components/AnimeCard"
 
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
-    var term = searchParams
+    var searchTerm = searchParams.get("search")
+    var genreTerm = searchParams.get("genre")
+
+    var term = `?${searchTerm? `search=${searchTerm}` : ''}${genreTerm? `genre=${genreTerm}` : ''}`
     const [anime, setAnime] = useState<any[]>([])
-        useEffect(() => {
-            console.log(term.toString())
-            axios.get(`https://api.jikan.moe/v4/anime?${term}`)
-            .then((res) => {
-                console.log(res.data.data)
-                setAnime(res.data.data)
-            })
-            .then((err) => {
-                console.log(err)
-            })
-        }, [term])
+
+    useEffect(() => {
+        console.log(term.toString())
+        
+    }, [term])
+
     return (
         <div>
             <Stack spacing={2} direction="row">
