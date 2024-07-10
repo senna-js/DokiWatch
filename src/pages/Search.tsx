@@ -4,6 +4,9 @@ import axios from "axios"
 import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
 import { AnimeData } from "../interfaces/AnimeData"
+import { AdvancedSearch } from "../components/AdvancedSearch"
+
+const genres = ["Action", "Adventure", "Comedy", "Drama","Ecchi", "Fantasy", "Horror","Mahou Shoujo", "Mecha","Music", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]
 
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -24,7 +27,7 @@ export const Search = () => {
             term = `search: "${searchTerm}"`
         }
         else if (genreTerm) {
-            term = `genre: "${genreTerm}"`
+            term = `genre_in: ${genreTerm}`
         }
         else {
             term = ``
@@ -82,6 +85,7 @@ export const Search = () => {
 
     return (
         <div>
+            <AdvancedSearch genres={genres} />
             <Stack spacing={2} direction="row" flexWrap="wrap">
                 {
                     anime.map((anime) => (
