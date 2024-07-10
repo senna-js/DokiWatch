@@ -95,7 +95,7 @@ export const Anime = () => {
                     <hr />
                     <div className="ml-2 items-center flex gap-2">
                         {animeData?.genres.map((genre: any) => (
-                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-transparent bg-red-500 font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-red-500 font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
                                 {genre.name}
                             </span>
                         ))}
@@ -112,8 +112,8 @@ export const Anime = () => {
                         <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
                             Episodes: {animeData?.episodes || "To be decided"}
                         </span>
-                        <span className="font-poppins bg-transparent bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
-                             {animeData?.year}
+                        <span className="font-poppins bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            {animeData?.year}
                         </span>
                     </div>
                     <div className="ml-2 flex gap-2">
