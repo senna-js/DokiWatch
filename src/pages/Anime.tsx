@@ -75,7 +75,7 @@ export const Anime = () => {
             <div className="flex gap-4">
                 <div className="relative group h-auto">
                     <img src={animeData?.images.jpg.large_image_url} alt={animeData?.title} className="rounded-lg shadow-xl mx-auto my-2 h-full w-full object-cover" />
-                    <div className=" rounded-lg mx-auto my-2 absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
+                    <div className="cursor-pointer rounded-lg mx-auto my-2 absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out" onClick={handleWatch}></div>
                     <div className="text-center">
                         <button onClick={handleWatch} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
                             style={{ transition: 'opacity 0.2s ease-in-out' }}>
@@ -96,7 +96,7 @@ export const Anime = () => {
                     <hr />
                     <div className="ml-2 items-center flex gap-2">
                         {animeData?.genres.map((genre: any) => (
-                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-red-500 border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                            <span onClick={handleGenreClick} key={genre.mal_id} className="cursor-pointer bg-red-500 border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg hover:border-pink-200 hover:text-pink-200">
                                 {genre.name}
                             </span>
                         ))}
