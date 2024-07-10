@@ -131,10 +131,10 @@ export const AnimeAiringStack = (props: AnimeStackProps) => {
   // Render the component
   return (
     <div className="flex-row p-4 m-6 rounded-md bg-gray-800 ">
-      <h2 className="text-xl">Anime {props.type}</h2>
+      <h2 className="text-xl">Anime Airing</h2>
       <hr className="my-4" />
       {animeData && (
-        <div className="flex gap-4">
+        <div className="flex gap-4 overflow-x-auto">
           {
             animeData.map((anime) => (
               <div key={anime?.mal_id}>
