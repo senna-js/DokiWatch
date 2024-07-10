@@ -95,7 +95,7 @@ export const Anime = () => {
                     <hr />
                     <div className="ml-2 items-center flex gap-2">
                         {animeData?.genres.map((genre: any) => (
-                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-red-500 font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-red-500 border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                                 {genre.name}
                             </span>
                         ))}
@@ -103,26 +103,26 @@ export const Anime = () => {
                     </div>
                     <div className="ml-2 flex gap-2">
                         {animeData?.studios.map((studio: any) => (
-                            <span key={studio.mal_id} className="bg-transparent font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            <span key={studio.mal_id} className="bg-transparent border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                                 {studio.name}
                             </span>
                         ))}
                     </div>
                     <div className="ml-2 flex gap-2">
-                        <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                        <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                             Episodes: {animeData?.episodes || "To be decided"}
                         </span>
                         {animeData?.year && (
-                            <span className="font-poppins bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                            <span className="font-poppins border border-white bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                                 {animeData.year}
                             </span>
                         )}
                     </div>
                     <div className="ml-2 flex gap-2">
-                        <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                        <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                             Duration: {animeData?.duration}
                         </span>
-                        <span className="font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-md">
+                        <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                             {animeData?.status}
                         </span>
                     </div>
