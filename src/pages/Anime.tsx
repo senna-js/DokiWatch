@@ -121,7 +121,7 @@ export const Anime = () => {
                     </div>
                     <div className="ml-2 flex gap-2">
                         <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
-                            Duration: {animeData?.duration}
+                            Duration: {animeData?.duration.replace('per ep', '')}
                         </span>
                         <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                             {animeData?.status}

@@ -20,14 +20,14 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
             placement="top"
             arrow
             sx={{
-                // Step 4: Styling the tooltip
+                
                 '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
                     color: 'white',
-                    maxWidth: 220,
-                    fontSize: '0.875rem',
-                    borderRadius: '4px',
-                    padding: '12px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Adjust transparency here
+                    backdropFilter: 'blur(4px)', // Adjust blur effect here
+                    borderColor: 'red',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
                 },
                 '& .MuiTooltip-arrow': {
                     color: 'rgba(0, 0, 0, 0.7)',
@@ -44,7 +44,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                             className="rounded-sm shadow-xl mx-auto object-cover w-[225px] h-[400px]"
                         />
                         <div className="rounded-sm mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out" onClick={navigateToPage}></div>
-                        
+
                         <button
                             onClick={navigateToPage}
                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
