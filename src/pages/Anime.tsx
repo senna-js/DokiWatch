@@ -24,7 +24,7 @@ export const Anime = () => {
     }, [params.id])
 
     const handleWatch = () => {
-        const romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/\s+/g, '-').replace(/:/g, '').replace(/,/g, '');
+        const romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/\s+/g, '-').replace(/:/g, '').replace(/,/g, '').replace(/\./g, '');
         const navString = `/watch/${romajiName}-episode-1`
         navigate(navString)
     }
