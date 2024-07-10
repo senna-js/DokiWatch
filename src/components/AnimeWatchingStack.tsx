@@ -66,7 +66,7 @@ export const AnimeWatchingStack = () => {
                     }
                     idMal
                     coverImage {
-                      large
+                      extraLarge
                     }
                     bannerImage
                     status(version: 1)
@@ -116,7 +116,7 @@ export const AnimeWatchingStack = () => {
                 english: entry.media.title.english
               },
               image: {
-                large: entry.media.coverImage.large,
+                large: entry.media.coverImage.extraLarge,
                 color: entry.media.coverImage.color
               }
             }))
