@@ -1,13 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
-import { AnimeStack } from "./components/AnimeStack";
+import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
+import {AnimeAiringStack} from "./components/AnimeAiringStack";
 import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
 import { useUser } from '@clerk/clerk-react';
+
 
 
 const App = () => {
@@ -42,8 +44,8 @@ const App = () => {
                   </div>
                   {isSignedIn && (
                     <div className="mt-16 ml-24">
-                      <AnimeStack type="Airing" />
-                      <AnimeStack type="Watching" />
+                      <AnimeAiringStack type="Airing" />
+                      <AnimeWatchingStack type="Watching" />
                     </div>
                   )}
                 </div>
