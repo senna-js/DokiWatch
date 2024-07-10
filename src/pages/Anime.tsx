@@ -22,6 +22,12 @@ export const Anime = () => {
         navigate(navString)
     }
 
+    const handleGenreClick = (e: any) => {
+        const genreName = e.target.innerText.toLowerCase()
+        const navString = `/genre/${genreName}`
+        navigate(navString)
+    }
+
     return (
         <div className="flex flex-col gap-6 mx-24 my-6">
             <div className="flex items-center justify-between gap-2">
@@ -65,7 +71,7 @@ export const Anime = () => {
                     </div>
                     <div className="flex gap-2">
                         {animeData?.genres.map((genre: any) => (
-                            <span key={genre.mal_id} className="bg-gray-800 text-white px-2 py-1 rounded-md">
+                            <span onClick={handleGenreClick} key={genre.mal_id} className="bg-gray-800 text-white px-2 py-1 rounded-md">
                                 {genre.name}
                             </span>
                         ))}
