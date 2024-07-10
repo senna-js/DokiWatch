@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
-import {AnimeAiringStack} from "./components/AnimeAiringStack";
+import { AnimeAiringStack } from "./components/AnimeAiringStack";
 import scene from "./assests/scene5.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
@@ -44,8 +44,8 @@ const App = () => {
                   </div>
                   {isSignedIn && (
                     <div className="mt-16 ml-24">
-                      <AnimeAiringStack type="Airing" />
-                      <AnimeWatchingStack type="Watching" />
+                      <AnimeAiringStack />
+                      <AnimeWatchingStack />
                     </div>
                   )}
                 </div>
