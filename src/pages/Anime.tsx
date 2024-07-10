@@ -30,7 +30,7 @@ export const Anime = () => {
 
     const handleGenreClick = (e: any) => {
         const genreName = e.target.innerText.toLowerCase()
-        const navString = `/genre/${genreName}`
+        const navString = `/search?genres=${genreName}`
         navigate(navString)
     }
 
@@ -129,7 +129,7 @@ export const Anime = () => {
                 </div>
 
             </div>
-            {(animeData?.trailer && animeData?.trailer.embed_url) &&
+            {(animeData?.trailer && animeData?.trailer.embed_url) ?
                 (<div className="video-container" style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
                     <iframe
                         src={animeData?.trailer.embed_url}
@@ -138,6 +138,8 @@ export const Anime = () => {
                         allowFullScreen
                     ></iframe>
                 </div>)
+                :
+                (<div>No trailer available</div>)
             }
         </div>
     )

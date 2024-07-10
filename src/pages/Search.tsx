@@ -1,14 +1,16 @@
-import { useParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
 
 export const Search = () => {
-    const params = useParams()
+    let [searchParams, setSearchParams] = useSearchParams();
+    var term = searchParams
     const [anime, setAnime] = useState<any[]>([])
         useEffect(() => {
-            axios.get(`https://api.jikan.moe/v4/anime?q=${params.term}`)
+            console.log(term.toString())
+            axios.get(`https://api.jikan.moe/v4/anime?${term}`)
             .then((res) => {
                 console.log(res.data.data)
                 setAnime(res.data.data)
@@ -16,8 +18,7 @@ export const Search = () => {
             .then((err) => {
                 console.log(err)
             })
-        }, [params.term])
-
+        }, [term])
     return (
         <div>
             <Stack spacing={2} direction="row">
