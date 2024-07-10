@@ -40,7 +40,7 @@ export const Navbar = () => {
       }
 
       if (accessToken) {
-        console.log("Access Token:", accessToken);
+        // console.log("Access Token:", accessToken);
         const query = `
           query ($name: String) {
             User(name: $name) {
@@ -72,7 +72,7 @@ export const Navbar = () => {
           });
 
           const { data } = await response.json();
-          console.log(data);
+          // console.log(data);
 
           if (data && data.User && data.User.avatar) {
             const user = JSON.parse(localStorage.getItem("user") || "{}");
