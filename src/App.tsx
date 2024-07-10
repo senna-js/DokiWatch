@@ -7,8 +7,11 @@ import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
+import { useUser } from '@clerk/clerk-react';
+
 
 const App = () => {
+  const { isSignedIn } = useUser();
   return (
     <AnimeProvider>
       <div className="min-h-screen bg-gray-900 text-white relative">
@@ -37,18 +40,20 @@ const App = () => {
                       Explore your favorite anime & manga here.
                     </p>
                   </div>
-                  <div className="mt-16 ml-24">
-                    <AnimeStack type="Airing" />
-                    <AnimeStack type="Watching" />
-                  </div>
+                  {isSignedIn && (
+                    <div className="mt-16 ml-24">
+                      <AnimeStack type="Airing" />
+                      <AnimeStack type="Watching" />
+                    </div>
+                  )}
                 </div>
               }
             />
-            <Route path="/anime/:id" element={<Anime/>} />
-            <Route path="/watch/:id" element={<Watch/>} />
-            <Route path="/search" element={<Search/>} />
+            <Route path="/anime/:id" element={<Anime />} />
+            <Route path="/watch/:id" element={<Watch />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/landingPage" element={<LandingPage />} />
-        </Routes>
+          </Routes>
         </div>
       </div>
     </AnimeProvider>

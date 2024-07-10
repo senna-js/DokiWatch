@@ -154,7 +154,7 @@ const Sidebar = () => {
               <HomeIcon className="text-white" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Manga" placement="right">
+          <Tooltip title="Coming Soon" placement="right">
             <IconButton onClick={handleMangaClick}>
               <MangaIcon className="text-white" />
             </IconButton>
