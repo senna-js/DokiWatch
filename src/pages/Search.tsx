@@ -34,7 +34,7 @@ export const Search = () => {
 
         var query = `{
                         Page(page: 1, perPage: 20) {
-                            media(${term}, sort: POPULARITY_DESC) {
+                            media(${term}, sort: POPULARITY_DESC,type: ANIME) {
                                 idMal
                                 title {
                                     romaji
