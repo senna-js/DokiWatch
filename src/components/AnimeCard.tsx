@@ -17,9 +17,9 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                         component="img"
                         image={anime?.image.large}
                         alt={anime?.title.english}
-                        className="transition-transform duration-200 ease-in-out hover:scale-105 w-[225px] h-[400px]"
+                        className="rounded-xl shadow-xl mx-auto object-cover w-[225px] h-[400px]"
                     />
-                    <div className="hover:bg-black absolute top-0 left-0 w-full h-full group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
+                    <div className="rounded-xl mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"></div>
                     <button
                         onClick={navigateToPage}
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
