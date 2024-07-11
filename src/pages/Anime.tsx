@@ -3,18 +3,12 @@ import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Content from "../components/ReadMore"
-import { ANIME } from "@consumet/extensions"
 
 export const Anime = () => {
     const params = useParams()
     const navigate = useNavigate()
     const [animeData, setAnimeData] = useState<any>()
     const [userRating, setUserRating] = useState(0);
-    const gogoanime = new ANIME.Gogoanime();
-
-    gogoanime.search("One Piece").then(data => {
-        console.log(data);
-    })
 
     const handleRating = (ratingValue: number) => {
         setUserRating(ratingValue);
