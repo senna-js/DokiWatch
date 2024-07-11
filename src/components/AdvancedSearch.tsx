@@ -1,6 +1,6 @@
 import { MdOutlineCheckBox, MdOutlineCheckBoxOutlineBlank, MdOutlineIndeterminateCheckBox } from 'react-icons/md'
 import { useState } from 'react'
-import { Button } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 
 const Bullet = (props: BulletProps) => {
     const [bulletType, setBulletType] = useState<BulletType>(BulletType.indeterminate)
@@ -30,9 +30,15 @@ const Bullet = (props: BulletProps) => {
 }
 
 export const AdvancedSearch = (props: AdvancedSearchProps) => {
+    const [searchTerm, setSearchTerm] = useState<string>('')
+
     return (
         <div className='backdrop-blur-lg flex'>
             <div className='container m-6 p-6 rounded-lg flex flex-col gap-4'>
+                <h1 className='text-center text-bold font-poppins text-2xl'>Search</h1>
+                <hr className='my-2' />
+                <TextField label='Search' variant='outlined' value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value) }} />
+
                 <h1 className='text-center text-bold font-poppins text-2xl'>Genres</h1>
                 <hr className='my-2' />
                 <div className='flex flex-wrap gap-4'>
@@ -41,7 +47,7 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
                     )}
                 </div>
                 <div className='flex justify-center'>
-                    <Button onClick={props.handleSearch} variant='contained'>Search</Button>
+                    <Button onClick={()=>{props.handleSearch(searchTerm)}} variant='contained'>Search</Button>
                 </div>
             </div>
         </div>
@@ -63,5 +69,5 @@ type BulletProps = {
 type AdvancedSearchProps = {
     genres: string[]
     handleGenreSelection: (index: number, set: number) => void
-    handleSearch: () => void
+    handleSearch: (searchTerm: string) => void
 }
