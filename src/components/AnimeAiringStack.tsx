@@ -18,8 +18,7 @@ export const AnimeAiringStack = () => {
       accessToken = JSON.parse(
         localStorage.getItem("user") as string
       ).access_token;
-    }
-    else {
+    } else {
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       accessToken = hashParams.get("access_token");
       const user = JSON.parse(localStorage.getItem("user") as string);
@@ -32,8 +31,12 @@ export const AnimeAiringStack = () => {
     }
   } else {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    if (!hashParams.get("access_token")) {
+      return;
+    }
     accessToken = hashParams.get("access_token");
     const user = JSON.parse(localStorage.getItem("user") as string);
+    if (!user) return;
     user["access_token"] = accessToken;
     localStorage.setItem("user", JSON.stringify(user));
 
@@ -100,23 +103,28 @@ export const AnimeAiringStack = () => {
 
         const { data } = await response.json();
 
-        if (data && data.MediaListCollection && data.MediaListCollection.lists) {
+        if (
+          data &&
+          data.MediaListCollection &&
+          data.MediaListCollection.lists
+        ) {
           const lists = data.MediaListCollection.lists;
           console.log(lists);
-          const animeList: AnimeData[] = lists.flatMap((list: any) => (
-            list.entries.filter((entry: any) => entry.media.status === "RELEASING")
+          const animeList: AnimeData[] = lists.flatMap((list: any) =>
+            list.entries
+              .filter((entry: any) => entry.media.status === "RELEASING")
               .map((entry: any) => ({
-              mal_id: entry.media.idMal,
-              title: {
-                romaji: entry.media.title.romaji,
-                english: entry.media.title.english
-              },
-              image: {
-                large: entry.media.coverImage.extraLarge,
-                color: entry.media.coverImage.color
-              }
-            }))
-          ));
+                mal_id: entry.media.idMal,
+                title: {
+                  romaji: entry.media.title.romaji,
+                  english: entry.media.title.english,
+                },
+                image: {
+                  large: entry.media.coverImage.extraLarge,
+                  color: entry.media.coverImage.color,
+                },
+              }))
+          );
           setAnimeData(animeList); // Set the fetched data
           setTriggerFetch(false); // Reset the trigger fetch flag
         }
@@ -135,17 +143,14 @@ export const AnimeAiringStack = () => {
       <hr className="my-4" />
       {animeData && (
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
-          {
-            animeData.map((anime) => (
-              <div key={anime?.mal_id}>
-                <AnimeCard anime={anime} />
-                {/* More anime details */}
-              </div>
-            ))
-          }
+          {animeData.map((anime) => (
+            <div key={anime?.mal_id}>
+              <AnimeCard anime={anime} />
+              {/* More anime details */}
+            </div>
+          ))}
         </div>
       )}
     </div>
   );
 };
-
