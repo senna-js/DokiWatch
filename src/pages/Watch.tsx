@@ -87,7 +87,7 @@ export const Watch: React.FC = () => {
   const handleNext = () => {
     const newEpisodeNumber = currentEpisodeNumber + 1;
     const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${newEpisodeNumber}`);
-    // Assuming you have a way to check if the episode exists before navigating
+    
     history(`/watch/${newId}`);
   };
 
