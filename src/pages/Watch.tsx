@@ -1,6 +1,7 @@
 import React, { useState, useEffect, } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
+import axios from "axios";
 
 interface Source {
   url: string;
@@ -22,18 +23,27 @@ export const Watch: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        console.log(id)
-        const response = await fetch(
-          `${import.meta.env.VITE_CONSUMET_API_ENDPOINT}watch/${id}`
-        );
-        const data = await response.json();
-        if (data && data.sources && data.sources.length > 0) {
-          setSources(data.sources);
-          setStreamUrl(data.sources[4].url); // Default to 1080p
+      const cacheKey = `watchData-${id}`;
+      const cachedData = sessionStorage.getItem(cacheKey);
+
+      if (cachedData) {
+        const data = JSON.parse(cachedData);
+        setSources(data.sources);
+        setStreamUrl(data.sources[4].url); // Default to 1080p
+      } else {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_CONSUMET_API_ENDPOINT}watch/${id}`
+          );
+          const data = response.data;
+          if (data && data.sources && data.sources.length > 0) {
+            sessionStorage.setItem(cacheKey, JSON.stringify(data));
+            setSources(data.sources);
+            setStreamUrl(data.sources[4].url); // Default to 1080p
+          }
+        } catch (error) {
+          console.log("Error:", error);
         }
-      } catch (error) {
-        console.log("Error:", error);
       }
     };
 
