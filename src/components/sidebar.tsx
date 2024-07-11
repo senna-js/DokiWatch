@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   IconButton,
   Tooltip,
@@ -14,6 +14,7 @@ import {
   Link as ConnectIcon,
   Home as HomeIcon,
   CollectionsBookmark as MangaIcon,
+  Schedule as ScheduleIcon,
 } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"; // For the toggle button
@@ -68,6 +69,8 @@ const Sidebar = () => {
   const [username, setUsername] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn } = useUser(); // Use the isSignedIn property from the useUser hook
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef(null);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -112,6 +115,18 @@ const Sidebar = () => {
   const handleMangaClick = () => {
     console.log("Manga IconButton clicked");
     // Add your logic here for Manga Stack button
+  };
+
+
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    modalRef.current.showModal();
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    modalRef.current.close();
   };
 
   return (
@@ -159,6 +174,22 @@ const Sidebar = () => {
               <MangaIcon className="text-white" />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Anime Schedule" placement="right">
+            <IconButton onClick={openModal}>
+              <ScheduleIcon className="text-white" id="schedule" />
+            </IconButton>
+          </Tooltip>
+          <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle" ref={modalRef}>
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">Hello!</h3>
+              <p className="py-4">Press ESC key or click the button below to close</p>
+              <div className="modal-action">
+                <form method="dialog" onClick={closeModal}>
+                  <button className="btn">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </Stack>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
