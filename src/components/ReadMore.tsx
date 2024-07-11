@@ -18,7 +18,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({ children }) => {
     return (
         <p className="text cursor-default">
             {isReadMore ? text.slice(0, 500) : text}
-                <span onClick={toggleReadMore} className="read-or-hide cursor-pointer inline-flex items-center justify-center text-black" style={{ marginLeft: '8px', color: 'gray' }}>
+                <span onClick={toggleReadMore} className="read-or-hide cursor-pointer inline-flex items-center justify-center text-black select-none" style={{ marginLeft: '8px', color: 'gray' }}>
                     {isReadMore ? (
                         <>
                             <span className="mr-1">+</span>
