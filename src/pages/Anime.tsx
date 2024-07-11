@@ -3,18 +3,13 @@ import { useParams, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Content from "../components/ReadMore"
-import { ANIME } from "@consumet/extensions";
 
 export const Anime = () => {
     const params = useParams()
     const navigate = useNavigate()
     const [animeData, setAnimeData] = useState<any>()
     const [userRating, setUserRating] = useState(0);
-    const zoro = new ANIME.Zoro();
 
-    zoro.search("spy x family").then(data => {
-        console.log(data);
-      })
 
     const handleRating = (ratingValue: number) => {
         setUserRating(ratingValue);
