@@ -1,20 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import React, { useState, useEffect, } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
+import { Button } from "@mui/material";
 
 interface Source {
   url: string;
   quality: string;
 }
 
+interface Episode {
+  id: number,
+  title_english: string,
+  title_romaji: string
+}
+
 export const Watch: React.FC = () => {
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [settingsVisible, setSettingsVisible] = useState(false);
-
+  const [episodesData, setEpisodesData] = useState<Episode[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const history = useNavigate();
 
@@ -54,6 +62,23 @@ export const Watch: React.FC = () => {
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    axios.get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}/episodes`)
+      .then(res => {
+        console.log(res.data.data)
+        setEpisodesData(res.data.data.map((episode: any) => ({
+          id: episode.mal_id,
+          title_english: episode.title,
+          title_romaji: episode.title_romanji
+        }))
+        )
+      })
+  }, [searchParams])
+
+  useEffect(() => {
+    console.log(episodesData)
+  }, [episodesData]);
 
   const reload = () => {
     window.location.reload();
@@ -134,7 +159,10 @@ export const Watch: React.FC = () => {
   // };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="grid grid-cols-2 justify-center items-center h-screen">
+      <div className="bg-slate-600 h-full">
+        hello
+      </div>
       <div className="w-full max-w-4xl relative">
         {streamUrl ? (
           <div onLoad={reload}>
@@ -166,26 +194,18 @@ export const Watch: React.FC = () => {
               height="500px"
               className="aspect-video"
             />
+            <div className="bg-slate-600 rounded-b-lg h-14 flex items-center px-4 py-auto">
+              <Button variant="contained" onClick={handlePrev}>Prev episode</Button>
+              <div className="ml-auto">
+                <Button variant="contained" onClick={handlePrev} >Next episode</Button>
+              </div>
+            </div>
           </div>
 
         ) : (
           <div className="flex justify-center items-center">
             <span className="loading loading-spinner text-info"></span>
             <p className="ml-2 font-poppins font-semibold">loading..</p>
-          </div>
-        )}
-        {streamUrl && (
-          <div className="p-2 flex justify-evenly mt-3">
-
-            <button className="rounded-lg bg-[#1F2837] p-3 border border-white"
-              onClick={handlePrev}>
-              Prev episode
-            </button>
-            <h2 className="rounded-lg bg-[#1F2837] p-3 border border-white">Episode {currentEpisodeNumber}</h2>
-            <button className="rounded-lg bg-[#1F2837] p-3 border border-white"
-              onClick={handleNext}>
-              Next episode
-            </button>
           </div>
         )}
 
