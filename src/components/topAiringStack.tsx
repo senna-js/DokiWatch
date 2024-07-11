@@ -18,7 +18,7 @@ const TopAiringAnimeStack = () => {
     const fetchTopAiringAnime = async () => {
       try {
         const response = await fetch(
-          "https://consumnetapieshan.vercel.app/anime/gogoanime/top-airing"
+          "https://consumet-deploy.vercel.app/anime/gogoanime/top-airing"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
