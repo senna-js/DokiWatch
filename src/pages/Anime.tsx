@@ -21,6 +21,7 @@ export const Anime = () => {
                 console.log(res.data)
                 setAnimeData(res.data.data)
             })
+
     }, [params.id])
 
     const handleWatch = () => {

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 import React, { useState, useEffect, } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
+import axios from "axios";
 
 interface Source {
   url: string;
@@ -22,18 +25,30 @@ export const Watch: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        console.log(id)
-        const response = await fetch(
-          `${import.meta.env.VITE_CONSUMET_API_ENDPOINT}watch/${id}`
-        );
-        const data = await response.json();
-        if (data && data.sources && data.sources.length > 0) {
-          setSources(data.sources);
-          setStreamUrl(data.sources[4].url); // Default to 1080p
+      // Clean the id by removing unwanted characters
+      const cleanId = id.replace(/["',.]/g, '');
+      console.log(cleanId);
+      const cacheKey = `watchData-${cleanId}`;
+      const cachedData = sessionStorage.getItem(cacheKey);
+
+      if (cachedData) {
+        const data = JSON.parse(cachedData);
+        setSources(data.sources);
+        setStreamUrl(data.sources[4].url); // Default to 1080p
+      } else {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_CONSUMET_API_ENDPOINT}watch/${cleanId}`
+          );
+          const data = response.data;
+          if (data && data.sources && data.sources.length > 0) {
+            sessionStorage.setItem(cacheKey, JSON.stringify(data));
+            setSources(data.sources);
+            setStreamUrl(data.sources[4].url); // Default to 1080p
+          }
+        } catch (error) {
+          console.log("Error:", error);
         }
-      } catch (error) {
-        console.log("Error:", error);
       }
     };
 
@@ -87,7 +102,7 @@ export const Watch: React.FC = () => {
   const handleNext = () => {
     const newEpisodeNumber = currentEpisodeNumber + 1;
     const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${newEpisodeNumber}`);
-    
+
     history(`/watch/${newId}`);
   };
 
@@ -161,7 +176,7 @@ export const Watch: React.FC = () => {
         )}
         {streamUrl && (
           <div className="p-2 flex justify-evenly mt-3">
-            
+
             <button className="rounded-lg bg-[#1F2837] p-3 border border-white"
               onClick={handlePrev}>
               Prev episode
