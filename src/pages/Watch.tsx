@@ -79,15 +79,13 @@ export const Watch: React.FC = () => {
       const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${currentEpisodeNumber - 1}`);
       history(`/watch/${newId}`);
     } else {
-      alert("You are at the first episode");
+      alert("You are watching the first episode");
     }
   };
 
   //TODO: @Eshan276 @Gadzrux @karan8404 Find a way to get the total number of episodes or check from the url params whethere there's any ep available after incrementing the ep index
   const handleNext = () => {
-    const newEpisodeNumber = currentEpisodeNumber + 1;
-    const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${newEpisodeNumber}`);
-    
+    const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${currentEpisodeNumber + 1}`);
     history(`/watch/${newId}`);
   };
 
