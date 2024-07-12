@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import React, { useState, useEffect, } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
 import { Button } from "@mui/material";
@@ -21,20 +21,45 @@ export const Watch: React.FC = () => {
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [settingsVisible, setSettingsVisible] = useState(false);
+  const [animeData, setAnimeData] = useState<any>();
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate();
-
-  let params = useParams<{ id: any }>();
-  let id: string = params.id;
-  const [episodeId, setEpisodeId] = useState(id);
-  const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState(0);
+  const [episodeId, setEpisodeId] = useState("");
+  const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(parseInt(searchParams.get("ep") || "-1"));
 
   useEffect(() => {
+    axios.get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}/episodes`)
+      .then(res => {
+        setEpisodesData(res.data.data.map((episode: any) => ({
+          id: episode.mal_id,
+          title_english: episode.title,
+          title_romaji: episode.title_romanji
+        }))
+        )
+      })
+
+    axios.get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}`)
+      .then(res => {
+        setAnimeData(res.data.data)
+      })
+    setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
+  }, [searchParams])
+
+  useEffect(() => {
+    console.log(episodesData);
+  }, [episodesData])
+
+  useEffect(() => {
+    const romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s:,\.]+/g, '-');
+    setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+  }, [animeData, currentEpisodeNumber]);
+
+  useEffect(() => {
+    if (!episodeId || !animeData || !animeData.title || !currentEpisodeNumber) return;
     const fetchData = async () => {
       // Clean the id by removing unwanted characters
-      const cleanId = id.replace(/["',.]/g, '');
+      const cleanId = episodeId.replace(/["',.]/g, '');
       console.log(cleanId);
       const cacheKey = `watchData-${cleanId}`;
       const cachedData = sessionStorage.getItem(cacheKey);
@@ -61,24 +86,7 @@ export const Watch: React.FC = () => {
     };
 
     fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    axios.get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}/episodes`)
-      .then(res => {
-        console.log(res.data.data)
-        setEpisodesData(res.data.data.map((episode: any) => ({
-          id: episode.mal_id,
-          title_english: episode.title,
-          title_romaji: episode.title_romanji
-        }))
-        )
-      })
-  }, [searchParams])
-
-  useEffect(() => {
-    console.log(episodesData)
-  }, [episodesData]);
+  }, [episodeId]);
 
   const reload = () => {
     window.location.reload();
@@ -98,42 +106,30 @@ export const Watch: React.FC = () => {
       a.click();
     }
   };
-  //TODO: @Eshan276 @Gadzrux @karan8404 Implement the next and previous episode functionality
 
-  // Assuming params.id is in the format "someString-EpisodeNumber"
-  // and useParams is from 'react-router-dom' for navigation
-
-  useEffect(() => {
-    setEpisodeId(id);
-    // Add any additional logic here to fetch new episode data based on the updated id
-  }, [id]); // This effect runs whenever the 'id' parameter changes
-
-  useEffect(() => {
-    // Extract episode number from episodeId and update state
-    const episodeNumber = parseInt(episodeId.split("-").pop() || "0", 10);
-    setCurrentEpisodeNumber(episodeNumber);
-  }, [episodeId]);
+  const handleWatchEpisode = (episodeId: number) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set('ep', (episodeId).toString());
+    setSearchParams(newSearchParams);
+  };
 
   const handlePrev = () => {
     if (currentEpisodeNumber > 1) {
-      const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${currentEpisodeNumber - 1}`);
-      navigate(`/watch/${newId}`);
+      handleWatchEpisode(currentEpisodeNumber - 1);
     } else {
       alert("You are watching the first episode");
     }
   };
 
-  //TODO: @Eshan276 @Gadzrux @karan8404 Find a way to get the total number of episodes or check from the url params whethere there's any ep available after incrementing the ep index
   const handleNext = () => {
-    const newEpisodeNumber = currentEpisodeNumber + 1;
-    const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${newEpisodeNumber}`);
-
-    navigate(`/watch/${newId}`);
-  };
-
-  const handleWatchEpisode = (episodeId: string) => {
-    
-  };
+    console.log("currentEpisodeNumber", currentEpisodeNumber);
+    console.log("episodesData.length", episodesData.length);
+    if (currentEpisodeNumber === episodesData.length) {
+      alert("You are watching the last episode");
+    } else {
+      handleWatchEpisode(currentEpisodeNumber + 1);
+    };
+  }
 
 
   // useEffect(() => {
@@ -171,7 +167,7 @@ export const Watch: React.FC = () => {
             <div className="overflow-y-scroll h-[32rem]">
               {episodesData.map((episode, index) => (
                 <div key={index} className="py-2">
-                  <a href={`/watch/${episode.id}`} className="hover:text-white">{episode.title_english}</a>
+                  <div onClick={()=>{handleWatchEpisode(episode.id)}} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
                 </div>
               ))}
             </div>
