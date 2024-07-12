@@ -165,11 +165,15 @@ export const Watch: React.FC = () => {
             <div className="text-center">Episodes</div>
             <hr />
             <div className="overflow-y-scroll h-[32rem]">
-              {episodesData.map((episode, index) => (
-                <div key={index} className="py-2">
-                  <div onClick={()=>{handleWatchEpisode(episode.id)}} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
+              {episodesData.map((episode, index) => (episode.id == currentEpisodeNumber) ? (
+                <div key={index} className="py-2 bg-red-700">
+                  <div onClick={() => { handleWatchEpisode(episode.id) }} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
                 </div>
-              ))}
+              ) :
+                (<div key={index} className="py-2">
+                  <div onClick={() => { handleWatchEpisode(episode.id) }} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
+                </div>)
+              )}
             </div>
           </div>
         </div>
