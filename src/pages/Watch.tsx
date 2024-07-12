@@ -119,7 +119,7 @@ export const Watch: React.FC = () => {
       const newId = episodeId.replace(`episode-${currentEpisodeNumber}`, `episode-${currentEpisodeNumber - 1}`);
       navigate(`/watch/${newId}`);
     } else {
-      alert("You are at the first episode");
+      alert("You are watching the first episode");
     }
   };
 
