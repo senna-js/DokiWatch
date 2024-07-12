@@ -143,7 +143,7 @@ export const AnimeAiringStack = () => {
 
   // Render the component
   return (
-    <div className="flex-row p-4 m-3 rounded-md bg-gray-800 ">
+    <div className="flex-row p-4 m-3 rounded-md bg-transparent backdrop-blur-lg ">
       <h2 className="text-2xl font-poppins pl-3 ">Anime Airing</h2>
       <hr className="my-4" />
       {animeData && (
