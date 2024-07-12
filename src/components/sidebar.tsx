@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   IconButton,
@@ -21,6 +21,7 @@ import styled from "@mui/material/styles/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useUser } from "@clerk/clerk-react";
+
 
 const AnimeDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
@@ -117,13 +118,17 @@ const Sidebar = () => {
 
   const openModal = () => {
     setIsModalOpen(true);
-    modalRef.current.showModal();
+    if (modalRef.current) {
+      (modalRef.current as HTMLDialogElement).showModal();
+    }
     fetchAnimeSchedule();
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    modalRef.current.close();
+    if (modalRef.current) {
+      (modalRef.current as HTMLDialogElement).close();
+    }
   };
 
   const fetchAnimeSchedule = () => {
@@ -219,13 +224,24 @@ const Sidebar = () => {
             className="modal modal-bottom sm:modal-middle"
             ref={modalRef}
           >
-            <div className="modal-box">
+            <div className="modal-box bg-transparent backdrop-blur-lg">
               <h3 className="font-bold text-lg">Anime Schedule</h3>
+              <hr className="mt-2" />
               <div className="py-4">
                 <div>
-                  <p>
+                  <p className="py-2">
                     <strong>Current Date and Time:</strong>{" "}
-                    {currentDate.toLocaleString()}
+                    {`${new Intl.DateTimeFormat('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: '2-digit',
+                      weekday: 'long',
+                    }).format(currentDate)} - ${new Intl.DateTimeFormat('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: true
+                    }).format(currentDate)}`}
                   </p>
                 </div>
                 {schedule.map((anime) => (
@@ -256,9 +272,9 @@ const Sidebar = () => {
                   </div>
                 ))}
               </div>
-              <div className="modal-action">
-                <form method="dialog" onClick={closeModal}>
-                  <button className="btn">Close</button>
+              <div className="modal-action bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
+                <form method="dialog" onClick={closeModal} className="w-full">
+                  <button className="w-full rounded-lg">Close</button>
                 </form>
               </div>
             </div>
