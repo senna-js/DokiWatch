@@ -47,7 +47,10 @@ export const AnimeWatchingStack = () => {
 
   // accessToken = "hi";
   // let username = "itzKirito";
-  const { triggerFetch, setTriggerFetch } = useAnimeContext();
+  let { triggerFetch, setTriggerFetch } = useAnimeContext();
+  if (accessToken) {
+    triggerFetch = true;
+  }
   useEffect(() => {
     const fetchData = async () => {
       if (!triggerFetch) return;

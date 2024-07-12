@@ -10,6 +10,7 @@ export const AnimeAiringStack = () => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
   const user = localStorage.getItem("user");
+
   ///////////////////////////////
   let username: string | undefined;
   if (user) {
@@ -47,9 +48,13 @@ export const AnimeAiringStack = () => {
 
   // accessToken = "hi";
   // let username = "itzKirito";
-  const { triggerFetch, setTriggerFetch } = useAnimeContext();
+  let { triggerFetch, setTriggerFetch } = useAnimeContext();
+  if (accessToken) {
+    triggerFetch = true;
+  }
   useEffect(() => {
     const fetchData = async () => {
+      //console.log("fetching anime list", accessToken, triggerFetch);
       if (!triggerFetch) return;
 
       const query = `
