@@ -229,21 +229,30 @@ const Sidebar = () => {
                   </p>
                 </div>
                 {schedule.map((anime) => (
-                  <div id={anime.mal_id} key={anime.mal_id}>
-                    <p>
-                      <strong>Title:</strong>{" "}
+                  <div
+                    id={anime.mal_id}
+                    key={anime.mal_id}
+                    className="relative text-white p-4 rounded-lg border border-blue-500 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-cover bg-center bg-no-repeat mb-4 hover:animate-scroll"
+                    style={{
+                      backgroundImage: `url(${anime.images.jpg.large_image_url})`,
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+                    <p className="relative">
+                      <strong className="cursor-default">Title:</strong>{" "}
                       <span
                         onClick={() => handleTitleClick(anime.mal_id)}
                         style={{ cursor: "pointer", color: "#04d9ff" }}
                       >
-                        {anime.title}
+                        {anime.title_english || anime.title}
                       </span>
                     </p>
-                    <p>
-                      <strong>Broadcast Time (Local):</strong>{" "}
+                    <p className="relative cursor-default">
+                      <strong></strong>{" "}
                       {convertToUserTime(anime.broadcast.time)}
                     </p>
-                    <hr />
+                    {/* <hr className="relative" /> */}
                   </div>
                 ))}
               </div>
