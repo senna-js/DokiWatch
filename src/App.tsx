@@ -3,6 +3,7 @@ import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
 import { AnimeAiringStack } from "./components/AnimeAiringStack";
+import TopAiringAnimeStack from "./components/topAiringStack"
 import scene from "./assests/scene2.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
@@ -44,6 +45,7 @@ const App = () => {
                   </div>
                   {isSignedIn && (
                     <div className="mt-16 ml-24">
+                      <TopAiringAnimeStack />
                       <AnimeAiringStack  />
                       <AnimeWatchingStack />
                     </div>

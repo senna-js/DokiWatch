@@ -11,9 +11,10 @@ const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "H
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
-    var searchTerm: any, genreTerm, genreNotTerm, term;
+    var genreTerm, genreNotTerm, term;
     const [anime, setAnime] = useState<AnimeData[]>([])
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
+    const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
 
     const handlegenreSelection = (index: number, set: number) => {
         console.log("Index: " + index + " Set: " + set, "Genre : " + genres[index])
@@ -22,7 +23,8 @@ export const Search = () => {
         setGenreSelections(newSelections);
     }
 
-    const handleSearch = () => {
+    const handleSearch = (search : string) => {
+        setSearchTerm(search);
         var genreString = "";
         var genreNotString = "";
         for (var i = 0; i < genreSelections.length; i++) {
@@ -41,6 +43,7 @@ export const Search = () => {
         console.log("Genre Not String: " + genreNotString)
 
         const params = new URLSearchParams();
+        params.append("search", search)
         params.append("genre", genreString);
         params.append("genreNot", genreNotString);
         if (searchTerm !== undefined && searchTerm !== "" && searchTerm !== null) {
@@ -52,7 +55,9 @@ export const Search = () => {
     }
 
     useEffect(() => {
-        searchTerm = searchParams.get("search")
+        // if(searchParams.get("search"))
+        //     setSearchTerm(searchParams.get("search"))
+        console.log("Search Term: " + searchTerm)
         genreTerm = searchParams.get("genre")
         genreNotTerm = searchParams.get("genreNot")
 
