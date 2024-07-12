@@ -22,7 +22,6 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useUser } from "@clerk/clerk-react";
 
-
 const AnimeDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
     backgroundColor: "#fafafa",
@@ -92,6 +91,7 @@ const Sidebar = () => {
     closeModal();
     navigate(`/anime/${animeId}`);
   };
+
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
     const user = { username: event.target.value };
@@ -223,6 +223,11 @@ const Sidebar = () => {
             id="my_modal_5"
             className="modal modal-bottom sm:modal-middle"
             ref={modalRef}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                closeModal();
+              }
+            }}
           >
             <div className="modal-box bg-transparent backdrop-blur-lg">
               <h3 className="font-bold text-lg">Anime Schedule</h3>
@@ -231,17 +236,20 @@ const Sidebar = () => {
                 <div>
                   <p className="py-2">
                     <strong>Current Date and Time:</strong>{" "}
-                    {`${new Intl.DateTimeFormat('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: '2-digit',
-                      weekday: 'long',
-                    }).format(currentDate)} - ${new Intl.DateTimeFormat('en-US', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: true
-                    }).format(currentDate)}`}
+                    {`${new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "2-digit",
+                      weekday: "long",
+                    }).format(currentDate)} - ${new Intl.DateTimeFormat(
+                      "en-US",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: true,
+                      }
+                    ).format(currentDate)}`}
                   </p>
                 </div>
                 {schedule.map((anime) => (
