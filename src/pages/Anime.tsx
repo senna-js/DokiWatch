@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Content from "../components/ReadMore";
@@ -10,6 +10,7 @@ export const Anime = () => {
   const [animeData, setAnimeData] = useState<any>();
   const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
+  const [searchParams] = useSearchParams();
 
   const handleTitleClick = (animeId) => {
     navigate(`/anime/${animeId}`);
@@ -18,7 +19,6 @@ export const Anime = () => {
     setUserRating(ratingValue);
     // Here you can add a function to update the rating in your database or state management system
   };
-
   useEffect(() => {
     axios
       .get(`https://api.jikan.moe/v4/anime/${params.id}/full`)
@@ -63,8 +63,14 @@ export const Anime = () => {
   }, [params.id]);
 
   const handleWatch = () => {
-    const navString = `/watch?id=${animeData?.mal_id}&ep=1`;
-    navigate(navString);
+    const mid = searchParams.get("mid");
+    if (mid) {
+      const navString = `/watch?id=${animeData?.mal_id}&ep=1&mid=${mid}`;
+      navigate(navString);
+    } else {
+      const navString = `/watch?id=${animeData?.mal_id}&ep=1`;
+      navigate(navString);
+    }
   };
 
   const handleGenreClick = (e: any) => {
@@ -229,15 +235,16 @@ export const Anime = () => {
                         alt={relation.title}
                         className="rounded-lg bottom-0 shadow-xl w-full h-48 object-cover mb-2"
                       />
-                      <div className="rounded-lg absolute top-0 left-0 w-full h-48 bg-black bg-opacity-0 group-hover:backdrop-blur-sm transition-opacity duration-300 ease-in-out" style={{ background: 'rgba(0, 0, 0, 0.5)' }}></div> {/* Overlay */}
-
-
-                      <div className="absolute bottom-0 w-full h-full flex items-center" >
+                      <div
+                        className="rounded-lg absolute top-0 left-0 w-full h-48 bg-black bg-opacity-0 group-hover:backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+                        style={{ background: "rgba(0, 0, 0, 0.5)" }}
+                      ></div>{" "}
+                      {/* Overlay */}
+                      <div className="absolute bottom-0 w-full h-full flex items-center">
                         <h3 className="text-center font-semibold text-white w-full p-2">
                           {relation.title_english || relation.title}
                         </h3>
                       </div>
-
                     </div>
                   ))}
                 </div>
