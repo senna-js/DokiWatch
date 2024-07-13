@@ -77,29 +77,21 @@ export const Watch: React.FC = () => {
   }
 
   useEffect(() => {
-    let romajiName;
+    let convertedName;
     if (errorLevel === 0) {
-      romajiName = convertName(animeData?.title);
-      console.log(romajiName);
-      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+      convertedName = convertName(animeData?.title);
     } else if (errorLevel === 1) {
-      romajiName = convertName(animeData?.title) + "-";
-      console.log(romajiName);
-      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+      convertedName = convertName(animeData?.title) + "-";
     } else if (errorLevel === 2) {
-      romajiName = convertName(animeData?.title_english);
-      console.log(romajiName);
-      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+      convertedName = convertName(animeData?.title_english);
     } else if (errorLevel === 3) {
-      romajiName = convertName(animeData?.title_english) + "-";
-      console.log(romajiName);
-      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+      convertedName = convertName(animeData?.title_english) + "-";
     } else {
       console.log("NO VALID EPISODE ID FOUND\n defaulting to romaji name");
-      romajiName = convertName(animeData?.title);
-      console.log(romajiName);
-      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+      convertedName = convertName(animeData?.title);
     }
+    console.log(convertedName);
+    setEpisodeId(`${convertedName}-episode-${currentEpisodeNumber}`);
   }, [animeData, currentEpisodeNumber, errorLevel]);
 
   useEffect(() => {
@@ -129,7 +121,9 @@ export const Watch: React.FC = () => {
           }
         } catch (error) {
           console.log("Error:", error);
-          setErrorLevel(errorLevel + 1);
+          if (errorLevel < 4) {
+            setErrorLevel(errorLevel + 1);
+          }
         }
       }
     };
@@ -323,11 +317,10 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-start items-center h-16 py-2 ${
-                    episode.id == currentEpisodeNumber
-                      ? "bg-red-700"
-                      : "bg-gray-800 hover:bg-gray-700"
-                  } transition-colors duration-150 ease-in-out`}
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.id == currentEpisodeNumber
+                    ? "bg-red-700"
+                    : "bg-gray-800 hover:bg-gray-700"
+                    } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
                     handleWatchEpisode(episode.id);
                   }}
