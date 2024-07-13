@@ -25,7 +25,6 @@ export const Watch: React.FC = () => {
   const [animeData, setAnimeData] = useState<any>();
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-
   const [episodeId, setEpisodeId] = useState("");
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(parseInt(searchParams.get("ep") || "-1"));
 
@@ -53,6 +52,7 @@ export const Watch: React.FC = () => {
 
   useEffect(() => {
     const romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s:,\.]+/g, '-');
+    console.log(romajiName);
     setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
   }, [animeData, currentEpisodeNumber]);
 
