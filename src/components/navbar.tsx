@@ -130,8 +130,16 @@ export const Navbar = () => {
   return (
     <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
       <Sidebar /> {/* Render the Sidebar component */}
-      <div onClick={() => { window.location.href = "/" }}>
-        <img src="/Color_combo_full.png" alt="Doki Watch" className="w-28 h-auto cursor-pointer" />
+      <div
+        onClick={() => {
+          window.location.href = "/home";
+        }}
+      >
+        <img
+          src="/Color_combo_full.png"
+          alt="Doki Watch"
+          className="w-28 h-auto cursor-pointer"
+        />
       </div>
       <div className="flex-1 mx-4">
         <div className="relative">

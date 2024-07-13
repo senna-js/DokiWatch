@@ -110,7 +110,7 @@ const Sidebar = () => {
 
   const handleHomeClick = () => {
     console.log("Home IconButton clicked");
-    window.location.href = "/";
+    window.location.href = "/home";
   };
 
   const handleMangaClick = () => {

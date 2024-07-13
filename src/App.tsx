@@ -3,15 +3,13 @@ import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
 import { AnimeAiringStack } from "./components/AnimeAiringStack";
-import TopAiringAnimeStack from "./components/topAiringStack"
-import scene from "./assests/scene6.mp4"
+import TopAiringAnimeStack from "./components/topAiringStack";
+import scene from "./assests/scene6.mp4";
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
-import { useUser } from '@clerk/clerk-react';
-
-
+import { useUser } from "@clerk/clerk-react";
 
 const App = () => {
   const { isSignedIn } = useUser();
@@ -32,7 +30,7 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route
-              path="/"
+              path="/home"
               element={
                 <div>
                   <div className="p-8 ml-24">
@@ -48,7 +46,7 @@ const App = () => {
                   </div>
                   {isSignedIn && (
                     <div className="ml-24">
-                      <AnimeAiringStack  />
+                      <AnimeAiringStack />
                       <AnimeWatchingStack />
                     </div>
                   )}
@@ -58,7 +56,7 @@ const App = () => {
             <Route path="/anime/:id" element={<Anime />} />
             <Route path="/watch" element={<Watch />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/landingPage" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
           </Routes>
         </div>
       </div>
