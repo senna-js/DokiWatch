@@ -216,8 +216,8 @@ export const Watch: React.FC = () => {
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <Button variant="contained" className="whitespace-nowrap" onClick={handlePrev}>Prev episode</Button>
                 <div className="flex-1 flex justify-center">
-                  {/* Find the current episode and display its title */}<p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 p-1">CURRENT EPISODE: </p>
-                  <p className="whitespace-nowrap flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">{currentEpisodeNumber} - {
+                  {/* Find the current episode and display its title */}<p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 pl-2 p-1">CURRENT EPISODE: </p>
+                  <p className="whitespace-nowrap mr-2 flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">{currentEpisodeNumber} - {
                     episodesData.find(episode => episode.id === currentEpisodeNumber)?.title_english
                   }</p>
                 </div>
