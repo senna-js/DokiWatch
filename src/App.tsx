@@ -4,7 +4,7 @@ import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
 import { AnimeAiringStack } from "./components/AnimeAiringStack";
 import TopAiringAnimeStack from "./components/topAiringStack"
-import scene from "./assests/scene2.mp4"
+import scene from "./assests/scene6.mp4"
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";

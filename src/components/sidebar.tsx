@@ -16,6 +16,7 @@ import {
   Home as HomeIcon,
   CollectionsBookmark as MangaIcon,
   Schedule as ScheduleIcon,
+  Search as SearchIcon,
 } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -116,6 +117,11 @@ const Sidebar = () => {
     console.log("Manga IconButton clicked");
   };
 
+  const handleSearchClick = () => {
+    console.log("Search IconButton clicked");
+    window.location.href = "/search";
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
     if (modalRef.current) {
@@ -207,6 +213,11 @@ const Sidebar = () => {
           <Tooltip title="Home" placement="right">
             <IconButton onClick={handleHomeClick}>
               <HomeIcon className="text-white" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Browse" placement="right">
+            <IconButton onClick={handleSearchClick}>
+              <SearchIcon className="text-white" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Coming Soon" placement="right">

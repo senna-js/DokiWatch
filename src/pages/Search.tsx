@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-var */
 import { useSearchParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axios from "axios"
@@ -81,7 +83,7 @@ export const Search = () => {
         console.log("Searched term : " + term.toString())
 
         var query = `{
-                        Page(page: 1, perPage: 20) {
+                        Page(page: 1, perPage: 24) {
                             media(${term} sort: POPULARITY_DESC,type: ANIME) {
                                 idMal
                                 title {
@@ -131,7 +133,7 @@ export const Search = () => {
     return (
         <div className="flex flex-col items-center justify-center">
             <AdvancedSearch genres={genres} handleGenreSelection={handlegenreSelection} handleSearch={handleSearch} />
-            <Stack spacing={2} direction="row" flexWrap="wrap">
+            <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
                 {
                     anime.map((anime) => (
                         <div key={anime.mal_id}>
