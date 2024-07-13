@@ -144,7 +144,7 @@ export const AnimeWatchingStack = () => {
     <div className="flex-row p-4 m-3 rounded-md bg-transparent backdrop-blur-lg border border-white">
       <h2 className="text-2xl font-poppins pl-3">Anime Watching</h2>
       <hr className="my-4" />
-      {animeData && (
+      {animeData && animeData.length > 0 ? (
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
           {animeData.map((anime) => (
             <div key={anime?.mal_id}>
@@ -152,6 +152,10 @@ export const AnimeWatchingStack = () => {
               {/* More anime details */}
             </div>
           ))}
+        </div>
+      ) : (
+        <div className="text-end text-white font-poppins text-opacity-50 cursor-help">
+          Connect to Anilist
         </div>
       )}
     </div>
