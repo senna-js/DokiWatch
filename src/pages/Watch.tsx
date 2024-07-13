@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
 import { Button } from "@mui/material";
+import "./Watch.css"
 
 interface Source {
   url: string;
@@ -161,19 +162,23 @@ export const Watch: React.FC = () => {
     <div className="flex h-screen w-screen justify-center mt-10">
       <div className="flex flex-row h-max">
         <div className="">
-          <div className="bg-slate-600 w-48 h-full text-center rounded-l-md border-r-2 border-r-slate-500 flex flex-col py-2">
-            <div className="text-center">Episodes</div>
-            <hr />
-            <div className="overflow-y-scroll h-[32rem]">
-              {episodesData.map((episode, index) => (episode.id == currentEpisodeNumber) ? (
-                <div key={index} className="py-2 bg-red-700">
-                  <div onClick={() => { handleWatchEpisode(episode.id) }} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
+          <div className="bg-gray-800 border border-white backdrop-blur-lg w-48 h-full text-center rounded-l-md border-r-2 border-r-slate-500 flex flex-col py-2">
+            <div className="text-center font-poppins font-semibold pb-2">EPISODES</div>
+            <hr className="" />
+            <div className="overflow-y-auto h-[33rem] scrollHide">
+              {episodesData.map((episode, index) => (
+                <div
+                  key={index}
+                  className={`episode-row flex justify-center items-center h-16 py-2 ${episode.id == currentEpisodeNumber ? 'bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} transition-colors duration-150 ease-in-out`}
+                  onClick={() => { handleWatchEpisode(episode.id) }}
+                >
+
+                  <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
+                    {episode.title_english}
+                  </div>
                 </div>
-              ) :
-                (<div key={index} className="py-2">
-                  <div onClick={() => { handleWatchEpisode(episode.id) }} className="hover:text-white hover:cursor-pointer">{episode.title_english}</div>
-                </div>)
-              )}
+              ))}
+
             </div>
           </div>
         </div>
@@ -206,12 +211,18 @@ export const Watch: React.FC = () => {
                 controls={true}
                 width="100%"
                 height="500px"
-                className="aspect-video"
+                className="aspect-video border border-white rounded-tr-md"
               />
-              <div className="bg-slate-600 rounded-ee-md h-14 flex items-center px-4 py-auto">
-                <Button variant="contained" onClick={handlePrev}>Prev episode</Button>
+              <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
+                <Button variant="contained" className="whitespace-nowrap" onClick={handlePrev}>Prev episode</Button>
+                <div className="flex-1 flex justify-center">
+                  {/* Find the current episode and display its title */}<p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 p-1">CURRENT EPISODE: </p>
+                  <p className="whitespace-nowrap flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">{currentEpisodeNumber} - {
+                    episodesData.find(episode => episode.id === currentEpisodeNumber)?.title_english
+                  }</p>
+                </div>
                 <div className="ml-auto">
-                  <Button variant="contained" onClick={handleNext} >Next episode</Button>
+                  <Button variant="contained" className="whitespace-nowrap" onClick={handleNext} >Next episode</Button>
                 </div>
               </div>
             </div>

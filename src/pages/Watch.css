@@ -1,0 +1,47 @@
+.scrollHide::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari */
+}
+
+.scrollHide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.episode-row:nth-child(odd) {
+  background-color: transparent;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.episode-row:nth-child(odd):hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Slightly more opaque on hover */
+}
+
+.episode-row:nth-child(even) {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Adjust transparency as needed */
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.episode-row:nth-child(even):hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Slightly more opaque on hover */
+}
+
+.text-border-white:hover {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}

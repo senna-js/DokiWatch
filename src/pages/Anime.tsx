@@ -164,18 +164,18 @@ export const Anime = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-4 w-full">
-          <div className="flex items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+        <div className="flex mt-3 flex-col gap-4 w-full">
+          <div className="flex border border-white items-center text-pretty font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
             <Content
               text={animeData?.synopsis
                 ?.replace(/\[Written by MAL Rewrite\]/g, "")
                 .trim()}
             />
           </div>
-          <hr />
+          {/* <hr /> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col items-start font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
-              <div className="ml-2 items-center flex gap-2 flex-wrap">
+            <div className="flex border border-white flex-col items-start font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+              <div className="pb-4 items-center flex gap-2 flex-wrap">
                 {animeData?.genres.map((genre: any) => (
                   <span
                     onClick={handleGenreClick}
@@ -186,7 +186,7 @@ export const Anime = () => {
                   </span>
                 ))}
               </div>
-              <div className="ml-2 flex gap-2 flex-wrap">
+              <div className="pb-4 flex gap-2 flex-wrap">
                 {animeData?.studios.map((studio: any) => (
                   <span
                     key={studio.mal_id}
@@ -196,7 +196,7 @@ export const Anime = () => {
                   </span>
                 ))}
               </div>
-              <div className="ml-2 flex gap-2 flex-wrap">
+              <div className="pb-4 flex gap-2 flex-wrap">
                 <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                   Episodes: {animeData?.episodes || "To be decided"}
                 </span>
@@ -206,7 +206,7 @@ export const Anime = () => {
                   </span>
                 )}
               </div>
-              <div className="ml-2 flex gap-2 flex-wrap">
+              <div className="flex gap-2 flex-wrap">
                 <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
                   Duration: {animeData?.duration.replace("per ep", "")}
                 </span>
@@ -215,28 +215,34 @@ export const Anime = () => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+            <div className="flex border border-white items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
               {relationData.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                <div className="grid grid-cols-2 gap-4 w-full">
                   {relationData.map((relation) => (
                     <div
                       key={relation.id}
-                      className="flex flex-col items-center cursor-pointer"
+                      className="relative flex flex-col items-center cursor-pointer group"
                       onClick={() => handleTitleClick(relation.id)}
                     >
                       <img
                         src={relation.image}
                         alt={relation.title}
-                        className="rounded-lg shadow-xl w-full h-48 object-cover mb-2"
+                        className="rounded-lg bottom-0 shadow-xl w-full h-48 object-cover mb-2"
                       />
-                      <h3 className="text-center font-semibold">
-                        {relation.title_english || relation.title}
-                      </h3>
+                      <div className="rounded-lg absolute top-0 left-0 w-full h-48 bg-black bg-opacity-0 group-hover:backdrop-blur-sm transition-opacity duration-300 ease-in-out" style={{ background: 'rgba(0, 0, 0, 0.5)' }}></div> {/* Overlay */}
+
+
+                      <div className="absolute bottom-0 w-full h-full flex items-center" >
+                        <h3 className="text-center font-semibold text-white w-full p-2">
+                          {relation.title_english || relation.title}
+                        </h3>
+                      </div>
+
                     </div>
                   ))}
                 </div>
               ) : (
-                <p>No Related Anime Found</p>
+                <p>No Related Seasons Found</p>
               )}
             </div>
           </div>
@@ -254,7 +260,7 @@ export const Anime = () => {
         >
           <iframe
             src={animeData?.trailer.embed_url}
-            className="absolute top-0 left-0 w-full h-full"
+            className="mt-2 absolute top-0 left-0 w-full h-[500px] aspect-video rounded-lg"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
