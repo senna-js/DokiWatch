@@ -61,10 +61,19 @@ export const Watch: React.FC = () => {
   }, [episodesData]);
 
   useEffect(() => {
-    const romajiName = animeData?.title
-      .replace(/\s*-\s*/g, "-")
-      .toLowerCase()
-      .replace(/[\s:,\.]+/g, "-");
+    let romajiName;
+    if (animeData?.title.includes(":")) {
+      romajiName = animeData?.title
+        .replace(/:/g, "")
+        .replace(/\s*-\s*/g, "-")
+        .toLowerCase()
+        .replace(/[\s,\.]+/g, "-");
+    } else {
+      romajiName = animeData?.title
+        .replace(/\s*-\s*/g, "-")
+        .toLowerCase()
+        .replace(/[\s,\.()?]+/g, "-");
+    }
     console.log(romajiName);
     setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
   }, [animeData, currentEpisodeNumber]);
@@ -74,7 +83,7 @@ export const Watch: React.FC = () => {
       return;
     const fetchData = async () => {
       // Clean the id by removing unwanted characters
-      const cleanId = episodeId.replace(/["',.]/g, "");
+      const cleanId = episodeId.replace(/["',.;:]/g, "");
       console.log(cleanId);
       const cacheKey = `watchData-${cleanId}`;
       const cachedData = sessionStorage.getItem(cacheKey);
@@ -96,10 +105,35 @@ export const Watch: React.FC = () => {
           }
         } catch (error) {
           console.log("Error:", error);
+          if (
+            (error as any).response &&
+            (error as any).response.status === 404
+          ) {
+            // If 404, append '-' and retry
+            let romajiName;
+            if (animeData?.title.includes(":")) {
+              romajiName = animeData?.title
+                .replace(/:/g, "")
+                .replace(/\s*-\s*/g, "-")
+                .toLowerCase()
+                .replace(/[\s,\.]+/g, "-");
+            } else {
+              romajiName = animeData?.title
+                .replace(/\s*-\s*/g, "-")
+                .toLowerCase()
+                .replace(/[\s,\.()?]+/g, "-");
+            }
+            const modifiedId = `${romajiName}-`;
+            console.log("Modified ID:", modifiedId);
+            setEpisodeId(`${modifiedId}-episode-${currentEpisodeNumber}`);
+            console.log("Retrying with modified ID:", episodeId);
+
+            // fetchData(episodeId);
+          }
         }
       }
     };
-
+    console.log("Fetching data for episode:", episodeId);
     fetchData();
   }, [episodeId]);
 
@@ -112,13 +146,15 @@ export const Watch: React.FC = () => {
     setSettingsVisible(false); // Hide settings menu after selection
   };
 
-  const handleDownload = () => {
+  const handleDownload = (): void => {
     const player = document.querySelector("video");
     if (player) {
       const a = document.createElement("a");
       a.href = player.src;
       a.download = "video.mp4";
-      a.click();
+      document.body.appendChild(a); // Append the anchor to the body
+      a.click(); // Programmatically click the anchor to trigger the download
+      document.body.removeChild(a); // Clean up by removing the anchor from the body
     }
   };
   const [isQueried, setIsQueried] = useState(false);
