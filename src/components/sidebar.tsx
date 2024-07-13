@@ -25,13 +25,18 @@ import { useUser } from "@clerk/clerk-react";
 
 const AnimeDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
-    backgroundColor: "#fafafa",
+    backgroundColor: "transparent", // Making background semi-transparent
+    backdropFilter: "blur(50px)", // Applying backdrop blur
+    borderRadius: "10px",
+    border: "2px solid white",
   },
 });
 
 const AnimeDialogTitle = styled(DialogTitle)({
-  backgroundColor: "#151F2E",
-  color: "#3DB4F2",
+  fontFamily: "Poppins, sans-serif",
+  backgroundColor: "rgba(238, 130, 238, 0)", // Making background fully transparent
+  backdropFilter: "blur(10px)", // Applying backdrop blur
+  color: "#FFFFFF", // Setting text color to white
 });
 
 const AnimeDialogContent = styled(DialogContent)({
@@ -40,11 +45,19 @@ const AnimeDialogContent = styled(DialogContent)({
 });
 
 const AnimeButton = styled(Button)({
-  backgroundColor: "#4CC9F0",
-  color: "white",
-  "&:hover": {
-    backgroundColor: "#4895EF",
+  color: 'white',
+  cursor: 'pointer',
+  marginLeft: 'auto',
+  border: '1px solid #4B5563', // border-gray-700
+  borderRadius: '0.5rem', // rounded-lg
+  padding: '0.5rem 1rem', // px-2 py-2
+  transition: 'transform 150ms ease-in-out, background-color 150ms ease-in-out', // transition duration-150 ease-in-out
+  '&:hover': {
+    backgroundColor: '#374151', // hover:bg-slate-700
+    transform: 'scale(1.05)', // hover:scale-105
   },
+  display: 'flex',
+  justifyContent: 'space-between',
 });
 
 const AnimeTextField = styled(TextField)({
@@ -205,9 +218,9 @@ const Sidebar = () => {
                 onChange={handleUsernameChange}
               />
             </AnimeDialogContent>
-            <DialogActions className="bg-[#9fadbd]">
+            <DialogActions className="bg-[#9fadbd] flex justify-between space-x-2">
               <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
-              <AnimeButton onClick={handleSubmit}>Submit</AnimeButton>
+              <AnimeButton onClick={handleSubmit}>Confirm</AnimeButton>
             </DialogActions>
           </AnimeDialog>
           <Tooltip title="Home" placement="right">

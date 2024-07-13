@@ -6,6 +6,8 @@ import ReactPlayer from "react-player";
 import axios from "axios";
 import { Button } from "@mui/material";
 import "./Watch.css"
+import { SkipPrevious } from "@mui/icons-material";
+import { SkipNext } from "@mui/icons-material";
 
 interface Source {
   url: string;
@@ -169,12 +171,12 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-center items-center h-16 py-2 ${episode.id == currentEpisodeNumber ? 'bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} transition-colors duration-150 ease-in-out`}
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.id == currentEpisodeNumber ? 'bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} transition-colors duration-150 ease-in-out`}
                   onClick={() => { handleWatchEpisode(episode.id) }}
                 >
 
                   <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                   {episode.id} : {episode.title_english}
+                    {episode.id}. {episode.title_english}
                   </div>
                 </div>
               ))}
@@ -214,15 +216,17 @@ export const Watch: React.FC = () => {
                 className="aspect-video border border-white rounded-tr-md"
               />
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
-                <Button variant="contained" className="" onClick={handlePrev}>Prev episode</Button>
+                <div className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" title="Previous Episode" >
+                  <SkipPrevious className="flex" onClick={handlePrev} />
+                </div>
                 <div className="flex-1 flex justify-center">
                   {/* Find the current episode and display its title */}<p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 pl-2 p-1">CURRENT EPISODE: </p>
                   <p className="whitespace-nowrap mr-2 flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">{currentEpisodeNumber} - {
                     episodesData.find(episode => episode.id === currentEpisodeNumber)?.title_english
                   }</p>
                 </div>
-                <div className="ml-auto">
-                  <Button variant="contained" className="whitespace-nowrap" onClick={handleNext} >Next episode</Button>
+                <div className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" title="Next Episode" >
+                  <SkipNext className="flex cursor-pointer" onClick={handleNext} />
                 </div>
               </div>
             </div>
