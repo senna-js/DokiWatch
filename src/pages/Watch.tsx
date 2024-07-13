@@ -162,7 +162,7 @@ export const Watch: React.FC = () => {
     <div className="flex h-screen w-screen justify-center mt-10">
       <div className="flex flex-row h-max">
         <div className="">
-          <div className="bg-gray-800 border border-white backdrop-blur-lg w-48 h-full text-center rounded-l-md border-r-2 border-r-slate-500 flex flex-col py-2">
+          <div className="bg-gray-800 border border-white backdrop-blur-lg w-64 h-full text-center rounded-l-md border-r-2 border-r-slate-500 flex flex-col py-2">
             <div className="text-center font-poppins font-semibold pb-2">EPISODES</div>
             <hr className="" />
             <div className="overflow-y-auto h-[33rem] scrollHide">
@@ -174,7 +174,7 @@ export const Watch: React.FC = () => {
                 >
 
                   <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                    {episode.title_english}
+                   {episode.id} : {episode.title_english}
                   </div>
                 </div>
               ))}
@@ -214,7 +214,7 @@ export const Watch: React.FC = () => {
                 className="aspect-video border border-white rounded-tr-md"
               />
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
-                <Button variant="contained" className="whitespace-nowrap" onClick={handlePrev}>Prev episode</Button>
+                <Button variant="contained" className="" onClick={handlePrev}>Prev episode</Button>
                 <div className="flex-1 flex justify-center">
                   {/* Find the current episode and display its title */}<p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 pl-2 p-1">CURRENT EPISODE: </p>
                   <p className="whitespace-nowrap mr-2 flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">{currentEpisodeNumber} - {
