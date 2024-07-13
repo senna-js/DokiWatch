@@ -120,14 +120,9 @@ export const AnimeAiringStack = () => {
               .filter((entry: any) => entry.media.status === "RELEASING")
               .map((entry: any) => ({
                 mal_id: entry.media.idMal,
-                title: {
-                  romaji: entry.media.title.romaji,
-                  english: entry.media.title.english,
-                },
-                image: {
-                  large: entry.media.coverImage.extraLarge,
-                  color: entry.media.coverImage.color,
-                },
+                title: entry.media.title.romaji,
+                title_english: entry.media.title.english,
+                image: entry.media.coverImage.extraLarge,
               }))
           );
           setAnimeData(animeList); // Set the fetched data

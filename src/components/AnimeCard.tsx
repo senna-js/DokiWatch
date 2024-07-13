@@ -13,7 +13,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
         <Tooltip
             title={
                 <>
-                    <h3>{anime?.title.english || anime?.title.romaji}</h3>
+                    <h3>{anime?.title_english || anime?.title}</h3>
 
                 </>
             }
@@ -39,8 +39,8 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                     <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
                         <CardMedia
                             component="img"
-                            image={anime?.image.large}
-                            alt={anime?.title.english}
+                            image={anime?.image}
+                            alt={anime?.title_english}
                             className="rounded-sm shadow-xl mx-auto object-cover w-[150px] h-[268px]"
                         />
                         <div className="rounded-sm mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out" onClick={navigateToPage}></div>
@@ -59,13 +59,13 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
                 </Card>
                 <div>
                 {
-                    anime?.title.english ? (
+                    anime?.title_english ? (
                         <div className="text-md  text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
-                            {anime?.title.english}
+                            {anime?.title_english}
                         </div>
                     ) : (
                         <div className="text-md text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
-                            {anime?.title.romaji}
+                            {anime?.title}
                         </div>
                     )
                 }

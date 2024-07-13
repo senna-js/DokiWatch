@@ -1,11 +1,7 @@
 export interface AnimeData {
     mal_id: number,
-    title: {
-        romaji: string,
-        english: string
-    }
-    image: {
-        large: string,
-        color: string
-    }
+    title: string,
+    title_english: string,
+    image: string,
+    color?: string
 }

@@ -25,7 +25,7 @@ export const Search = () => {
         setGenreSelections(newSelections);
     }
 
-    const handleSearch = (search : string) => {
+    const handleSearch = (search: string) => {
         setSearchTerm(search);
         var genreString = "";
         var genreNotString = "";
@@ -77,7 +77,7 @@ export const Search = () => {
             genreNotTerm = `[${genreNotTerm.join(',')}]`;
             term = term + `genre_not_in: ${genreNotTerm},`
         }
-        if(term == "")
+        if (term == "")
             term = ","
 
         console.log("Searched term : " + term.toString())
@@ -116,14 +116,9 @@ export const Search = () => {
             console.log(response.data);
             setAnime(response.data.data.Page.media.map((item: any) => ({
                 mal_id: item.idMal,
-                title: {
-                    romaji: item.title.romaji,
-                    english: item.title.english
-                },
-                image: {
-                    large: item.coverImage.extraLarge,
-                    color: item.coverImage.color
-                }
+                title: item.title.romaji,
+                title_english: item.title.english,
+                image: item.coverImage.extraLarge
             })));
         }).catch(error => {
             console.error(error);
