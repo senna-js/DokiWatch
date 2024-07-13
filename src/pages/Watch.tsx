@@ -169,12 +169,12 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-center items-center h-16 py-2 ${episode.id == currentEpisodeNumber ? 'bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} transition-colors duration-150 ease-in-out`}
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.id == currentEpisodeNumber ? 'bg-red-700' : 'bg-gray-800 hover:bg-gray-700'} transition-colors duration-150 ease-in-out`}
                   onClick={() => { handleWatchEpisode(episode.id) }}
                 >
 
                   <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                   {episode.id} : {episode.title_english}
+                   {episode.id}. {episode.title_english}
                   </div>
                 </div>
               ))}
