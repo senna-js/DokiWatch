@@ -123,8 +123,10 @@ export const AnimeAiringStack = () => {
                 title: entry.media.title.romaji,
                 title_english: entry.media.title.english,
                 image: entry.media.coverImage.extraLarge,
+                mediaId: entry.mediaId,
               }))
           );
+          // console.log(animeList);
           setAnimeData(animeList); // Set the fetched data
           setTriggerFetch(false); // Reset the trigger fetch flag
         }

@@ -121,6 +121,7 @@ export const AnimeWatchingStack = () => {
                 title: entry.media.title.romaji,
                 title_english: entry.media.title.english,
                 image: entry.media.coverImage.extraLarge,
+                mediaId: entry.mediaId,
               }))
           );
           setAnimeData(animeList); // Set the fetched data
