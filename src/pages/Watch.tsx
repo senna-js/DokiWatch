@@ -4,7 +4,6 @@ import React, { useState, useEffect, } from "react";
 import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
-import { Button } from "@mui/material";
 import "./Watch.css"
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
@@ -29,6 +28,8 @@ export const Watch: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [episodeId, setEpisodeId] = useState("");
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(parseInt(searchParams.get("ep") || "-1"));
+  //0=romaji,1=romaji+"-",2=english,3=english+"-",4=none
+  const [errorLevel, setErrorLevel] = useState<number>(0);
 
   useEffect(() => {
     axios.get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}/episodes`)
@@ -52,16 +53,46 @@ export const Watch: React.FC = () => {
     console.log(episodesData);
   }, [episodesData])
 
+  const convertName = (romajiName: string) => {
+    if (!romajiName) return;
+
+    // Removing unwanted characters
+    romajiName = romajiName.replace(/[^a-zA-Z0-9 \-\u00C0-\u017F]/g, '');
+    // Remove spaces surrounding hyphens
+    romajiName = romajiName.replace(/\s+-\s+/g, '-');
+    // Convert all spaces to hyphens
+    romajiName = romajiName.replace(/\s+/g, '-');
+    // Convert characters with accents to normal characters
+    romajiName = romajiName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    return romajiName
+  }
+
   useEffect(() => {
     let romajiName;
-    if (animeData?.title.includes(':')) {
-      romajiName = animeData?.title.replace(/:/g, '').replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s,\.]+/g, '-');
+    if (errorLevel === 0) {
+      romajiName = convertName(animeData?.title);
+      console.log(romajiName);
+      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+    } else if (errorLevel === 1) {
+      romajiName = convertName(animeData?.title) + "-";
+      console.log(romajiName);
+      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+    } else if (errorLevel === 2) {
+      romajiName = convertName(animeData?.title_english);
+      console.log(romajiName);
+      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
+    } else if (errorLevel === 3) {
+      romajiName = convertName(animeData?.title_english) + "-";
+      console.log(romajiName);
+      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
     } else {
-      romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s,\.()?]+/g, '-');
+      console.log("NO VALID EPISODE ID FOUND\n defaulting to romaji name");
+      romajiName = convertName(animeData?.title);
+      console.log(romajiName);
+      setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
     }
-    console.log(romajiName);
-    setEpisodeId(`${romajiName}-episode-${currentEpisodeNumber}`);
-  }, [animeData, currentEpisodeNumber]);
+  }, [animeData, currentEpisodeNumber, errorLevel]);
 
   useEffect(() => {
     if (!episodeId || !animeData || !animeData.title || !currentEpisodeNumber) return;
@@ -89,21 +120,7 @@ export const Watch: React.FC = () => {
           }
         } catch (error) {
           console.log("Error:", error);
-          if ((error as any).response && (error as any).response.status === 404) {
-            // If 404, append '-' and retry
-            let romajiName;
-            if (animeData?.title.includes(':')) {
-              romajiName = animeData?.title.replace(/:/g, '').replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s,\.]+/g, '-');
-            } else {
-              romajiName = animeData?.title.replace(/\s*-\s*/g, '-').toLowerCase().replace(/[\s,\.()?]+/g, '-');
-            }
-            const modifiedId = `${romajiName}-`;
-            console.log("Modified ID:", modifiedId);
-            setEpisodeId(`${modifiedId}-episode-${currentEpisodeNumber}`);
-            console.log("Retrying with modified ID:", episodeId);
-
-            // fetchData(episodeId);
-          }
+          setErrorLevel(errorLevel + 1);
         }
       }
     };
