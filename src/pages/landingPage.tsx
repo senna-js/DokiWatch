@@ -19,7 +19,7 @@ const LandingPage = () => {
     useEffect(() => {
         if (isAuthenticated()) {
             // Redirect to the App component if the user is authenticated
-            navigate("/home");
+            navigate("/");
         }
     }, [navigate]);
 
