@@ -43,9 +43,11 @@ const App = () => {
                       Explore your favorite anime & manga here.
                     </p>
                   </div>
+                  <div className="mt-16 ml-24">
+                    <TopAiringAnimeStack />
+                  </div>
                   {isSignedIn && (
-                    <div className="mt-16 ml-24">
-                      <TopAiringAnimeStack />
+                    <div className="ml-24">
                       <AnimeAiringStack  />
                       <AnimeWatchingStack />
                     </div>
