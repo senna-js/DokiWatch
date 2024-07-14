@@ -54,7 +54,7 @@ const App = () => {
               }
             />
             <Route path="/anime/:id" element={<Anime />} />
-            <Route path="/watch" element={<Watch />} />
+            <Route path="/watch/:id" element={<Watch />} />
             <Route path="/search" element={<Search />} />
             <Route path="/" element={<LandingPage />} />
           </Routes>

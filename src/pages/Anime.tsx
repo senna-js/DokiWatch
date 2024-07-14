@@ -12,7 +12,7 @@ export const Anime = () => {
   const [relationData, setRelationData] = useState<any[]>([]);
   const [searchParams] = useSearchParams();
 
-  const handleTitleClick = (animeId) => {
+  const handleTitleClick = (animeId:number) => {
     navigate(`/anime/${animeId}`);
   };
   const handleRating = (ratingValue: number) => {
@@ -65,10 +65,10 @@ export const Anime = () => {
   const handleWatch = () => {
     const mid = searchParams.get("mid");
     if (mid) {
-      const navString = `/watch?id=${animeData?.mal_id}&ep=1&mid=${mid}`;
+      const navString = `/watch/${animeData?.mal_id}?id=${animeData?.title}&ep=1&mid=${mid}`;
       navigate(navString);
     } else {
-      const navString = `/watch?id=${animeData?.mal_id}&ep=1`;
+      const navString = `/watch/${animeData?.mal_id}?id=${animeData?.title}&ep=1`;
       navigate(navString);
     }
   };

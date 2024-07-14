@@ -1,30 +1,61 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
-import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useSearchParams, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
 import "./Watch.css"
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
+import Hls from 'hls.js';
 import { json } from "stream/consumers";
 
-interface Source {
-  url: string;
-  quality: string;
+interface Quality {
+  level: number,
+  label: string
+}
+
+interface AnimeData {
+  id: string,
+  title: string,
+  malID: number,
+  alID: number,
+  image: string,
+  description: string,
+  totalEpisodes: number,
 }
 
 interface Episode {
-  id: number;
-  title_english: string;
-  title_romaji: string;
+  id: string,
+  number: number,
+  title: string
+}
+
+interface currEpisodeData {
+  //always has one source
+  sources: [{
+    url: string,
+  }];
+  subtitles: {
+    url: string,
+    lang: string
+  }[];
+  intro: {
+    start: number,
+    end: number
+  },
+  outro: {
+    start: number,
+    end: number
+  }
 }
 
 export const Watch: React.FC = () => {
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
-  const [sources, setSources] = useState<Source[]>([]);
+  const [qualitiesList, setQualitiesList] = useState<Quality[]>([])
+  const [qualityLevel, setQualityLevel] = useState<number | null>(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
-  const [animeData, setAnimeData] = useState<any>();
+  const [animeData, setAnimeData] = useState<AnimeData>();
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [episodeId, setEpisodeId] = useState("");
@@ -32,98 +63,116 @@ export const Watch: React.FC = () => {
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(
     parseInt(searchParams.get("ep") || "-1")
   );
+  const [currentEpisode, setCurrentEpisode] = useState<currEpisodeData>();
   const [playedSeconds, setPlayedSeconds] = useState<number>(0);
-  //0=romaji,1=romaji+"-",2=english,3=english+"-",4=none
-  const [errorLevel, setErrorLevel] = useState<number>(0);
   const [totalDuration, setTotalDuration] = useState<number>(0);
-  useEffect(() => {
-    axios
-      .get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}/episodes`)
-      .then((res) => {
-        setEpisodesData(
-          res.data.data.map((episode: any) => ({
-            id: episode.mal_id,
-            title_english: episode.title,
-            title_romaji: episode.title_romanji,
-          }))
-        );
-      });
+  const params = useParams();
+  const playerRef: any = useRef(null);
 
-    axios
-      .get(`https://api.jikan.moe/v4/anime/${searchParams.get("id")}`)
-      .then((res) => {
-        setAnimeData(res.data.data);
-      });
+  useEffect(() => {
+    let hls: any;
+
+    if (playerRef.current) {
+      const player = playerRef.current.getInternalPlayer();
+
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(player);
+
+        hls.on(Hls.Events.MANIFEST_LOADED, () => {
+          const levels: Quality[] = hls.levels.map((level: any, index: any) => ({
+            level: index,
+            label: `${level.height}p`
+          }));
+          setQualitiesList(levels);
+
+          // Set to highest quality by default
+          if (qualityLevel == null) {
+            const highestQualityIndex = hls.levels.length - 1;
+            hls.currentLevel = highestQualityIndex;
+            setQualityLevel(highestQualityIndex);
+          }
+
+          // If a specific qualityLevel is set, use it instead
+          if (qualityLevel !== null && qualityLevel >= 0 && qualityLevel < hls.levels.length) {
+            hls.currentLevel = qualityLevel;
+          }
+        });
+
+        // Listen for quality level changes outside of manifest loading
+        if (qualityLevel !== null && qualityLevel >= 0 && qualityLevel < hls.levels.length) {
+          hls.currentLevel = qualityLevel;
+        }
+      }
+    }
+
+    return () => {
+      if (hls) {
+        hls.destroy();
+      }
+    };
+  }, [streamUrl, qualityLevel]);
+
+  const fetchAnimeData = async (animeResponses: any) => {
+    if (animeData?.malID == params.id) return;
+    for (let i = 0; i < animeResponses.length; i++) {
+      const anime = animeResponses[i];
+      try {
+        const response = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`);
+        console.log(anime.id);
+        if (response.data.malID == params.id) {
+          setAnimeData(response.data);
+          setEpisodesData(response.data.episodes);
+          console.log("SELECTED:");
+          console.log(response.data);
+          return;
+        }
+      } catch (error) {
+        console.error("Error fetching anime data:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("id")}`)
+      .then((response) => {
+        fetchAnimeData(response.data.results)
+      })
     setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
   }, [searchParams]);
 
   useEffect(() => {
-    console.log(episodesData);
-  }, [episodesData])
-
-  const convertName = (romajiName: string) => {
-    if (!romajiName) return;
-
-    // Removing unwanted characters
-    romajiName = romajiName.replace(/[^a-zA-Z0-9 \-\u00C0-\u017F]/g, '');
-    // Remove spaces surrounding hyphens
-    romajiName = romajiName.replace(/\s+-\s+/g, '-');
-    // Convert all spaces to hyphens
-    romajiName = romajiName.replace(/\s+/g, '-');
-    // Convert characters with accents to normal characters
-    romajiName = romajiName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    return romajiName
-  }
+    if (!animeData || !episodesData) return;
+    setEpisodeId(episodesData[currentEpisodeNumber - 1].id);
+  }, [animeData, currentEpisodeNumber]);
 
   useEffect(() => {
-    let convertedName;
-    if (errorLevel === 0) {
-      convertedName = convertName(animeData?.title);
-    } else if (errorLevel === 1) {
-      convertedName = convertName(animeData?.title) + "-";
-    } else if (errorLevel === 2) {
-      convertedName = convertName(animeData?.title_english);
-    } else if (errorLevel === 3) {
-      convertedName = convertName(animeData?.title_english) + "-";
-    } else {
-      console.log("NO VALID EPISODE ID FOUND\n defaulting to romaji name");
-      convertedName = convertName(animeData?.title);
-    }
-    console.log(convertedName);
-    setEpisodeId(`${convertedName}-episode-${currentEpisodeNumber}`);
-  }, [animeData, currentEpisodeNumber, errorLevel]);
-
-  useEffect(() => {
-    if (!episodeId || !animeData || !animeData.title || !currentEpisodeNumber)
+    if (!episodeId)
       return;
     const fetchData = async () => {
-      // Clean the id by removing unwanted characters
-      const cleanId = episodeId.replace(/["',.;:]/g, "");
-      console.log(cleanId);
-      const cacheKey = `watchData-${cleanId}`;
+      const cacheKey = `watchData-${episodeId}`;
       const cachedData = sessionStorage.getItem(cacheKey);
 
       if (cachedData) {
-        const data = JSON.parse(cachedData);
-        setSources(data.sources);
-        setStreamUrl(data.sources[4].url); // Default to 1080p
+        const data: currEpisodeData = JSON.parse(cachedData);
+        setStreamUrl(data.sources[0].url); // Default to 1080p
       } else {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_CONSUMET_API_ENDPOINT}watch/${cleanId}`
+            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
           );
-          const data = response.data;
-          if (data && data.sources && data.sources.length > 0) {
-            sessionStorage.setItem(cacheKey, JSON.stringify(data));
-            setSources(data.sources);
-            setStreamUrl(data.sources[4].url); // Default to 1080p
+          if (response.data.sources && response.data.sources[0].url) {
+            response.data.sources[0].url = response.data.sources[0].url.replace(/https?:\/\/[^/]+\/hls-playback/, '/api');
+          } else {
+            console.log("Invalid Stream URL");
+            console.log(response.data.sources[0] ? response.data.sources[0].url : "No source URL found");
           }
+          setCurrentEpisode(response.data);
+          const data: currEpisodeData = response.data;
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
         } catch (error) {
           console.log("Error:", error);
-          if (errorLevel < 4) {
-            setErrorLevel(errorLevel + 1);
-          }
         }
       }
     };
@@ -131,12 +180,18 @@ export const Watch: React.FC = () => {
     fetchData();
   }, [episodeId]);
 
+  useEffect(() => {
+    if (!currentEpisode || !currentEpisode.sources) return;
+    console.log(currentEpisode);
+    setStreamUrl(currentEpisode.sources[0].url);
+  }, [currentEpisode])
+
   const reload = () => {
     window.location.reload();
   };
 
-  const handleQualityChange = (url: string) => {
-    setStreamUrl(url);
+  const handleQualityChange = (index: number) => {
+    setQualityLevel(index);
     setSettingsVisible(false); // Hide settings menu after selection
   };
 
@@ -317,16 +372,16 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.id == currentEpisodeNumber
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
                     ? "bg-red-700"
                     : "bg-gray-800 hover:bg-gray-700"
                     } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
-                    handleWatchEpisode(episode.id);
+                    handleWatchEpisode(episode.number);
                   }}
                 >
                   <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                    {episode.id}. {episode.title_english}
+                    {episode.number}. {episode.title}
                   </div>
                 </div>
               ))}
@@ -382,6 +437,7 @@ export const Watch: React.FC = () => {
               </button>
               <ReactPlayer
                 url={streamUrl}
+                ref={playerRef}
                 playing={true}
                 controls={true}
                 width="100%"
@@ -389,6 +445,13 @@ export const Watch: React.FC = () => {
                 className="aspect-video border border-white rounded-tr-md"
                 onProgress={handleProgress}
                 onDuration={handleDuration}
+                config={{
+                  file: {
+                    hlsOptions: {
+                      enableWorker: true,
+                    },
+                  },
+                }}
               />
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
@@ -406,8 +469,8 @@ export const Watch: React.FC = () => {
                     {currentEpisodeNumber} -{" "}
                     {
                       episodesData.find(
-                        (episode) => episode.id === currentEpisodeNumber
-                      )?.title_english
+                        (episode) => episode.number === currentEpisodeNumber
+                      )?.title
                     }
                   </p>
                 </div>
@@ -431,18 +494,19 @@ export const Watch: React.FC = () => {
 
           {settingsVisible && (
             <div className="absolute top-10 right-2.5 bg-black border border-gray-300 shadow-md z-20">
-              {sources.map((source, index) => (
+              {qualitiesList.map((quality) => (
                 <div
-                  key={index}
-                  onClick={() => handleQualityChange(source.url)}
+                  key={quality.level}
+                  onClick={() => handleQualityChange(quality.level)}
                   style={{
                     padding: "10px",
                     cursor: "pointer",
-                    backgroundColor:
-                      streamUrl === source.url ? "Black" : "Black",
+                    backgroundColor: "Black",
                   }}
                 >
-                  {source.quality}
+                  <div className={`${quality.level == qualityLevel ? "bg-red-500" : ""}`}>
+                    {quality.label}
+                  </div>
                 </div>
               ))}
             </div>
