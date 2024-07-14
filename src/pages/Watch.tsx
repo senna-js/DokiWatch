@@ -493,7 +493,7 @@ export const Watch: React.FC = () => {
           )}
 
           {settingsVisible && (
-            <div className="absolute top-10 right-2.5 bg-black border border-gray-300 shadow-md z-20">
+            <div className="flex flex-col absolute top-10 right-2.5 shadow-md z-20 mt-3">
               {qualitiesList.map((quality) => (
                 <div
                   key={quality.level}
@@ -501,11 +501,11 @@ export const Watch: React.FC = () => {
                   style={{
                     padding: "10px",
                     cursor: "pointer",
-                    backgroundColor: "Black",
                   }}
+                  className={`bg-black bg-opacity-50 rounded-md border ${quality.level == qualityLevel ? "bg-blue-200" : ""}`}
                 >
-                  <div className={`${quality.level == qualityLevel ? "bg-red-500" : ""}`}>
-                    {quality.label}
+                  <div className="opacity-100">
+                  {quality.label}
                   </div>
                 </div>
               ))}
