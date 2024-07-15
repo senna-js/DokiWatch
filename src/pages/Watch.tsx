@@ -196,7 +196,7 @@ export const Watch: React.FC = () => {
           if (response.data.sources && response.data.sources[0].url) {
             response.data.sources[0].url = response.data.sources[0].url.replace(
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-              "/api/$1"
+              "/api-$1"
             );
           } else {
             console.log("Invalid Stream URL");
