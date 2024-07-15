@@ -12,5 +12,14 @@ export default defineConfig({
         rewrite:(path)=>path.replace(/^\/api/,'')
       }
     }
+  },
+  build : {
+    proxy:{
+      '/api':{
+        target:'https://ec.netmagcdn.com:2228/hls-playback/',
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/api/,'')
+      }
+    }
   }
 })
