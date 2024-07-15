@@ -23,6 +23,8 @@ interface AnimeData {
   image: string;
   description: string;
   totalEpisodes: number;
+  hasSub: boolean;
+  hasDub: boolean;
 }
 
 interface Episode {
@@ -33,11 +35,10 @@ interface Episode {
 
 interface currEpisodeData {
   //always has one source
-  sources: [
-    {
-      url: string;
-    }
-  ];
+  sources: {
+    sub: string;
+    dub?: string;
+  };
   subtitles: {
     url: string;
     lang: string;
@@ -173,10 +174,10 @@ export const Watch: React.FC = () => {
       const cacheKey = `watchData-${episodeId}`;
       // const cachedData = sessionStorage.getItem(cacheKey);
       const cachedData = null;
-
       if (cachedData) {
+        console.log("using cached data");
         const data: currEpisodeData = JSON.parse(cachedData);
-        setStreamUrl(data.sources[0].url); // Default to 1080p
+        setStreamUrl(data.sources.sub); // Default to 1080p
         console.log(data.subtitles);
         data.subtitles.forEach((element) => {
           if (element.lang == "English") {
@@ -190,9 +191,19 @@ export const Watch: React.FC = () => {
           const response = await axios.get(
             `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
           );
+          let currEpisodeResponse: currEpisodeData = response.data;
+          currEpisodeResponse.sources.sub = response.data.sources[0].url;
           console.log(response.data)
-          if (response.data.sources && response.data.sources[0].url) {
-            response.data.sources[0].url = response.data.sources[0].url.replace(
+          if (animeData?.hasSub) {
+            const dubId = episodeId.replace('$both', '$dub');
+            const dubResponse = await axios.get(
+              `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${dubId}`
+            );
+            currEpisodeResponse.sources.dub = dubResponse.data.sources[0].url;
+          }
+
+          if (currEpisodeResponse.sources.sub) {
+            currEpisodeResponse.sources.sub = currEpisodeResponse.sources.sub.replace(
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
               "/api-$1"
             );
@@ -204,8 +215,14 @@ export const Watch: React.FC = () => {
                 : "No source URL found"
             );
           }
-          setCurrentEpisode(response.data);
-          console.log("eshan", response.data.sources[0].url);
+          if (currEpisodeResponse.sources.dub) {
+            currEpisodeResponse.sources.dub = currEpisodeResponse.sources.dub.replace(
+              /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+              "/api-$1"
+            );
+          }
+          setCurrentEpisode(currEpisodeResponse);
+          console.log("eshan", currEpisodeResponse.sources);
           // response.data.subtitles.forEach((element: any) => {
           //   if (element.lang === "English") {
           //     console.log("Found English Subtitle");
@@ -231,12 +248,12 @@ export const Watch: React.FC = () => {
         setSubtitleUrl(element.url);
       }
     });
-  },[episodeId])
+  }, [episodeId])
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
     console.log(currentEpisode);
-    setStreamUrl(currentEpisode.sources[0].url);
+    setStreamUrl(currentEpisode.sources.sub);
   }, [currentEpisode]);
 
   const reload = () => {
@@ -392,7 +409,7 @@ export const Watch: React.FC = () => {
       const introEndTime = currentEpisode.intro.end;
       playerRef.current.seekTo(introEndTime, 'seconds');
       playerRef.current.getInternalPlayer().play();
-      
+
     }
   }
   const handleSkipEnding = () => {
@@ -400,7 +417,7 @@ export const Watch: React.FC = () => {
       const outroEndTime = currentEpisode.outro.end;
       playerRef.current.seekTo(outroEndTime, 'seconds');
       playerRef.current.getInternalPlayer().play();
-      }
+    }
   }
 
   return (
@@ -417,8 +434,8 @@ export const Watch: React.FC = () => {
                 <div
                   key={index}
                   className={`episode-row flex justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
-                      ? "bg-red-700"
-                      : "bg-gray-800 hover:bg-gray-700"
+                    ? "bg-red-700"
+                    : "bg-gray-800 hover:bg-gray-700"
                     } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
                     handleWatchEpisode(episode.number);
@@ -503,21 +520,23 @@ export const Watch: React.FC = () => {
                         src: subtitleurl,
                         srcLang: "en",
                         default: true,
-                        label : "English Subtitles"
+                        label: "English Subtitles"
                       },
                     ],
                   },
                 }}
               />
-               {currentEpisode && (
-                <button className="m-2 bg-slate-300 p-2 rounded-md"
-                onClick={handleSkipInro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
-                )}
               {currentEpisode && (
-              <button className="m-2 bg-slate-300 p-2 rounded-md"
-              onClick={handleSkipEnding} style={{ visibility: (playedSeconds > currentEpisode.outro.start 
-                && playedSeconds < currentEpisode.outro.end)
-                 ? 'visible' : 'hidden' }}>Skip Outro</button>
+                <button className="m-2 bg-slate-300 p-2 rounded-md"
+                  onClick={handleSkipInro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
+              )}
+              {currentEpisode && (
+                <button className="m-2 bg-slate-300 p-2 rounded-md"
+                  onClick={handleSkipEnding} style={{
+                    visibility: (playedSeconds > currentEpisode.outro.start
+                      && playedSeconds < currentEpisode.outro.end)
+                      ? 'visible' : 'hidden'
+                  }}>Skip Outro</button>
               )}
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
