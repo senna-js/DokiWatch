@@ -481,7 +481,6 @@ export const Watch: React.FC = () => {
               </button>
               <ReactPlayer
                 ref={playerRef}
-                seekTo
                 url={streamUrl}
                 playing={true}
                 controls={true}
