@@ -179,13 +179,11 @@ export const Watch: React.FC = () => {
         setStreamUrl(data.sources[0].url); // Default to 1080p
         console.log(data.subtitles);
         data.subtitles.forEach((element) => {
-          console.log(element.lang);
           if (element.lang == "English") {
-            console.log("Found English Subtitle");
             setSubtitleUrl(element.url);
           }
         });
-        //setSubtitleUrl(data.subtitles[0].url);
+        // setSubtitleUrl(data.subtitles[0].url);
         console.log(subtitleurl);
       } else {
         try {
@@ -208,13 +206,12 @@ export const Watch: React.FC = () => {
           }
           setCurrentEpisode(response.data);
           console.log("eshan", response.data.sources[0].url);
-          response.data.subtitles.forEach((element: any) => {
-            console.log(element.lang);
-            if (element.lang == "English") {
-              console.log("Found English Subtitle");
-              setSubtitleUrl(element.url);
-            }
-          });
+          // response.data.subtitles.forEach((element: any) => {
+          //   if (element.lang === "English") {
+          //     console.log("Found English Subtitle");
+          //     setSubtitleUrl(element.url);
+          //   }
+          // });
           const data: currEpisodeData = response.data;
           sessionStorage.setItem(cacheKey, JSON.stringify(data));
         } catch (error) {
@@ -225,6 +222,16 @@ export const Watch: React.FC = () => {
     console.log("Fetching data for episode:", episodeId);
     fetchData();
   }, [episodeId]);
+
+  useEffect(() => {
+    if (!currentEpisode || !currentEpisode.sources) return;
+    currentEpisode.subtitles.forEach((element) => {
+      if (element.lang == "English") {
+        console.log("Found English Subtitle");
+        setSubtitleUrl(element.url);
+      }
+    });
+  },[episodeId])
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
@@ -380,6 +387,22 @@ export const Watch: React.FC = () => {
     }
   };
 
+  const handleSkipInro = () => {
+    if (currentEpisode && playerRef.current) {
+      const introEndTime = currentEpisode.intro.end;
+      playerRef.current.seekTo(introEndTime, 'seconds');
+      playerRef.current.getInternalPlayer().play();
+      
+    }
+  }
+  const handleSkipEnding = () => {
+    if (currentEpisode && playerRef.current) {
+      const outroEndTime = currentEpisode.outro.end;
+      playerRef.current.seekTo(outroEndTime, 'seconds');
+      playerRef.current.getInternalPlayer().play();
+      }
+  }
+
   return (
     <div className="flex h-screen w-screen justify-center mt-10">
       <div className="flex flex-row h-max">
@@ -457,8 +480,9 @@ export const Watch: React.FC = () => {
                 </svg>
               </button>
               <ReactPlayer
+              ref={playerRef}
+                seekTo
                 url={streamUrl}
-                ref={playerRef}
                 playing={true}
                 controls={true}
                 width="100%"
@@ -486,6 +510,14 @@ export const Watch: React.FC = () => {
                   },
                 }}
               />
+               {currentEpisode && (
+                <button className="m-2 bg-slate-300 p-2 rounded-md"
+                onClick={handleSkipInro} style={{ visibility: playedSeconds < currentEpisode.intro.end ? 'visible' : 'hidden' }}>Skip Intro</button>
+                )}
+              {currentEpisode && (
+              <button className="m-2 bg-slate-300 p-2 rounded-md"
+              onClick={handleSkipEnding} style={{ visibility: playedSeconds > currentEpisode.outro.start ? 'visible' : 'hidden' }}>Skip Outro</button>
+              )}
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
                   className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
