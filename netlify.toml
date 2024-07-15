@@ -1,0 +1,35 @@
+[[redirects]]
+  from = "/api-a/"
+  to = "https://api-a/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api-b/"
+  to = "https://api-b/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api-c/"
+  to = "https://api-c/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api-d/"
+  to = "https://api-d/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api-e/"
+  to = "https://api-e/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api-f/"
+  to = "https://api-f/:splat"
+  status = 200
+  force = true
