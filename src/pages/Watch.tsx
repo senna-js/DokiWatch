@@ -512,11 +512,13 @@ export const Watch: React.FC = () => {
               />
                {currentEpisode && (
                 <button className="m-2 bg-slate-300 p-2 rounded-md"
-                onClick={handleSkipInro} style={{ visibility: playedSeconds < currentEpisode.intro.end ? 'visible' : 'hidden' }}>Skip Intro</button>
+                onClick={handleSkipInro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
                 )}
               {currentEpisode && (
               <button className="m-2 bg-slate-300 p-2 rounded-md"
-              onClick={handleSkipEnding} style={{ visibility: playedSeconds > currentEpisode.outro.start ? 'visible' : 'hidden' }}>Skip Outro</button>
+              onClick={handleSkipEnding} style={{ visibility: (playedSeconds > currentEpisode.outro.start 
+                && playedSeconds < currentEpisode.outro.end)
+                 ? 'visible' : 'hidden' }}>Skip Outro</button>
               )}
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
