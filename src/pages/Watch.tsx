@@ -176,8 +176,15 @@ export const Watch: React.FC = () => {
       if (cachedData) {
         const data: currEpisodeData = JSON.parse(cachedData);
         setStreamUrl(data.sources[0].url); // Default to 1080p
-        console.log(data.subtitles[0].url);
-        setSubtitleUrl(data.subtitles[0].url);
+        console.log(data.subtitles);
+        data.subtitles.forEach((element) => {
+          console.log(element.lang);
+          if (element.lang == "English") {
+            console.log("Found English Subtitle");
+            setSubtitleUrl(element.url);
+          }
+        });
+        //setSubtitleUrl(data.subtitles[0].url);
         console.log(subtitleurl);
       } else {
         try {
@@ -198,6 +205,14 @@ export const Watch: React.FC = () => {
             );
           }
           setCurrentEpisode(response.data);
+          console.log("eshan", response.data);
+          response.data.subtitles.forEach((element) => {
+            console.log(element.lang);
+            if (element.lang == "English") {
+              console.log("Found English Subtitle");
+              setSubtitleUrl(element.url);
+            }
+          });
           const data: currEpisodeData = response.data;
           sessionStorage.setItem(cacheKey, JSON.stringify(data));
         } catch (error) {
