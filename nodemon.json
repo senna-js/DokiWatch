@@ -1,0 +1,11 @@
+{
+    "ignore": [
+      "dist/*",
+      "src/*",
+      "public/*"
+    ],
+    "watch": [
+      "server.js"
+    ],
+    "ext": "js,json"
+  }

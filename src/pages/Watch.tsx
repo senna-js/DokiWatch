@@ -171,7 +171,8 @@ export const Watch: React.FC = () => {
     if (!episodeId) return;
     const fetchData = async () => {
       const cacheKey = `watchData-${episodeId}`;
-      const cachedData = sessionStorage.getItem(cacheKey);
+      // const cachedData = sessionStorage.getItem(cacheKey);
+      const cachedData = null;
 
       if (cachedData) {
         const data: currEpisodeData = JSON.parse(cachedData);
@@ -191,10 +192,11 @@ export const Watch: React.FC = () => {
           const response = await axios.get(
             `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
           );
+          console.log(response.data)
           if (response.data.sources && response.data.sources[0].url) {
             response.data.sources[0].url = response.data.sources[0].url.replace(
-              /https?:\/\/[^/]+\/hls-playback/,
-              "/api"
+              /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+              "/api-$1"
             );
           } else {
             console.log("Invalid Stream URL");
@@ -205,8 +207,8 @@ export const Watch: React.FC = () => {
             );
           }
           setCurrentEpisode(response.data);
-          console.log("eshan", response.data);
-          response.data.subtitles.forEach((element) => {
+          console.log("eshan", response.data.sources[0].url);
+          response.data.subtitles.forEach((element: any) => {
             console.log(element.lang);
             if (element.lang == "English") {
               console.log("Found English Subtitle");
@@ -416,11 +418,10 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-start items-center h-16 py-2 ${
-                    episode.number == currentEpisodeNumber
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
                       ? "bg-red-700"
                       : "bg-gray-800 hover:bg-gray-700"
-                  } transition-colors duration-150 ease-in-out`}
+                    } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
                     handleWatchEpisode(episode.number);
                   }}
@@ -504,6 +505,7 @@ export const Watch: React.FC = () => {
                         src: subtitleurl,
                         srcLang: "en",
                         default: true,
+                        label : "English Subtitles"
                       },
                     ],
                   },
@@ -558,9 +560,8 @@ export const Watch: React.FC = () => {
                     padding: "10px",
                     cursor: "pointer",
                   }}
-                  className={`bg-black bg-opacity-50 rounded-md border ${
-                    quality.level == qualityLevel ? "bg-blue-200" : ""
-                  }`}
+                  className={`bg-black bg-opacity-50 rounded-md border ${quality.level == qualityLevel ? "bg-blue-200" : ""
+                    }`}
                 >
                   <div className="opacity-100">{quality.label}</div>
                 </div>
