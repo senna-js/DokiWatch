@@ -480,8 +480,7 @@ export const Watch: React.FC = () => {
                 </svg>
               </button>
               <ReactPlayer
-              ref={playerRef}
-                seekTo
+                ref={playerRef}
                 url={streamUrl}
                 playing={true}
                 controls={true}
