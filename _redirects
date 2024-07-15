@@ -1,0 +1,7 @@
+/* /index.html 200
+/api-a/*  https://api-a/:splat  200
+/api-b/*  https://api-b/:splat  200
+/api-c/*  https://api-c/:splat  200
+/api-d/*  https://api-d/:splat  200
+/api-e/*  https://api-e/:splat  200
+/api-f/*  https://api-f/:splat  200
