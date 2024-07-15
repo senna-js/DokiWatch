@@ -1,22 +1,22 @@
 {  
   "rewrites": [
        { "source": "/api-a/:match*",
-         "destination": "https://api-a/:match*"
+         "destination": "https://ea.netmagcdn.com:2228/hls-playback/:match*"
        },
        { "source": "/api-b/:match*",
-         "destination": "https://api-b/:match*"
+         "destination": "https://eb.netmagcdn.com:2228/hls-playback/:match*"
        },
        { "source": "/api-c/:match*",
-         "destination": "https://api-c/:match*"
+         "destination": "https://ec.netmagcdn.com:2228/hls-playback/:match*"
        },
        { "source": "/api-d/:match*",
-         "destination": "https://api-d/:match*"
+         "destination": "https://ed.netmagcdn.com:2228/hls-playback/:match*"
        },
        { "source": "/api-e/:match*",
-         "destination": "https://api-e/:match*"
+         "destination": "https://ee.netmagcdn.com:2228/hls-playback/:match*"
        },
        { "source": "/api-f/:match*",
-         "destination": "https://api-f/:match*"
+         "destination": "https://ef.netmagcdn.com:2228/hls-playback/:match*"
        }
  ]
 }
