@@ -132,7 +132,7 @@ export const Navbar = () => {
       <Sidebar /> {/* Render the Sidebar component */}
       <div
         onClick={() => {
-          window.location.href = "/home";
+          navigate("/home");
         }}
       >
         <img
