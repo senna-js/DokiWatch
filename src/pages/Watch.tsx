@@ -231,7 +231,7 @@ export const Watch: React.FC = () => {
         setSubtitleUrl(element.url);
       }
     });
-  },[episodeId])
+  }, [episodeId])
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
@@ -392,7 +392,7 @@ export const Watch: React.FC = () => {
       const introEndTime = currentEpisode.intro.end;
       playerRef.current.seekTo(introEndTime, 'seconds');
       playerRef.current.getInternalPlayer().play();
-      
+
     }
   }
   const handleSkipEnding = () => {
@@ -400,7 +400,7 @@ export const Watch: React.FC = () => {
       const outroEndTime = currentEpisode.outro.end;
       playerRef.current.seekTo(outroEndTime, 'seconds');
       playerRef.current.getInternalPlayer().play();
-      }
+    }
   }
 
   return (
@@ -417,8 +417,8 @@ export const Watch: React.FC = () => {
                 <div
                   key={index}
                   className={`episode-row flex justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
-                      ? "bg-red-700"
-                      : "bg-gray-800 hover:bg-gray-700"
+                    ? "bg-red-700"
+                    : "bg-gray-800 hover:bg-gray-700"
                     } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
                     handleWatchEpisode(episode.number);
@@ -480,7 +480,7 @@ export const Watch: React.FC = () => {
                 </svg>
               </button>
               <ReactPlayer
-              ref={playerRef}
+                ref={playerRef}
                 seekTo
                 url={streamUrl}
                 playing={true}
@@ -504,22 +504,33 @@ export const Watch: React.FC = () => {
                         src: subtitleurl,
                         srcLang: "en",
                         default: true,
-                        label : "English Subtitles"
+                        label: "English Subtitles"
                       },
                     ],
                   },
                 }}
+                
               />
-               {currentEpisode && (
-                <button className="m-2 bg-slate-300 p-2 rounded-md"
-                onClick={handleSkipInro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
+              <div className="absolute bottom-0 left-0 h-full w-full flex justify-between items-center pointer-events-none">
+                {currentEpisode && (
+                  <button
+                    className="m-2 ml-4 bg-gray-500 border border-white bg-opacity-50 p-2 rounded-md pointer-events-auto"
+                    onClick={handleSkipInro}
+                    style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}
+                  >
+                    Skip Intro
+                  </button>
                 )}
-              {currentEpisode && (
-              <button className="m-2 bg-slate-300 p-2 rounded-md"
-              onClick={handleSkipEnding} style={{ visibility: (playedSeconds > currentEpisode.outro.start 
-                && playedSeconds < currentEpisode.outro.end)
-                 ? 'visible' : 'hidden' }}>Skip Outro</button>
-              )}
+                {currentEpisode && (
+                  <button
+                    className="m-2 mr-4 bg-gray-500 border border-white bg-opacity-50 p-2 rounded-md pointer-events-auto"
+                    onClick={handleSkipEnding}
+                    style={{ visibility: (playedSeconds > currentEpisode.outro.start && playedSeconds < currentEpisode.outro.end) ? 'visible' : 'hidden' }}
+                  >
+                    Skip Outro
+                  </button>
+                )}
+              </div>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
                   className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
