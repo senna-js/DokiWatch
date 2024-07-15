@@ -196,7 +196,7 @@ export const Watch: React.FC = () => {
           if (response.data.sources && response.data.sources[0].url) {
             response.data.sources[0].url = response.data.sources[0].url.replace(
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-              "/api-$1"
+              "/api/$1"
             );
           } else {
             console.log("Invalid Stream URL");
@@ -379,31 +379,6 @@ export const Watch: React.FC = () => {
       handleWatchEpisode(currentEpisodeNumber + 1);
     }
   };
-
-  // useEffect(() => {
-  //   // Add the following code to the useEffect hook
-  //   const episode = sources.find((source) => source.url === streamUrl)?.episode;
-  //   console.log(episode);
-  //   if (episode) {
-  //     setCurrentEpisode(episode);
-  //   }
-  // }, [streamUrl, sources]);
-
-  // const handleNextEpisode = () => {
-  //   const nextEpisode = sources.find((source) => source.episode === currentEpisode + 1);
-  //   console.log(nextEpisode);
-  //   if (nextEpisode) {
-  //     setStreamUrl(nextEpisode.url);
-  //   }
-  // };
-
-  // const handlePreviousEpisode = () => {
-  //   const previousEpisode = sources.find((source) => source.episode === currentEpisode - 1);
-  //   console.log(previousEpisode);
-  //   if (previousEpisode) {
-  //     setStreamUrl(previousEpisode.url);
-  //   }
-  // };
 
   return (
     <div className="flex h-screen w-screen justify-center mt-10">
