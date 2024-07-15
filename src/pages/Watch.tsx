@@ -4,55 +4,57 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
-import "./Watch.css"
+import "./Watch.css";
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
-import Hls from 'hls.js';
+import Hls from "hls.js";
 import { json } from "stream/consumers";
 
 interface Quality {
-  level: number,
-  label: string
+  level: number;
+  label: string;
 }
 
 interface AnimeData {
-  id: string,
-  title: string,
-  malID: number,
-  alID: number,
-  image: string,
-  description: string,
-  totalEpisodes: number,
+  id: string;
+  title: string;
+  malID: number;
+  alID: number;
+  image: string;
+  description: string;
+  totalEpisodes: number;
 }
 
 interface Episode {
-  id: string,
-  number: number,
-  title: string
+  id: string;
+  number: number;
+  title: string;
 }
 
 interface currEpisodeData {
   //always has one source
-  sources: [{
-    url: string,
-  }];
+  sources: [
+    {
+      url: string;
+    }
+  ];
   subtitles: {
-    url: string,
-    lang: string
+    url: string;
+    lang: string;
   }[];
   intro: {
-    start: number,
-    end: number
-  },
+    start: number;
+    end: number;
+  };
   outro: {
-    start: number,
-    end: number
-  }
+    start: number;
+    end: number;
+  };
 }
 
 export const Watch: React.FC = () => {
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
-  const [qualitiesList, setQualitiesList] = useState<Quality[]>([])
+  const [qualitiesList, setQualitiesList] = useState<Quality[]>([]);
   const [qualityLevel, setQualityLevel] = useState<number | null>(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [animeData, setAnimeData] = useState<AnimeData>();
@@ -60,6 +62,7 @@ export const Watch: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [episodeId, setEpisodeId] = useState("");
   const [progress, setProgress] = useState<number>(0);
+  const [subtitleurl, setSubtitleUrl] = useState<string>("");
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(
     parseInt(searchParams.get("ep") || "-1")
   );
@@ -81,10 +84,12 @@ export const Watch: React.FC = () => {
         hls.attachMedia(player);
 
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
-          const levels: Quality[] = hls.levels.map((level: any, index: any) => ({
-            level: index,
-            label: `${level.height}p`
-          }));
+          const levels: Quality[] = hls.levels.map(
+            (level: any, index: any) => ({
+              level: index,
+              label: `${level.height}p`,
+            })
+          );
           setQualitiesList(levels);
 
           // Set to highest quality by default
@@ -95,13 +100,21 @@ export const Watch: React.FC = () => {
           }
 
           // If a specific qualityLevel is set, use it instead
-          if (qualityLevel !== null && qualityLevel >= 0 && qualityLevel < hls.levels.length) {
+          if (
+            qualityLevel !== null &&
+            qualityLevel >= 0 &&
+            qualityLevel < hls.levels.length
+          ) {
             hls.currentLevel = qualityLevel;
           }
         });
 
         // Listen for quality level changes outside of manifest loading
-        if (qualityLevel !== null && qualityLevel >= 0 && qualityLevel < hls.levels.length) {
+        if (
+          qualityLevel !== null &&
+          qualityLevel >= 0 &&
+          qualityLevel < hls.levels.length
+        ) {
           hls.currentLevel = qualityLevel;
         }
       }
@@ -119,7 +132,9 @@ export const Watch: React.FC = () => {
     for (let i = 0; i < animeResponses.length; i++) {
       const anime = animeResponses[i];
       try {
-        const response = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`);
+        const response = await axios.get(
+          `https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`
+        );
         console.log(anime.id);
         if (response.data.malID == params.id) {
           setAnimeData(response.data);
@@ -135,10 +150,15 @@ export const Watch: React.FC = () => {
   };
 
   useEffect(() => {
-    axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("id")}`)
+    axios
+      .get(
+        `https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get(
+          "id"
+        )}`
+      )
       .then((response) => {
-        fetchAnimeData(response.data.results)
-      })
+        fetchAnimeData(response.data.results);
+      });
     setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
   }, [searchParams]);
 
@@ -148,8 +168,7 @@ export const Watch: React.FC = () => {
   }, [animeData, currentEpisodeNumber]);
 
   useEffect(() => {
-    if (!episodeId)
-      return;
+    if (!episodeId) return;
     const fetchData = async () => {
       const cacheKey = `watchData-${episodeId}`;
       const cachedData = sessionStorage.getItem(cacheKey);
@@ -157,16 +176,26 @@ export const Watch: React.FC = () => {
       if (cachedData) {
         const data: currEpisodeData = JSON.parse(cachedData);
         setStreamUrl(data.sources[0].url); // Default to 1080p
+        console.log(data.subtitles[0].url);
+        setSubtitleUrl(data.subtitles[0].url);
+        console.log(subtitleurl);
       } else {
         try {
           const response = await axios.get(
             `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
           );
           if (response.data.sources && response.data.sources[0].url) {
-            response.data.sources[0].url = response.data.sources[0].url.replace(/https?:\/\/[^/]+\/hls-playback/, '/api');
+            response.data.sources[0].url = response.data.sources[0].url.replace(
+              /https?:\/\/[^/]+\/hls-playback/,
+              "/api"
+            );
           } else {
             console.log("Invalid Stream URL");
-            console.log(response.data.sources[0] ? response.data.sources[0].url : "No source URL found");
+            console.log(
+              response.data.sources[0]
+                ? response.data.sources[0].url
+                : "No source URL found"
+            );
           }
           setCurrentEpisode(response.data);
           const data: currEpisodeData = response.data;
@@ -184,7 +213,7 @@ export const Watch: React.FC = () => {
     if (!currentEpisode || !currentEpisode.sources) return;
     console.log(currentEpisode);
     setStreamUrl(currentEpisode.sources[0].url);
-  }, [currentEpisode])
+  }, [currentEpisode]);
 
   const reload = () => {
     window.location.reload();
@@ -372,10 +401,11 @@ export const Watch: React.FC = () => {
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
-                  className={`episode-row flex justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
-                    ? "bg-red-700"
-                    : "bg-gray-800 hover:bg-gray-700"
-                    } transition-colors duration-150 ease-in-out`}
+                  className={`episode-row flex justify-start items-center h-16 py-2 ${
+                    episode.number == currentEpisodeNumber
+                      ? "bg-red-700"
+                      : "bg-gray-800 hover:bg-gray-700"
+                  } transition-colors duration-150 ease-in-out`}
                   onClick={() => {
                     handleWatchEpisode(episode.number);
                   }}
@@ -450,6 +480,17 @@ export const Watch: React.FC = () => {
                     hlsOptions: {
                       enableWorker: true,
                     },
+                    attributes: {
+                      crossOrigin: "anonymous",
+                    },
+                    tracks: [
+                      {
+                        kind: "subtitles",
+                        src: subtitleurl,
+                        srcLang: "en",
+                        default: true,
+                      },
+                    ],
                   },
                 }}
               />
@@ -502,11 +543,11 @@ export const Watch: React.FC = () => {
                     padding: "10px",
                     cursor: "pointer",
                   }}
-                  className={`bg-black bg-opacity-50 rounded-md border ${quality.level == qualityLevel ? "bg-blue-200" : ""}`}
+                  className={`bg-black bg-opacity-50 rounded-md border ${
+                    quality.level == qualityLevel ? "bg-blue-200" : ""
+                  }`}
                 >
-                  <div className="opacity-100">
-                  {quality.label}
-                  </div>
+                  <div className="opacity-100">{quality.label}</div>
                 </div>
               ))}
             </div>
