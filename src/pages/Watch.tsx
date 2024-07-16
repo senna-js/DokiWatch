@@ -261,9 +261,11 @@ export const Watch: React.FC = () => {
         setStreamUrl(currentEpisode.sources.sub);
       } else if (streamType === StreamType.dub && currentEpisode.sources.dub) {
         setStreamUrl(currentEpisode.sources.dub);
+      } else if (streamType === StreamType.dub && !currentEpisode.sources.dub) {
+        setStreamUrl(currentEpisode.sources.sub);
       }
     }
-  }, [streamType,currentEpisode]);
+  }, [streamType, currentEpisode]);
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
