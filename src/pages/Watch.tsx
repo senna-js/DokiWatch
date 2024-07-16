@@ -248,7 +248,7 @@ export const Watch: React.FC = () => {
         setSubtitleUrl(element.url);
       }
     });
-  },  [episodeId])
+  }, [episodeId])
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
@@ -404,7 +404,7 @@ export const Watch: React.FC = () => {
     }
   };
 
-  const handleSkipInro = () => {
+  const handleSkipIntro = () => {
     if (currentEpisode && playerRef.current) {
       const introEndTime = currentEpisode.intro.end;
       playerRef.current.seekTo(introEndTime, 'seconds');
@@ -525,18 +525,22 @@ export const Watch: React.FC = () => {
                     ],
                   },
                 }}
-                
+
               />
-               {currentEpisode && (
-                <button className="m-2 bg-slate-300 p-2 rounded-md"
-                onClick={handleSkipInro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
-                )}
+              <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
               {currentEpisode && (
-              <button className="m-2 bg-slate-300 p-2 rounded-md"
-              onClick={handleSkipEnding} style={{ visibility: (playedSeconds > currentEpisode.outro.start 
-                && playedSeconds < currentEpisode.outro.end)
-                 ? 'visible' : 'hidden' }}>Skip Outro</button>
+                <button className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto"
+                  onClick={handleSkipIntro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
               )}
+              {currentEpisode && (
+                <button className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto"
+                  onClick={handleSkipEnding} style={{
+                    visibility: (playedSeconds > currentEpisode.outro.start
+                      && playedSeconds < currentEpisode.outro.end)
+                      ? 'visible' : 'hidden'
+                  }}>Skip Outro</button>
+              )}
+              </div>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
                   className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
