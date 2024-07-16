@@ -101,12 +101,12 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
 
-  const handleTitleClick = (animeId) => {
+  const handleTitleClick = (animeId: any) => {
     closeModal();
     navigate(`/anime/${animeId}`);
   };
 
-  const handleUsernameChange = (event) => {
+  const handleUsernameChange = (event: any) => {
     setUsername(event.target.value);
     const user = { username: event.target.value };
     localStorage.setItem("user", JSON.stringify(user));
@@ -115,7 +115,7 @@ const Sidebar = () => {
   const handleSubmit = () => {
     console.log("Username submitted:", username);
     window.open(
-      "https://anilist.co/api/v2/oauth/authorize?client_id=19786&response_type=token",
+      "https://anilist.co/api/v2/oauth/authorize?client_id=19922&response_type=token",
       "_blank"
     );
     setOpen(false);
@@ -276,7 +276,7 @@ const Sidebar = () => {
                     ).format(currentDate)}`}
                   </p>
                 </div>
-                {schedule.map((anime) => (
+                {schedule.map((anime: any) => (
                   <div
                     id={anime.mal_id}
                     key={anime.mal_id}

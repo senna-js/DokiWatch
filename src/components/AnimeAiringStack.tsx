@@ -9,7 +9,23 @@ import { AnimeData } from "../interfaces/AnimeData";
 export const AnimeAiringStack = () => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
+
+  //token is now set inside the user object, prev it was set as a different variable in localstorage
   const user = localStorage.getItem("user");
+  const token = localStorage.getItem("token") as string;
+
+  let userObject;
+
+  if(user){
+    userObject = JSON.parse(user);
+  }
+  else {
+    userObject = {};
+  }
+  if(token){
+    userObject["access_token"] = token;
+  }
+  localStorage.setItem("user", JSON.stringify(userObject));
 
   ///////////////////////////////
   let username: string | undefined;
