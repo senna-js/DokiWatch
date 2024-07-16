@@ -529,16 +529,16 @@ export const Watch: React.FC = () => {
               />
               <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
               {currentEpisode && (
-                <button className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto"
-                  onClick={handleSkipIntro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro</button>
+                <button className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
+                  onClick={handleSkipIntro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro &gt;&gt;</button>
               )}
               {currentEpisode && (
-                <button className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto"
+                <button className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
                   onClick={handleSkipEnding} style={{
                     visibility: (playedSeconds > currentEpisode.outro.start
                       && playedSeconds < currentEpisode.outro.end)
                       ? 'visible' : 'hidden'
-                  }}>Skip Outro</button>
+                  }}>Skip Outro &gt;&gt;</button>
               )}
               </div>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
