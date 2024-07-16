@@ -195,14 +195,14 @@ export const Watch: React.FC = () => {
           let currEpisodeResponse: currEpisodeData = response.data;
           currEpisodeResponse.sources.sub = response.data.sources[0].url;
           console.log(response.data)
-          if (animeData?.hasSub) {
+          if (animeData?.hasDub) {
             const dubId = episodeId.replace('$both', '$dub');
             const dubResponse = await axios.get(
               `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${dubId}`
             );
             currEpisodeResponse.sources.dub = dubResponse.data.sources[0].url;
           }
-        
+
           if (currEpisodeResponse.sources.sub) {
             currEpisodeResponse.sources.sub = currEpisodeResponse.sources.sub.replace(
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
@@ -424,13 +424,13 @@ export const Watch: React.FC = () => {
     }
   }
   const changeToDub = () => {
-    if(dubURL){
-      setStreamUrl(dubURL);
+    if (animeData && animeData.hasDub && currentEpisode?.sources.dub) {
+      setStreamUrl(currentEpisode.sources.dub);
+
     }
     else {
       alert("No Dub Available for this episode");
     }
-    
   }
   const changeToSub = () => {
     setStreamUrl(subURL);
@@ -444,7 +444,7 @@ export const Watch: React.FC = () => {
               EPISODES
             </div>
             <hr className="" />
-            <div className="overflow-y-auto h-[33rem] scrollHide">
+            <div className="overflow-y-auto h-[37rem] scrollHide">
               {episodesData.map((episode, index) => (
                 <div
                   key={index}
@@ -543,22 +543,27 @@ export const Watch: React.FC = () => {
 
               />
               <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
-              {currentEpisode && (
-                <button className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
-                  onClick={handleSkipIntro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro &gt;&gt;</button>
-              )}
-              {currentEpisode && (
-                <button className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
-                  onClick={handleSkipEnding} style={{
-                    visibility: (playedSeconds > currentEpisode.outro.start
-                      && playedSeconds < currentEpisode.outro.end)
-                      ? 'visible' : 'hidden'
-                  }}>Skip Outro &gt;&gt;</button>
-              )}
+                {currentEpisode && (
+                  <button className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
+                    onClick={handleSkipIntro} style={{ visibility: (playedSeconds < currentEpisode.intro.end && playedSeconds > currentEpisode.intro.start) ? 'visible' : 'hidden' }}>Skip Intro &gt;&gt;</button>
+                )}
+                {currentEpisode && (
+                  <button className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
+                    onClick={handleSkipEnding} style={{
+                      visibility: (playedSeconds > currentEpisode.outro.start
+                        && playedSeconds < currentEpisode.outro.end)
+                        ? 'visible' : 'hidden'
+                    }}>Skip Outro &gt;&gt;</button>
+                )}
               </div>
-              {/* TODO:Style sub and dub buttons */}
-              <button onClick={changeToSub}>SUB</button>
-              <button onClick={changeToDub}>DUB</button>
+              <div className="bg-gray-800 gap-2 border border-white backdrop-blur-lg h-16 flex items-center justify-center px-4 py-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" id="closed-caption" fill="currentColor">
+                  <path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 6.5c0 .28-.22.5-.5.5H10c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5zm7 0c0 .28-.22.5-.5.5H17c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5z"></path>
+                </svg><p className="mb-1">:</p>
+                {/* TODO:Style sub and dub buttons */}
+                <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={changeToSub}>SUB</button>
+                <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={changeToDub}>DUB</button>
+              </div>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
                   className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
