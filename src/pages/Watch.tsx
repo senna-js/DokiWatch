@@ -33,7 +33,6 @@ interface Episode {
 }
 
 interface currEpisodeData {
-  //always has one source
   sources: {
     sub: string;
     dub?: string;
@@ -52,10 +51,14 @@ interface currEpisodeData {
   };
 }
 
+enum StreamType {
+  sub,
+  dub
+}
+
 export const Watch: React.FC = () => {
-  const [subURL, setSubURL] = useState<string>("");
-  const [dubURL, setDubURL] = useState<string>("");
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
+  const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
   const [qualitiesList, setQualitiesList] = useState<Quality[]>([]);
   const [qualityLevel, setQualityLevel] = useState<number | null>(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
@@ -63,7 +66,7 @@ export const Watch: React.FC = () => {
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [episodeId, setEpisodeId] = useState("");
-  const [progress, setProgress] = useState<number>(0);
+  // const [progress, setProgress] = useState<number>(0);
   const [subtitleurl, setSubtitleUrl] = useState<string>("");
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(
     parseInt(searchParams.get("ep") || "-1")
@@ -178,7 +181,6 @@ export const Watch: React.FC = () => {
       if (cachedData) {
         console.log("using cached data");
         const data: currEpisodeData = JSON.parse(cachedData);
-        setStreamUrl(data.sources.sub); // Default to 1080p
         console.log(data.subtitles);
         data.subtitles.forEach((element) => {
           if (element.lang == "English") {
@@ -188,56 +190,54 @@ export const Watch: React.FC = () => {
         // setSubtitleUrl(data.subtitles[0].url);
         console.log(subtitleurl);
       } else {
-        try {
-          const response = await axios.get(
-            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
-          );
-          let currEpisodeResponse: currEpisodeData = response.data;
-          currEpisodeResponse.sources.sub = response.data.sources[0].url;
-          console.log(response.data)
-          if (animeData?.hasDub) {
+        const response = await axios.get(
+          `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
+        );
+        let currEpisodeResponse: currEpisodeData = response.data;
+        currEpisodeResponse.sources.sub = response.data.sources[0].url;
+        currEpisodeResponse.sources.dub = undefined; //this is default behaviour, setting for clarity
+        console.log(response.data)
+        if (animeData?.hasDub) {
+          try {
             const dubId = episodeId.replace('$both', '$dub');
             const dubResponse = await axios.get(
               `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${dubId}`
             );
             currEpisodeResponse.sources.dub = dubResponse.data.sources[0].url;
+          } catch (error) {
+            console.error("Error fetching dub data:", error);
           }
-
-          if (currEpisodeResponse.sources.sub) {
-            currEpisodeResponse.sources.sub = currEpisodeResponse.sources.sub.replace(
-              /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-              "/api-$1"
-            );
-            setSubURL(currEpisodeResponse.sources.sub);
-          }
-          else {
-            console.log("Invalid Stream URL");
-            console.log(
-              response.data.sources[0]
-                ? response.data.sources[0].url
-                : "No source URL found"
-            );
-          }
-          if (currEpisodeResponse.sources.dub) {
-            currEpisodeResponse.sources.dub = currEpisodeResponse.sources.dub.replace(
-              /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-              "/api-$1"
-            );
-            setDubURL(currEpisodeResponse.sources.dub);
-          }
-          setCurrentEpisode(currEpisodeResponse);
-          console.log("eshan", currEpisodeResponse.sources);
-          // response.data.subtitles.forEach((element: any) => {
-          //   if (element.lang === "English") {
-          //     console.log("Found English Subtitle");
-          //     setSubtitleUrl(element.url);
-          //   }
-          // });
-          const data: currEpisodeData = response.data;
-          sessionStorage.setItem(cacheKey, JSON.stringify(data));
-        } catch (error) {
-          console.log("Error:", error);
         }
+
+        if (currEpisodeResponse.sources.sub) {
+          currEpisodeResponse.sources.sub = currEpisodeResponse.sources.sub.replace(
+            /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+            "/api-$1"
+          );
+        }
+        else {
+          console.log("Invalid Stream URL");
+          console.log(
+            response.data.sources[0]
+              ? response.data.sources[0].url
+              : "No source URL found"
+          );
+        }
+        if (currEpisodeResponse.sources.dub) {
+          currEpisodeResponse.sources.dub = currEpisodeResponse.sources.dub.replace(
+            /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+            "/api-$1"
+          );
+        }
+        setCurrentEpisode(currEpisodeResponse);
+        console.log("eshan", currEpisodeResponse.sources);
+        // response.data.subtitles.forEach((element: any) => {
+        //   if (element.lang === "English") {
+        //     console.log("Found English Subtitle");
+        //     setSubtitleUrl(element.url);
+        //   }
+        // });
+        sessionStorage.setItem(cacheKey, JSON.stringify(currEpisodeResponse));
       }
     };
     console.log("Fetching data for episode:", episodeId);
@@ -255,9 +255,19 @@ export const Watch: React.FC = () => {
   }, [episodeId])
 
   useEffect(() => {
+    console.log("Stream Type Changed to:", streamType);
+    if (currentEpisode) {
+      if (streamType === StreamType.sub && currentEpisode.sources.sub) {
+        setStreamUrl(currentEpisode.sources.sub);
+      } else if (streamType === StreamType.dub && currentEpisode.sources.dub) {
+        setStreamUrl(currentEpisode.sources.dub);
+      }
+    }
+  }, [streamType,currentEpisode]);
+
+  useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
     console.log(currentEpisode);
-    setStreamUrl(currentEpisode.sources.sub);
   }, [currentEpisode]);
 
   const reload = () => {
@@ -423,18 +433,7 @@ export const Watch: React.FC = () => {
       playerRef.current.getInternalPlayer().play();
     }
   }
-  const changeToDub = () => {
-    if (animeData && animeData.hasDub && currentEpisode?.sources.dub) {
-      setStreamUrl(currentEpisode.sources.dub);
 
-    }
-    else {
-      alert("No Dub Available for this episode");
-    }
-  }
-  const changeToSub = () => {
-    setStreamUrl(subURL);
-  }
   return (
     <div className="flex h-screen w-screen justify-center mt-10">
       <div className="flex flex-row h-max">
@@ -561,8 +560,10 @@ export const Watch: React.FC = () => {
                   <path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 6.5c0 .28-.22.5-.5.5H10c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5zm7 0c0 .28-.22.5-.5.5H17c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5z"></path>
                 </svg><p className="mb-1">:</p>
                 {/* TODO:Style sub and dub buttons */}
-                <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={changeToSub}>SUB</button>
-                <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={changeToDub}>DUB</button>
+                <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={() => { setStreamType(StreamType.sub) }}>SUB</button>
+                {animeData && animeData.hasDub && currentEpisode?.sources.dub ?
+                  <button className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out" onClick={() => { setStreamType(StreamType.dub) }}>DUB</button>
+                  : null}
               </div>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
