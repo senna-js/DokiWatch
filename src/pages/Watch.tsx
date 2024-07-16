@@ -8,7 +8,6 @@ import "./Watch.css";
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
 import Hls from "hls.js";
-import { json } from "stream/consumers";
 
 interface Quality {
   level: number;
@@ -54,6 +53,8 @@ interface currEpisodeData {
 }
 
 export const Watch: React.FC = () => {
+  const [subURL, setSubURL] = useState<string>("");
+  const [dubURL, setDubURL] = useState<string>("");
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [qualitiesList, setQualitiesList] = useState<Quality[]>([]);
   const [qualityLevel, setQualityLevel] = useState<number | null>(null);
@@ -201,13 +202,15 @@ export const Watch: React.FC = () => {
             );
             currEpisodeResponse.sources.dub = dubResponse.data.sources[0].url;
           }
-
+        
           if (currEpisodeResponse.sources.sub) {
             currEpisodeResponse.sources.sub = currEpisodeResponse.sources.sub.replace(
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
               "/api-$1"
             );
-          } else {
+            setSubURL(currEpisodeResponse.sources.sub);
+          }
+          else {
             console.log("Invalid Stream URL");
             console.log(
               response.data.sources[0]
@@ -220,6 +223,7 @@ export const Watch: React.FC = () => {
               /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
               "/api-$1"
             );
+            setDubURL(currEpisodeResponse.sources.dub);
           }
           setCurrentEpisode(currEpisodeResponse);
           console.log("eshan", currEpisodeResponse.sources);
@@ -419,7 +423,18 @@ export const Watch: React.FC = () => {
       playerRef.current.getInternalPlayer().play();
     }
   }
-
+  const changeToDub = () => {
+    if(dubURL){
+      setStreamUrl(dubURL);
+    }
+    else {
+      alert("No Dub Available for this episode");
+    }
+    
+  }
+  const changeToSub = () => {
+    setStreamUrl(subURL);
+  }
   return (
     <div className="flex h-screen w-screen justify-center mt-10">
       <div className="flex flex-row h-max">
@@ -541,6 +556,9 @@ export const Watch: React.FC = () => {
                   }}>Skip Outro &gt;&gt;</button>
               )}
               </div>
+              {/* TODO:Style sub and dub buttons */}
+              <button onClick={changeToSub}>SUB</button>
+              <button onClick={changeToDub}>DUB</button>
               <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
                 <div
                   className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
