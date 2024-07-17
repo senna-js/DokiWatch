@@ -35,27 +35,34 @@ export const Navbar = () => {
           accessToken = userobj.access_token;
         }
       } else {
-        console.log("No user found in localstorage");
-        return;
+        const user = {
+          access_token: accessToken,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
       }
+      // else {
+      //   console.log("No user found in localstorage");
+      //   return;
+      // }
 
       if (accessToken) {
         // console.log("Access Token:", accessToken);
         const query = `
-          query ($name: String) {
-            User(name: $name) {
-              id
-              name
-              avatar {
-                large
-              }
+          query {
+            Viewer { 
+            id 
+            name 
+            avatar { 
+            large 
+            medium 
+            } 
             }
           }
         `;
 
-        const variables = {
-          name: username as string,
-        };
+        // const variables = {
+        //   name: username as string,
+        // };
 
         try {
           const response = await fetch("https://graphql.anilist.co", {
@@ -67,18 +74,23 @@ export const Navbar = () => {
             },
             body: JSON.stringify({
               query,
-              variables,
             }),
           });
 
           const { data } = await response.json();
-          // console.log(data);
+          console.log(data);
 
-          if (data && data.User && data.User.avatar) {
-            const user = JSON.parse(localStorage.getItem("user") || "{}");
-            user["avatar"] = data.User.avatar.large;
+          if (data && data.Viewer && data.Viewer.avatar) {
+            const user = {
+              username: data.Viewer.name,
+              access_token: accessToken,
+              avatar: data.Viewer.avatar.large,
+            };
+            console.log("navbar_User:", user);
+            //const user = JSON.parse(localStorage.getItem("user") || "{}");
+            //user["avatar"] = data.Viewer.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));
-            setProfilePic(data.User.avatar.large);
+            setProfilePic(data.Viewer.avatar.large);
 
             // Update anime data in the context
             setTriggerFetch(true);

@@ -21,10 +21,11 @@ export const AnimeAiringStack = () => {
   } else {
     userObject = {};
   }
+  console.log("user ache", user);
   if (token) {
     userObject["access_token"] = token;
   }
-  localStorage.setItem("user", JSON.stringify(userObject));
+  //localStorage.setItem("user", JSON.stringify(userObject));
 
   ///////////////////////////////
   let username: string | undefined;

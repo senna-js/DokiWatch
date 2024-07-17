@@ -45,19 +45,19 @@ const AnimeDialogContent = styled(DialogContent)({
 });
 
 const AnimeButton = styled(Button)({
-  color: 'white',
-  cursor: 'pointer',
-  marginLeft: 'auto',
-  border: '1px solid #4B5563', // border-gray-700
-  borderRadius: '0.5rem', // rounded-lg
-  padding: '0.5rem 1rem', // px-2 py-2
-  transition: 'transform 150ms ease-in-out, background-color 150ms ease-in-out', // transition duration-150 ease-in-out
-  '&:hover': {
-    backgroundColor: '#374151', // hover:bg-slate-700
-    transform: 'scale(1.05)', // hover:scale-105
+  color: "white",
+  cursor: "pointer",
+  marginLeft: "auto",
+  border: "1px solid #4B5563", // border-gray-700
+  borderRadius: "0.5rem", // rounded-lg
+  padding: "0.5rem 1rem", // px-2 py-2
+  transition: "transform 150ms ease-in-out, background-color 150ms ease-in-out", // transition duration-150 ease-in-out
+  "&:hover": {
+    backgroundColor: "#374151", // hover:bg-slate-700
+    transform: "scale(1.05)", // hover:scale-105
   },
-  display: 'flex',
-  justifyContent: 'space-between',
+  display: "flex",
+  justifyContent: "space-between",
 });
 
 const AnimeTextField = styled(TextField)({
@@ -115,7 +115,7 @@ const Sidebar = () => {
   const handleSubmit = () => {
     console.log("Username submitted:", username);
     window.open(
-      "https://anilist.co/api/v2/oauth/authorize?client_id=19923&response_type=token",
+      "https://anilist.co/api/v2/oauth/authorize?client_id=19753&response_type=token",
       "_blank"
     );
     setOpen(false);
