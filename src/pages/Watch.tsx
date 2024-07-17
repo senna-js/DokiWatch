@@ -424,7 +424,7 @@ export const Watch: React.FC = () => {
     }
   }
   const changeToDub = () => {
-    if(dubURL){
+    if(!(dubURL==="")){
       setStreamUrl(dubURL);
     }
     else {

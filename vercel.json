@@ -17,6 +17,10 @@
        },
        { "source": "/api-f/:match*",
          "destination": "https://ef.netmagcdn.com:2228/hls-playback/:match*"
+       },
+       {
+        "source": "/(.*)",
+        "destination": "/"
        }
  ]
 }
