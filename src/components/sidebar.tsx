@@ -199,7 +199,7 @@ const Sidebar = () => {
         >
           {isSignedIn && (
             <Tooltip title="Connect to Anilist" placement="right">
-              <IconButton onClick={handleClickOpen}>
+              <IconButton onClick={handleSubmit}>
                 <ConnectIcon className="text-white" />
               </IconButton>
             </Tooltip>
