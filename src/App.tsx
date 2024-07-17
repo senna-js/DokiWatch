@@ -10,6 +10,7 @@ import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
 import { useUser } from "@clerk/clerk-react";
+import {Watchgogo} from "./pages/Watch-gogo";
 
 const App = () => {
   const { isSignedIn } = useUser();
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/watch/:id" element={<Watch />} />
             <Route path="/search" element={<Search />} />
             <Route path="/" element={<LandingPage />} />
+            <Route path="/watch-gogo/:id" element={<Watchgogo/>} />
           </Routes>
         </div>
       </div>
