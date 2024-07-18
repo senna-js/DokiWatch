@@ -7,7 +7,6 @@ import axios from "axios";
 import "./Watch.css";
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
-import Hls from "hls.js";
 
 enum Quality {
     lowRes,
@@ -169,6 +168,7 @@ export const Watchgogo: React.FC = () => {
     //   };
 
     useEffect(() => {
+        if (animeData?.malID === params.id) return;
         const query = `query($id:Int){
         Media(idMal: $id,type:ANIME) {
                         id
@@ -195,8 +195,11 @@ export const Watchgogo: React.FC = () => {
                 data.malID = parseInt(params.id || "0");
                 setAnimeData(data);
             })
+    }, [params]);
+
+    useEffect(() => {
         setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
-    }, [searchParams, params]);
+    }, [searchParams])
 
     useEffect(() => {
         if (!animeData || !animeData.alID) return;
@@ -205,12 +208,13 @@ export const Watchgogo: React.FC = () => {
         axios.get(`https://api-mappings.madara.live/anime/${animeData.alID}`)
             .then((response) => {
                 console.log(response.data);
-                if (response.data.mappings.gogoanime) {
+                if (!gogoId && response.data.mappings.gogoanime) {
                     gogoId = response.data.mappings.gogoanime.id;
                 }
-                if (response.data.mappings.zoro) {
+                if (!zoroId && response.data.mappings.zoro) {
                     zoroId = response.data.mappings.zoro.id;
                 }
+
                 if ((!gogoId || !zoroId) && response.data.mappings.anify.info.mappings) {
                     const mappings = response.data.mappings.anify.info.mappings;
                     for (const mapping of mappings) {
