@@ -55,10 +55,10 @@ const TopAiringAnimeStack = () => {
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
           {topAiringAnime.map((anime) => (
             // Anime card component goes here
-            <AnimeCard
-              key={anime.mal_id}
-              anime={anime}
-            />
+            <div key={anime?.mal_id}>
+              <AnimeCard key={anime.mal_id} anime={anime} />
+              {/* More anime details */}
+            </div>
           ))}
         </div>
       </div>

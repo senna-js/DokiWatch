@@ -6,11 +6,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   const navigate = useNavigate();
 
   const navigateToPage = () => {
-    if (anime?.mediaId) {
-      navigate(`/anime/${anime?.mal_id}?mid=${anime.mediaId}`);
-    } else {
-      navigate(`/anime/${anime?.mal_id}`);
-    }
+    navigate(`/anime/${anime?.mal_id}`);
   };
 
   return (

@@ -16,16 +16,16 @@ export const AnimeAiringStack = () => {
 
   let userObject;
 
-  if(user){
+  if (user) {
     userObject = JSON.parse(user);
-  }
-  else {
+  } else {
     userObject = {};
   }
-  if(token){
+  console.log("user ache", user);
+  if (token) {
     userObject["access_token"] = token;
   }
-  localStorage.setItem("user", JSON.stringify(userObject));
+  //localStorage.setItem("user", JSON.stringify(userObject));
 
   ///////////////////////////////
   let username: string | undefined;
@@ -143,8 +143,18 @@ export const AnimeAiringStack = () => {
               }))
           );
           // console.log(animeList);
+          const mediaIdList = lists[0].entries.map((entry: any) => ({
+            mal_id: entry.media.idMal,
+            mediaId: entry.mediaId,
+            progress: entry.progress,
+          }));
+
+          //console.log(mediaIdList);
+          sessionStorage.setItem("mediaIdList", JSON.stringify(mediaIdList));
           setAnimeData(animeList); // Set the fetched data
           setTriggerFetch(false); // Reset the trigger fetch flag
+        } else {
+          console.log("No data found");
         }
       } catch (error) {
         console.error("Error fetching anime list:", error);
