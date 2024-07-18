@@ -143,11 +143,16 @@ export const AnimeAiringStack = () => {
               }))
           );
           // console.log(animeList);
-          const mediaIdList = lists[0].entries.map((entry: any) => ({
-            mal_id: entry.media.idMal,
-            mediaId: entry.mediaId,
-            progress: entry.progress,
-          }));
+          var mediaIdList = {};
+          if (lists[0].entries.length === 0) {
+            console.log("No anime found in the list");
+          } else {
+            mediaIdList = lists[0].entries.map((entry: any) => ({
+              mal_id: entry.media.idMal,
+              mediaId: entry.mediaId,
+              progress: entry.progress,
+            }));
+          }
 
           //console.log(mediaIdList);
           sessionStorage.setItem("mediaIdList", JSON.stringify(mediaIdList));
