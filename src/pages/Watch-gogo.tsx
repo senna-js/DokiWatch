@@ -421,6 +421,15 @@ export const Watchgogo: React.FC = () => {
         }
     }, [streamType, quality, currentEpisode]);
 
+    const handleQualityChange = (quality: Quality) => {
+        setQuality(quality);
+        setSettingsVisible(false); // Hide settings menu after selection
+    };
+
+    useEffect(() => {
+        console.log("Stream URL : ", streamUrl);
+    },[streamUrl]);
+
     useEffect(() => {
         if (!currentEpisode || !currentEpisode.sources) return;
         console.log(currentEpisode);
@@ -428,11 +437,6 @@ export const Watchgogo: React.FC = () => {
 
     const reload = () => {
         window.location.reload();
-    };
-
-    const handleQualityChange = (quality: Quality) => {
-        setQuality(quality);
-        setSettingsVisible(false); // Hide settings menu after selection
     };
 
     const handleDownload = (): void => {
@@ -621,7 +625,7 @@ export const Watchgogo: React.FC = () => {
                 </div>
                 <div className="w-full max-w-4xl relative">
                     {streamUrl ? (
-                        <div onLoad={reload}>
+                        <div>
                             <button
                                 onClick={handleDownload}
                                 className="absolute top-2.5 right-2.5 mr-12 z-10 p-2 rounded-md bg-black bg-opacity-50 text-white border-none cursor-pointer"
@@ -680,6 +684,7 @@ export const Watchgogo: React.FC = () => {
                                     file: {
                                         hlsOptions: {
                                             enableWorker: true,
+                                            debug:true,
                                         },
                                         attributes: {
                                             crossOrigin: "anonymous",
