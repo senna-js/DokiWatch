@@ -89,6 +89,7 @@ export const Watchgogo: React.FC = () => {
     const [totalDuration, setTotalDuration] = useState<number>(0);
     const params = useParams();
     const playerRef: any = useRef(null);
+    const [playerKey, setPlayerKey] = useState(0);
 
     //   useEffect(() => {
     //     let hls: any;
@@ -428,16 +429,18 @@ export const Watchgogo: React.FC = () => {
 
     useEffect(() => {
         console.log("Stream URL : ", streamUrl);
-    },[streamUrl]);
+        reloadReactPlayer();
+    }, [streamUrl]);
+
+    const reloadReactPlayer = () => {
+        setPlayerKey(playerKey === 0 ? 1 : 0);
+    };
 
     useEffect(() => {
         if (!currentEpisode || !currentEpisode.sources) return;
         console.log(currentEpisode);
     }, [currentEpisode]);
 
-    const reload = () => {
-        window.location.reload();
-    };
 
     const handleDownload = (): void => {
         const player = document.querySelector("video");
@@ -671,6 +674,7 @@ export const Watchgogo: React.FC = () => {
                                 </svg>
                             </button>
                             <ReactPlayer
+                                key={playerKey}
                                 ref={playerRef}
                                 url={streamUrl}
                                 playing={true}
@@ -684,7 +688,7 @@ export const Watchgogo: React.FC = () => {
                                     file: {
                                         hlsOptions: {
                                             enableWorker: true,
-                                            debug:true,
+                                            debug: true,
                                         },
                                         attributes: {
                                             crossOrigin: "anonymous",
