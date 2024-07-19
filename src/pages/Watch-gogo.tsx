@@ -424,7 +424,8 @@ export const Watchgogo: React.FC = () => {
 
     const handleQualityChange = (quality: Quality) => {
         setQuality(quality);
-        setSettingsVisible(false); // Hide settings menu after selection
+        setSettingsVisible(false);
+         // Hide settings menu after selection
     };
 
     useEffect(() => {
@@ -433,7 +434,7 @@ export const Watchgogo: React.FC = () => {
     }, [streamUrl]);
 
     const reloadReactPlayer = () => {
-        setPlayerKey(playerKey === 0 ? 1 : 0);
+        setPlayerKey((playerKey+1)%2);
     };
 
     useEffect(() => {
@@ -441,6 +442,7 @@ export const Watchgogo: React.FC = () => {
         console.log(currentEpisode);
     }, [currentEpisode]);
 
+    
 
     const handleDownload = (): void => {
         const player = document.querySelector("video");
