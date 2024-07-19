@@ -90,7 +90,7 @@ export const Watchgogo: React.FC = () => {
   const [totalDuration, setTotalDuration] = useState<number>(0);
   const params = useParams();
   const playerRef: any = useRef(null);
-  const [playerKey, setPlayerKey] = useState(0);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
   //   useEffect(() => {
   //     let hls: any;
 
@@ -444,58 +444,59 @@ export const Watchgogo: React.FC = () => {
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
     console.log(streamType, quality, currentEpisode.sources);
-    switch (streamType) {
-      case StreamType.sub:
-        switch (quality) {
-          case Quality.lowRes:
-            setStreamUrl(currentEpisode.sources.sub.lowRes);
-            break;
-          case Quality.midRes:
-            setStreamUrl(currentEpisode.sources.sub.midRes);
-            break;
-          case Quality.highRes:
-            setStreamUrl(currentEpisode.sources.sub.highRes);
-            break;
-          case Quality.fullRes:
-            setStreamUrl(currentEpisode.sources.sub.fullRes);
-            break;
-        }
-        break;
-      case StreamType.dub:
-        if (!currentEpisode.sources.dub) {
-          switch (quality) {
-            case Quality.lowRes:
-              setStreamUrl(currentEpisode.sources.sub.lowRes);
-              break;
-            case Quality.midRes:
-              setStreamUrl(currentEpisode.sources.sub.midRes);
-              break;
-            case Quality.highRes:
-              setStreamUrl(currentEpisode.sources.sub.highRes);
-              break;
-            case Quality.fullRes:
-              setStreamUrl(currentEpisode.sources.sub.fullRes);
-              break;
-          }
-          return;
-        }
-        switch (quality) {
-          case Quality.lowRes:
-            setStreamUrl(currentEpisode.sources.dub.lowRes);
-            break;
-          case Quality.midRes:
-            setStreamUrl(currentEpisode.sources.dub.midRes);
-            break;
-          case Quality.highRes:
-            setStreamUrl(currentEpisode.sources.dub.highRes);
-            break;
-          case Quality.fullRes:
-            setStreamUrl(currentEpisode.sources.dub.fullRes);
-            break;
-        }
-        break;
-    }
-  }, [streamType, quality, currentEpisode]);
+    setStreamUrl(currentEpisode.sources.sub.fullRes);
+    // switch (streamType) {
+    //   case StreamType.sub:
+    //     switch (quality) {
+    //       case Quality.lowRes:
+    //         setStreamUrl(currentEpisode.sources.sub.lowRes);
+    //         break;
+    //       case Quality.midRes:
+    //         setStreamUrl(currentEpisode.sources.sub.midRes);
+    //         break;
+    //       case Quality.highRes:
+    //         setStreamUrl(currentEpisode.sources.sub.highRes);
+    //         break;
+    //       case Quality.fullRes:
+    //         setStreamUrl(currentEpisode.sources.sub.fullRes);
+    //         break;
+    //     }
+    //     break;
+    //   case StreamType.dub:
+    //     if (!currentEpisode.sources.dub) {
+    //       switch (quality) {
+    //         case Quality.lowRes:
+    //           setStreamUrl(currentEpisode.sources.sub.lowRes);
+    //           break;
+    //         case Quality.midRes:
+    //           setStreamUrl(currentEpisode.sources.sub.midRes);
+    //           break;
+    //         case Quality.highRes:
+    //           setStreamUrl(currentEpisode.sources.sub.highRes);
+    //           break;
+    //         case Quality.fullRes:
+    //           setStreamUrl(currentEpisode.sources.sub.fullRes);
+    //           break;
+    //       }
+    //       return;
+    //     }
+    //     switch (quality) {
+    //       case Quality.lowRes:
+    //         setStreamUrl(currentEpisode.sources.dub.lowRes);
+    //         break;
+    //       case Quality.midRes:
+    //         setStreamUrl(currentEpisode.sources.dub.midRes);
+    //         break;
+    //       case Quality.highRes:
+    //         setStreamUrl(currentEpisode.sources.dub.highRes);
+    //         break;
+    //       case Quality.fullRes:
+    //         setStreamUrl(currentEpisode.sources.dub.fullRes);
+    //         break;
+    //     }
+    //     break;
+    // }
+  }, [ currentEpisode]);
 
   const handleQualityChange = (quality: Quality) => {
     setQuality(quality);
@@ -504,12 +505,14 @@ export const Watchgogo: React.FC = () => {
 
   useEffect(() => {
     console.log("Stream URL : ", streamUrl);
-    reloadReactPlayer();
+    if(streamUrl)
+        setIsPlayerReady(true);
+    // reloadReactPlayer();
   }, [streamUrl]);
 
-    const reloadReactPlayer = () => {
-        setPlayerKey((playerKey+1)%2);
-    };
+//     const reloadReactPlayer = () => {
+//         setPlayerKey((playerKey+1)%2);
+//     };
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
@@ -619,7 +622,7 @@ export const Watchgogo: React.FC = () => {
     if (
       percentageWatched >= 80 &&
       !isQueried &&
-      progress < currentEpisodeNumber &&
+      progress! < currentEpisodeNumber &&
       mediaID
     ) {
       // if (isNaN(mid)) {
@@ -707,7 +710,7 @@ export const Watchgogo: React.FC = () => {
           </div>
         </div>
         <div className="w-full max-w-4xl relative">
-          {streamUrl ? (
+          {isPlayerReady ? (
             <div>
               <button
                 onClick={handleDownload}
@@ -754,9 +757,8 @@ export const Watchgogo: React.FC = () => {
                 </svg>
               </button>
               <ReactPlayer
-                key={playerKey}
                 ref={playerRef}
-                url={streamUrl}
+                url={streamUrl!}
                 playing={true}
                 controls={true}
                 width="100%"
