@@ -800,7 +800,7 @@ export const Watchgogo: React.FC = () => {
                           : "hidden",
                     }}
                   >
-                    Skip Intro &gt;&gt;
+                    Skip Intro
                   </button>
                 )}
                 {currentEpisode && (
@@ -815,7 +815,7 @@ export const Watchgogo: React.FC = () => {
                           : "hidden",
                     }}
                   >
-                    Skip Outro &gt;&gt;
+                    Skip Outro
                   </button>
                 )}
               </div>
