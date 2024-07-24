@@ -34,19 +34,19 @@ const App = () => {
               path="/home"
               element={
                 <div>
-                  <div className="p-8 ml-24">
-                    <h1 className="text-4xl font-bold">
+                  <div className="p-4 sm:p-8 ml-4 sm:ml-24">
+                    <h1 className="text-2xl sm:text-4xl font-bold">
                       Welcome to Doki Watch
                     </h1>
-                    <p className="mt-2">
+                    <p className="mt-2 text-sm sm:text-base">
                       Explore your favorite anime & manga here.
                     </p>
                   </div>
-                  <div className="mt-16 ml-24">
+                  <div className="mt-8 sm:mt-16 ml-4 sm:ml-24">
                     <TopAiringAnimeStack />
                   </div>
                   {isSignedIn && (
-                    <div className="ml-24">
+                    <div className="ml-4 sm:ml-24">
                       <AnimeAiringStack />
                       <AnimeWatchingStack />
                     </div>

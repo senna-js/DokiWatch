@@ -74,19 +74,19 @@ export const Anime = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 mx-24 my-6">
-      <div className="flex items-center justify-between gap-2">
+    <div className="flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
         <div>
-          <h1 className="text-4xl flex font-bold">
+          <h1 className="text-2xl sm:text-4xl font-bold">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
           </h1>
-          <h2 className="mt-2 text-xl font-semibold text-gray-500">
+          <h2 className="mt-1 sm:mt-2 text-lg sm:text-xl font-semibold text-gray-500">
             {animeData?.title}
           </h2>
         </div>
-        <div className="flex-none w-auto bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg text-white">
+        <div className="flex-none w-auto bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-2 sm:p-4 rounded-lg text-white">
           <div className="flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +123,7 @@ export const Anime = () => {
 
       <hr />
 
-      <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="relative group h-auto">
           <img
             src={animeData?.images.jpg.large_image_url}
@@ -165,7 +165,7 @@ export const Anime = () => {
           </div>
         </div>
         <div className="flex mt-3 flex-col gap-4 w-full">
-          <div className="flex border border-white items-center text-pretty font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+          <div className="flex border border-white items-center text-pretty sm:text-pretty font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-2 sm:p-4 rounded-lg font-semibold text-sm sm:text-md text-white">
             <Content
               text={animeData?.synopsis
                 ?.replace(/\[Written by MAL Rewrite\]/g, "")
@@ -174,7 +174,7 @@ export const Anime = () => {
           </div>
           {/* <hr /> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex border border-white flex-col items-start font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+            <div className="flex border border-white flex-col items-start font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-3 sm:p-4 rounded-lg font-semibold text-sm sm:text-md text-white">
               <div className="pb-4 items-center flex gap-2 flex-wrap">
                 {animeData?.genres.map((genre: any) => (
                   <span
@@ -217,7 +217,7 @@ export const Anime = () => {
             </div>
             <div className="flex border border-white items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
               {relationData.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                   {relationData.map((relation) => (
                     <div
                       key={relation.id}
@@ -235,7 +235,7 @@ export const Anime = () => {
                       ></div>{" "}
                       {/* Overlay */}
                       <div className="absolute bottom-0 w-full h-full flex items-center">
-                        <h3 className="text-center font-semibold text-white w-full p-2">
+                        <h3 className="text-center font-semibold text-white w-full p-2 text-sm">
                           {relation.title_english || relation.title}
                         </h3>
                       </div>
@@ -251,17 +251,23 @@ export const Anime = () => {
       </div>
       {animeData?.trailer && animeData?.trailer.embed_url ? (
         <div
-          className="video-container"
+          className="video-container relative w-full overflow-hidden"
           style={{
-            position: "relative",
+
             paddingBottom: "56.25%",
-            height: 0,
-            overflow: "hidden",
+
           }}
         >
           <iframe
             src={animeData?.trailer.embed_url}
             className="mt-2 absolute top-0 left-0 w-full h-[500px] aspect-video rounded-lg"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            }}
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>

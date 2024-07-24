@@ -49,7 +49,7 @@ const TopAiringAnimeStack = () => {
 
   return (
     <div className="flex-row p-4 m-3 rounded-md bg-transparent backdrop-blur-lg border border-white">
-      <h2 className="text-2xl font-poppins pl-3">Top Airing Anime</h2>
+      <h2 className="text-2xl font-poppins pl-3">Top Airing</h2>
       <hr className="my-4" />
       <div>
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">

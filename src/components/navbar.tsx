@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-var */
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Sidebar from "./sidebar";
@@ -140,9 +142,9 @@ export const Navbar = () => {
   );
 
   return (
-    <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
+    <div className="flex justify-between items-center w-full p-2 sm:p-4 bg-gray-800 text-white">
       <Sidebar /> {/* Render the Sidebar component */}
-      <div
+      <div className="cursor-pointer"
         onClick={() => {
           navigate("/home");
         }}
@@ -150,10 +152,19 @@ export const Navbar = () => {
         <img
           src="/Color_combo_full.png"
           alt="Doki Watch"
-          className="w-28 h-auto cursor-pointer"
+          className="w-20 h-auto sm:w-28 cursor-pointer"
         />
       </div>
-      <div className="flex-1 mx-4">
+      <div className="sm:hidden flex items-center">
+        <button
+          onClick={() => navigate("/search")}
+          className="bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-1.5 sm:p-2.5 font-anime font-bold cursor-pointer shadow-md inline-flex items-center hover:bg-gray-900 hover:scale-105 transform transition duration-150 ease-in-out"
+        >
+          <SearchIcon className="h-5 w-5 text-gray-500" />
+          <span className="px-auto mx-2 whitespace-nowrap">Search</span>
+        </button>
+      </div>
+      <div className="flex-1 mx-2 sm:mx-4 hidden sm:block">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3">
             <SearchIcon className="h-5 w-5 text-gray-500" />
@@ -168,27 +179,27 @@ export const Navbar = () => {
           />
         </div>
       </div>
-      <div></div>
-      <div className="flex gap-4 items-center">
+      
+      <div className="flex gap-2 sm:gap-4 items-center">
         <SignedIn>
           <div>
             {profilePic ? (
               <img
                 src={profilePic || ""}
                 alt="Profile"
-                className="h-10 w-10 rounded-full"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
               />
             ) : (
               <DefaultProfileIcon />
             )}
           </div>
-          <div className="bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
+          <div className="text-sm sm:text-sm whitespace-nowrap bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-1.5 sm:p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
             <SignOutButton />
           </div>
         </SignedIn>
 
         <SignedOut>
-          <div className="bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
+          <div className="bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-1.5 sm:p-2.5 font-anime font-bold cursor-pointer shadow-md inline-block hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
             <SignInButton />
           </div>
         </SignedOut>

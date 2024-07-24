@@ -376,8 +376,7 @@ export const Watchgogo: React.FC = () => {
       try {
         await axios
           .get(
-            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${
-              episodesData[currentEpisodeNumber - 1].zoroId
+            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodesData[currentEpisodeNumber - 1].zoroId
             }`
           )
           .then((response) => {
@@ -394,8 +393,7 @@ export const Watchgogo: React.FC = () => {
       // try {
       await axios
         .get(
-          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
-            episodesData[currentEpisodeNumber - 1].gogoId
+          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoId
           }`
         )
         .then((response) => {
@@ -415,8 +413,7 @@ export const Watchgogo: React.FC = () => {
       try {
         await axios
           .get(
-            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
-              episodesData[currentEpisodeNumber - 1].gogoDubId
+            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoDubId
             }`
           )
           .then((response) => {
@@ -496,7 +493,7 @@ export const Watchgogo: React.FC = () => {
     //     }
     //     break;
     // }
-  }, [ currentEpisode]);
+  }, [currentEpisode]);
 
   const handleQualityChange = (quality: Quality) => {
     setQuality(quality);
@@ -505,14 +502,14 @@ export const Watchgogo: React.FC = () => {
 
   useEffect(() => {
     console.log("Stream URL : ", streamUrl);
-    if(streamUrl)
-        setIsPlayerReady(true);
+    if (streamUrl)
+      setIsPlayerReady(true);
     // reloadReactPlayer();
   }, [streamUrl]);
 
-//     const reloadReactPlayer = () => {
-//         setPlayerKey((playerKey+1)%2);
-//     };
+  //     const reloadReactPlayer = () => {
+  //         setPlayerKey((playerKey+1)%2);
+  //     };
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
@@ -680,32 +677,36 @@ export const Watchgogo: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen justify-center mt-10">
-      <div className="flex flex-row h-max">
-        <div className="">
-          <div className="bg-gray-800 border border-white backdrop-blur-lg w-64 h-full text-center rounded-l-md border-r-2 border-r-slate-500 flex flex-col py-2">
+    <div className="flex flex-col sm:flex-row h-screen w-screen px-2 justify-center mt-20 sm:mt-20">
+      <div className="flex flex-col sm:flex-row h-max">
+        <div className="w-full sm:w-64">
+          <div className="bg-gray-800 border border-white backdrop-blur-lg w-full sm:w-64 h-full text-center rounded-l-md sm:border-r-2 border-r-slate-500 flex flex-col py-2">
             <div className="text-center font-poppins font-semibold pb-2">
               EPISODES
             </div>
             <hr className="" />
-            <div className="overflow-y-auto h-[37rem] scrollHide">
-              {episodesData.map((episode, index) => (
-                <div
-                  key={index}
-                  className={`episode-row flex justify-start items-center h-16 py-2 ${
-                    episode.number == currentEpisodeNumber
+            <div className="overflow-y-auto h-[37rem] sm:h-[37rem] md:h-[27rem] scrollHide aspect-h-9">
+              <div className="grid grid-cols-5 sm:grid-cols-1 gap-1 sm:gap-0">
+                {episodesData.map((episode, index) => (
+                  <div
+                    key={index}
+                    className={`episode-row flex justify-center sm:justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
                       ? "bg-red-700"
                       : "bg-gray-800 hover:bg-gray-700"
-                  } transition-colors duration-150 ease-in-out`}
-                  onClick={() => {
-                    handleWatchEpisode(episode.number);
-                  }}
-                >
-                  <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                    {episode.number}. {episode.title}
+                      } transition-colors duration-150 ease-in-out cursor-pointer`}
+                    onClick={() => {
+                      handleWatchEpisode(episode.number);
+                    }}
+                  >
+                    <div className="hidden sm:block hover:text-pink-200 text-border-white ml-2 cursor-pointer font-poppins truncate">
+                      {episode.number}. {episode.title}
+                    </div>
+                    <div className="sm:hidden text-white font-poppins">
+                      E{episode.number}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -756,37 +757,39 @@ export const Watchgogo: React.FC = () => {
                   />
                 </svg>
               </button>
-              <ReactPlayer
-                ref={playerRef}
-                url={streamUrl!}
-                playing={true}
-                controls={true}
-                width="100%"
-                height="500px"
-                className="aspect-video border border-white rounded-tr-md"
-                onProgress={handleProgress}
-                onDuration={handleDuration}
-                config={{
-                  file: {
-                    hlsOptions: {
-                      enableWorker: true,
-                      debug: true,
-                    },
-                    attributes: {
-                      crossOrigin: "anonymous",
-                    },
-                    tracks: [
-                      {
-                        kind: "subtitles",
-                        src: subtitleurl,
-                        srcLang: "en",
-                        default: true,
-                        label: "English Subtitles",
+              <div className="aspect-w-16 aspect-h-9 w-full border border-white rounded-tr-md">
+                <ReactPlayer
+                  ref={playerRef}
+                  url={streamUrl!}
+                  playing={true}
+                  controls={true}
+                  width="100%"
+                  height="100%"
+                  className="w-full h-full"
+                  onProgress={handleProgress}
+                  onDuration={handleDuration}
+                  config={{
+                    file: {
+                      hlsOptions: {
+                        enableWorker: true,
+                        debug: true,
                       },
-                    ],
-                  },
-                }}
-              />
+                      attributes: {
+                        crossOrigin: "anonymous",
+                      },
+                      tracks: [
+                        {
+                          kind: "subtitles",
+                          src: subtitleurl,
+                          srcLang: "en",
+                          default: true,
+                          label: "English Subtitles",
+                        },
+                      ],
+                    },
+                  }}
+                />
+              </div>
               <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
                 {currentEpisode && (
                   <button
@@ -795,7 +798,7 @@ export const Watchgogo: React.FC = () => {
                     style={{
                       visibility:
                         playedSeconds < currentEpisode.intro.end &&
-                        playedSeconds > currentEpisode.intro.start
+                          playedSeconds > currentEpisode.intro.start
                           ? "visible"
                           : "hidden",
                     }}
@@ -810,7 +813,7 @@ export const Watchgogo: React.FC = () => {
                     style={{
                       visibility:
                         playedSeconds > currentEpisode.outro.start &&
-                        playedSeconds < currentEpisode.outro.end
+                          playedSeconds < currentEpisode.outro.end
                           ? "visible"
                           : "hidden",
                     }}
@@ -841,7 +844,7 @@ export const Watchgogo: React.FC = () => {
                   SUB
                 </button>
                 {animeData &&
-                episodesData[currentEpisodeNumber - 1].gogoDubId ? (
+                  episodesData[currentEpisodeNumber - 1].gogoDubId ? (
                   <button
                     className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
                     onClick={() => {
@@ -852,19 +855,19 @@ export const Watchgogo: React.FC = () => {
                   </button>
                 ) : null}
               </div>
-              <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-20 flex items-center px-4 py-auto">
+              <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-20 flex flex-row sm:flex-row items-center px-4 py-2">
                 <div
-                  className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+                  className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
                   title="Previous Episode"
                 >
                   <SkipPrevious className="flex" onClick={handlePrev} />
                 </div>
-                <div className="flex-1 flex justify-center">
+                <div className="flex-1 flex flex-col sm:flex-row justify-center items-center mt-2 sm:mt-0">
                   {/* Find the current episode and display its title */}
-                  <p className="whitespace-nowrap flex flex-col items-center font-poppins font-semibold text-white px-1 pl-2 p-1">
+                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
                     CURRENT EPISODE:{" "}
                   </p>
-                  <p className="whitespace-nowrap mr-2 flex flex-col items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold text-md text-white">
+                  <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
                     {currentEpisodeNumber} -{" "}
                     {
                       episodesData.find(
@@ -874,7 +877,7 @@ export const Watchgogo: React.FC = () => {
                   </p>
                 </div>
                 <div
-                  className="cursor-pointer ml-auto border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+                  className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
                   title="Next Episode"
                 >
                   <SkipNext
@@ -906,9 +909,8 @@ export const Watchgogo: React.FC = () => {
                     padding: "10px",
                     cursor: "pointer",
                   }}
-                  className={`bg-black bg-opacity-50 rounded-md border ${
-                    qualityOption == quality ? "bg-blue-200" : ""
-                  }`}
+                  className={`bg-black bg-opacity-50 rounded-md border ${qualityOption == quality ? "bg-blue-200" : ""
+                    }`}
                 >
                   <div className="opacity-100">
                     {["360p", "480p", "720p", "1080p"][qualityOption]}
