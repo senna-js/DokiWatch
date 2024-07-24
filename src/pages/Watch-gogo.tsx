@@ -296,47 +296,40 @@ export const Watchgogo: React.FC = () => {
     let gogoDubEpisodes: string[] = [];
     let totalEpisodes: number = 0;
     const fetchEpisodesData = async () => {
-      try {
-        await axios
-          .get(
-            `https://consumet-deploy.vercel.app/anime/zoro/info?id=${zoroId}`
-          )
-          .then((response) => {
-            zoroEpisodesData = response.data.episodes;
-            totalEpisodes = response.data.totalEpisodes;
-          });
-      } catch (error) {
-        console.error("Error with fetching Episodes Data\nZoro Id : ", zoroId);
-      }
-      try {
-        await axios
-          .get(
-            `https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}`
-          )
-          .then((response) => {
-            gogoEpisodes = response.data.episodes.map(
-              (episode: any) => episode.id
-            );
-          });
-      } catch (error) {
-        console.error(
-          "Error with fetching Gogoanime Sub Episodes Data\nGogoAnime Id : ",
-          gogoAnimeId
-        );
-      }
-      try {
-        await axios
-          .get(
-            `https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}-dub`
-          )
-          .then((response) => {
-            gogoDubEpisodes = response.data.episodes.map(
-              (episode: any) => episode.id
-            );
-          });
-      } catch (error) {
-        console.log("No Dub for this anime\nGogoAnime Id : ", gogoAnimeId);
-      }
+
+      await axios
+        .get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${zoroId}`)
+        .then((response) => {
+          zoroEpisodesData = response.data.episodes;
+          totalEpisodes = response.data.totalEpisodes;
+        })
+        .catch((error) => {
+          console.error("Error with fetching Zoro Episodes Data\nZoro Id : ", zoroId, error);
+        });
+
+      await axios
+        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}`)
+        .then((response) => {
+          gogoEpisodes = response.data.episodes.map(
+            (episode: any) => episode.id
+          );
+        })
+        .catch((error) => {
+          console.error(
+            "Error with fetching Gogoanime Sub Episodes Data\nGogoAnime Id : ", gogoAnimeId, error);
+        });
+
+      await axios
+        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}-dub`)
+        .then((response) => {
+          gogoDubEpisodes = response.data.episodes.map(
+            (episode: any) => episode.id
+          );
+        })
+        .catch((error) => {
+          console.error("Error with fetching Gogoanime Dub Episodes Data\nGogoAnime Id : ", gogoAnimeId, error);
+        });
+
       let tempEpisodesData: Episode[] = [];
       for (let i = 0; i < totalEpisodes; i++) {
         let episode: Episode = {
@@ -375,10 +368,7 @@ export const Watchgogo: React.FC = () => {
       //get current episode intro and outros from zoro
       try {
         await axios
-          .get(
-            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodesData[currentEpisodeNumber - 1].zoroId
-            }`
-          )
+          .get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodesData[currentEpisodeNumber - 1].zoroId}`)
           .then((response) => {
             console.log(response.data);
             currEpisodeData.intro = response.data.intro;
@@ -392,10 +382,7 @@ export const Watchgogo: React.FC = () => {
       }
       // try {
       await axios
-        .get(
-          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoId
-          }`
-        )
+        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoId}`)
         .then((response) => {
           console.log(response.data);
           currEpisodeData.sources.sub = {
@@ -412,10 +399,7 @@ export const Watchgogo: React.FC = () => {
       // }
       try {
         await axios
-          .get(
-            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoDubId
-            }`
-          )
+          .get(`https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoDubId}`)
           .then((response) => {
             console.log(response.data);
             currEpisodeData.sources.dub = {
@@ -426,10 +410,7 @@ export const Watchgogo: React.FC = () => {
             };
           });
       } catch (error) {
-        console.log(
-          "No Dub for this episode\nEpisode Id : ",
-          episodesData[currentEpisodeNumber - 1].gogoDubId
-        );
+        console.log("No Dub for this episode\nEpisode Id : ", episodesData[currentEpisodeNumber - 1].gogoDubId);
         currEpisodeData.sources.dub = undefined;
       }
       setCurrentEpisode(currEpisodeData);
