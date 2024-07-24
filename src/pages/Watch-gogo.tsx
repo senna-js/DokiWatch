@@ -92,6 +92,14 @@ export const Watchgogo: React.FC = () => {
   const params = useParams();
   const playerRef: any = useRef(null);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+
+  // State to manage comment section visibility
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+
+  // Toggle function
+  const toggleCommentsVisibility = () => {
+    setIsCommentsVisible(!isCommentsVisible);
+  };
   //   useEffect(() => {
   //     let hls: any;
 
@@ -384,8 +392,7 @@ export const Watchgogo: React.FC = () => {
       try {
         await axios
           .get(
-            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${
-              episodesData[currentEpisodeNumber - 1].zoroId
+            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodesData[currentEpisodeNumber - 1].zoroId
             }`
           )
           .then((response) => {
@@ -402,8 +409,7 @@ export const Watchgogo: React.FC = () => {
       // try {
       await axios
         .get(
-          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
-            episodesData[currentEpisodeNumber - 1].gogoId
+          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoId
           }`
         )
         .then((response) => {
@@ -423,8 +429,7 @@ export const Watchgogo: React.FC = () => {
       try {
         await axios
           .get(
-            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
-              episodesData[currentEpisodeNumber - 1].gogoDubId
+            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoDubId
             }`
           )
           .then((response) => {
@@ -687,7 +692,7 @@ export const Watchgogo: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen w-screen px-2 justify-center mt-20 sm:mt-20">
+    <div className="flex flex-col sm:flex-row h-screen w-screen px-2 justify-center sm:mt-10">
       <div className="grid grid-cols-1 gap-2 p-2">
         <div className="flex flex-col sm:flex-row h-max">
           <div className="w-full sm:w-64">
@@ -696,16 +701,15 @@ export const Watchgogo: React.FC = () => {
                 EPISODES
               </div>
               <hr className="" />
-              <div className="overflow-y-auto h-[37rem] sm:h-[37rem] md:h-[27rem] scrollHide aspect-h-9">
+              <div className="overflow-y-auto h-[17rem] sm:h-[37rem] md:h-[27rem] scrollHide aspect-h-9">
                 <div className="grid grid-cols-5 sm:grid-cols-1 gap-1 sm:gap-0">
                   {episodesData.map((episode, index) => (
                     <div
                       key={index}
-                      className={`episode-row flex justify-center sm:justify-start items-center h-16 py-2 ${
-                        episode.number == currentEpisodeNumber
-                          ? "bg-red-700"
-                          : "bg-gray-800 hover:bg-gray-700"
-                      } transition-colors duration-150 ease-in-out cursor-pointer`}
+                      className={`episode-row flex justify-center sm:justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
+                        ? "bg-red-700"
+                        : "bg-gray-800 hover:bg-gray-700"
+                        } transition-colors duration-150 ease-in-out cursor-pointer`}
                       onClick={() => {
                         handleWatchEpisode(episode.number);
                       }}
@@ -810,7 +814,7 @@ export const Watchgogo: React.FC = () => {
                       style={{
                         visibility:
                           playedSeconds < currentEpisode.intro.end &&
-                          playedSeconds > currentEpisode.intro.start
+                            playedSeconds > currentEpisode.intro.start
                             ? "visible"
                             : "hidden",
                       }}
@@ -825,7 +829,7 @@ export const Watchgogo: React.FC = () => {
                       style={{
                         visibility:
                           playedSeconds > currentEpisode.outro.start &&
-                          playedSeconds < currentEpisode.outro.end
+                            playedSeconds < currentEpisode.outro.end
                             ? "visible"
                             : "hidden",
                       }}
@@ -856,7 +860,7 @@ export const Watchgogo: React.FC = () => {
                     SUB
                   </button>
                   {animeData &&
-                  episodesData[currentEpisodeNumber - 1].gogoDubId ? (
+                    episodesData[currentEpisodeNumber - 1].gogoDubId ? (
                     <button
                       className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
                       onClick={() => {
@@ -921,9 +925,8 @@ export const Watchgogo: React.FC = () => {
                       padding: "10px",
                       cursor: "pointer",
                     }}
-                    className={`bg-black bg-opacity-50 rounded-md border ${
-                      qualityOption == quality ? "bg-blue-200" : ""
-                    }`}
+                    className={`bg-black bg-opacity-50 rounded-md border ${qualityOption == quality ? "bg-blue-200" : ""
+                      }`}
                   >
                     <div className="opacity-100">
                       {["360p", "480p", "720p", "1080p"][qualityOption]}
@@ -936,30 +939,41 @@ export const Watchgogo: React.FC = () => {
         </div>
         <div
           id="jjk"
-          className="bg-gray-300 border border-gray-800 p-5 text-center"
+          className="mt-2 bg-transparent backdrop-blur-lg border border-white text-center rounded-md py-2"
         >
           {`${params.id} - ${currentEpisodeNumber}`}
-          <DiscussionEmbed
-            shortname="domain-of-weebs"
-            config={{
-              url: window.location.href,
-              identifier: `${params.id}-${currentEpisodeNumber}`,
-              title: `Episode ${currentEpisodeNumber}`,
-              language: "en", // e.g. for Traditional Chinese (Taiwan)
-            }}
-          />
-          <style>
-            {`
-          #disqus_thread a {
-            color: #39FF14;
-          }
-          #layout {
-            background-color: black;
-          }
-        `}
-          </style>
+          {/* Toggle Button */}
+          <button
+            onClick={toggleCommentsVisibility}
+            className="font-anime cursor-pointer ml-4 sm:ml-4 mb-2 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+          >
+            {isCommentsVisible ? 'Hide Comments' : 'Show Comments'}
+          </button>
+          {/* Conditional rendering based on isCommentsVisible */}
+          {isCommentsVisible && (
+            <>
+              <DiscussionEmbed
+                shortname="domain-of-weebs"
+                config={{
+                  url: window.location.href,
+                  identifier: `${params.id}-${currentEpisodeNumber}`,
+                  title: `Episode ${currentEpisodeNumber}`,
+                  language: "en", // e.g. for Traditional Chinese (Taiwan)
+                }}
+              />
+              <style>{`
+        #disqus_thread {
+          background-color: #121212;
+          color: #FFFFFF;
+        }
+        #disqus_thread a {
+          color: #39FF14;
+        }
+      `}</style>
+            </>
+          )}
+            </div>
         </div>
       </div>
-    </div>
-  );
+      );
 };
