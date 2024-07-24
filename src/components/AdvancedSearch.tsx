@@ -53,7 +53,7 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
 
         <h1 className='text-start ml-2 text-bold font-poppins text-2xl'>Genres</h1>
         <hr className='my-2' />
-        <div className='grid grid-cols-9 gap-4 mb-4'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-4 mb-4'>
           {props.genres.map((genre, index) =>
             <Bullet key={genre} text={genre} genreIndex={index} handleGenreSelection={props.handleGenreSelection} />
           )}
