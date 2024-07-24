@@ -29,9 +29,9 @@ const LandingPage = () => {
 
     return (
         <div>
-            <div className="container mx-auto text-center items-center justify-center">
-                <h1 className="text-4xl font-bold text-white mt-10">Welcome to Doki Watch</h1>
-                <p className="text-white mt-4">Explore your favorite anime & manga here.</p>
+            <div className="container mx-auto text-center items-center justify-center px-4 sm:px-6 lg:px-8">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-10">Welcome to Doki Watch</h1>
+                <p className="text-white mt-4 text-base sm:text-lg md:text-xl">Explore your favorite anime & manga here.</p>
                 <div className="flex justify-center items-center">
                     <button onClick={handleExploreClick} className="text-center mt-6 bg-transparent backdrop-blur-lg text-white border border-gray-700 rounded-lg p-3 font-anime cursor-pointer shadow-md flex hover:bg-blue-600 hover:scale-105 transform transition duration-150 ease-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
