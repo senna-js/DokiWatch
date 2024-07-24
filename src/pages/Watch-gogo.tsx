@@ -7,6 +7,7 @@ import axios from "axios";
 import "./Watch.css";
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
+import { DiscussionEmbed } from "disqus-react";
 
 enum Quality {
   lowRes,
@@ -174,7 +175,7 @@ export const Watchgogo: React.FC = () => {
     );
     //console.log(mediaIdList);
     if (!mediaIdList) {
-      alert("You are not connected to anilist");
+      // alert("You are not connected to anilist");
     } else {
       for (let i = 0; i < mediaIdList.length; i++) {
         const mediaId = mediaIdList[i];
@@ -296,7 +297,6 @@ export const Watchgogo: React.FC = () => {
     let gogoDubEpisodes: string[] = [];
     let totalEpisodes: number = 0;
     const fetchEpisodesData = async () => {
-
       await axios
         .get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${zoroId}`)
         .then((response) => {
@@ -304,11 +304,17 @@ export const Watchgogo: React.FC = () => {
           totalEpisodes = response.data.totalEpisodes;
         })
         .catch((error) => {
-          console.error("Error with fetching Zoro Episodes Data\nZoro Id : ", zoroId, error);
+          console.error(
+            "Error with fetching Zoro Episodes Data\nZoro Id : ",
+            zoroId,
+            error
+          );
         });
 
       await axios
-        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}`)
+        .get(
+          `https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}`
+        )
         .then((response) => {
           gogoEpisodes = response.data.episodes.map(
             (episode: any) => episode.id
@@ -316,18 +322,27 @@ export const Watchgogo: React.FC = () => {
         })
         .catch((error) => {
           console.error(
-            "Error with fetching Gogoanime Sub Episodes Data\nGogoAnime Id : ", gogoAnimeId, error);
+            "Error with fetching Gogoanime Sub Episodes Data\nGogoAnime Id : ",
+            gogoAnimeId,
+            error
+          );
         });
 
       await axios
-        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}-dub`)
+        .get(
+          `https://consumet-deploy.vercel.app/anime/gogoanime/info/${gogoAnimeId}-dub`
+        )
         .then((response) => {
           gogoDubEpisodes = response.data.episodes.map(
             (episode: any) => episode.id
           );
         })
         .catch((error) => {
-          console.error("Error with fetching Gogoanime Dub Episodes Data\nGogoAnime Id : ", gogoAnimeId, error);
+          console.error(
+            "Error with fetching Gogoanime Dub Episodes Data\nGogoAnime Id : ",
+            gogoAnimeId,
+            error
+          );
         });
 
       let tempEpisodesData: Episode[] = [];
@@ -368,7 +383,11 @@ export const Watchgogo: React.FC = () => {
       //get current episode intro and outros from zoro
       try {
         await axios
-          .get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodesData[currentEpisodeNumber - 1].zoroId}`)
+          .get(
+            `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${
+              episodesData[currentEpisodeNumber - 1].zoroId
+            }`
+          )
           .then((response) => {
             console.log(response.data);
             currEpisodeData.intro = response.data.intro;
@@ -382,7 +401,11 @@ export const Watchgogo: React.FC = () => {
       }
       // try {
       await axios
-        .get(`https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoId}`)
+        .get(
+          `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
+            episodesData[currentEpisodeNumber - 1].gogoId
+          }`
+        )
         .then((response) => {
           console.log(response.data);
           currEpisodeData.sources.sub = {
@@ -399,7 +422,11 @@ export const Watchgogo: React.FC = () => {
       // }
       try {
         await axios
-          .get(`https://consumet-deploy.vercel.app/anime/gogoanime/watch/${episodesData[currentEpisodeNumber - 1].gogoDubId}`)
+          .get(
+            `https://consumet-deploy.vercel.app/anime/gogoanime/watch/${
+              episodesData[currentEpisodeNumber - 1].gogoDubId
+            }`
+          )
           .then((response) => {
             console.log(response.data);
             currEpisodeData.sources.dub = {
@@ -410,7 +437,10 @@ export const Watchgogo: React.FC = () => {
             };
           });
       } catch (error) {
-        console.log("No Dub for this episode\nEpisode Id : ", episodesData[currentEpisodeNumber - 1].gogoDubId);
+        console.log(
+          "No Dub for this episode\nEpisode Id : ",
+          episodesData[currentEpisodeNumber - 1].gogoDubId
+        );
         currEpisodeData.sources.dub = undefined;
       }
       setCurrentEpisode(currEpisodeData);
@@ -483,8 +513,7 @@ export const Watchgogo: React.FC = () => {
 
   useEffect(() => {
     console.log("Stream URL : ", streamUrl);
-    if (streamUrl)
-      setIsPlayerReady(true);
+    if (streamUrl) setIsPlayerReady(true);
     // reloadReactPlayer();
   }, [streamUrl]);
 
@@ -659,247 +688,276 @@ export const Watchgogo: React.FC = () => {
 
   return (
     <div className="flex flex-col sm:flex-row h-screen w-screen px-2 justify-center mt-20 sm:mt-20">
-      <div className="flex flex-col sm:flex-row h-max">
-        <div className="w-full sm:w-64">
-          <div className="bg-gray-800 border border-white backdrop-blur-lg w-full sm:w-64 h-full text-center rounded-l-md sm:border-r-2 border-r-slate-500 flex flex-col py-2">
-            <div className="text-center font-poppins font-semibold pb-2">
-              EPISODES
-            </div>
-            <hr className="" />
-            <div className="overflow-y-auto h-[37rem] sm:h-[37rem] md:h-[27rem] scrollHide aspect-h-9">
-              <div className="grid grid-cols-5 sm:grid-cols-1 gap-1 sm:gap-0">
-                {episodesData.map((episode, index) => (
-                  <div
-                    key={index}
-                    className={`episode-row flex justify-center sm:justify-start items-center h-16 py-2 ${episode.number == currentEpisodeNumber
-                      ? "bg-red-700"
-                      : "bg-gray-800 hover:bg-gray-700"
+      <div className="grid grid-cols-1 gap-2 p-2">
+        <div className="flex flex-col sm:flex-row h-max">
+          <div className="w-full sm:w-64">
+            <div className="bg-gray-800 border border-white backdrop-blur-lg w-full sm:w-64 h-full text-center rounded-l-md sm:border-r-2 border-r-slate-500 flex flex-col py-2">
+              <div className="text-center font-poppins font-semibold pb-2">
+                EPISODES
+              </div>
+              <hr className="" />
+              <div className="overflow-y-auto h-[37rem] sm:h-[37rem] md:h-[27rem] scrollHide aspect-h-9">
+                <div className="grid grid-cols-5 sm:grid-cols-1 gap-1 sm:gap-0">
+                  {episodesData.map((episode, index) => (
+                    <div
+                      key={index}
+                      className={`episode-row flex justify-center sm:justify-start items-center h-16 py-2 ${
+                        episode.number == currentEpisodeNumber
+                          ? "bg-red-700"
+                          : "bg-gray-800 hover:bg-gray-700"
                       } transition-colors duration-150 ease-in-out cursor-pointer`}
+                      onClick={() => {
+                        handleWatchEpisode(episode.number);
+                      }}
+                    >
+                      <div className="hidden sm:block hover:text-pink-200 text-border-white ml-2 cursor-pointer font-poppins truncate">
+                        {episode.number}. {episode.title}
+                      </div>
+                      <div className="sm:hidden text-white font-poppins">
+                        E{episode.number}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-full max-w-4xl relative">
+            {isPlayerReady ? (
+              <div>
+                <button
+                  onClick={handleDownload}
+                  className="absolute top-2.5 right-2.5 mr-12 z-10 p-2 rounded-md bg-black bg-opacity-50 text-white border-none cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                    />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() => setSettingsVisible(!settingsVisible)}
+                  className="absolute top-2.5 right-2.5 z-10 p-2 rounded-md bg-black bg-opacity-50 text-white border-none cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                </button>
+                <div className="aspect-w-16 aspect-h-9 w-full border border-white rounded-tr-md">
+                  <ReactPlayer
+                    ref={playerRef}
+                    url={streamUrl!}
+                    playing={true}
+                    controls={true}
+                    width="100%"
+                    height="100%"
+                    className="w-full h-full"
+                    onProgress={handleProgress}
+                    onDuration={handleDuration}
+                    config={{
+                      file: {
+                        hlsOptions: {
+                          enableWorker: true,
+                          // debug: true,
+                        },
+                        attributes: {
+                          crossOrigin: "anonymous",
+                        },
+                        tracks: [
+                          {
+                            kind: "subtitles",
+                            src: subtitleurl,
+                            srcLang: "en",
+                            default: true,
+                            label: "English Subtitles",
+                          },
+                        ],
+                      },
+                    }}
+                  />
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
+                  {currentEpisode && (
+                    <button
+                      className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
+                      onClick={handleSkipIntro}
+                      style={{
+                        visibility:
+                          playedSeconds < currentEpisode.intro.end &&
+                          playedSeconds > currentEpisode.intro.start
+                            ? "visible"
+                            : "hidden",
+                      }}
+                    >
+                      Skip Intro
+                    </button>
+                  )}
+                  {currentEpisode && (
+                    <button
+                      className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
+                      onClick={handleSkipEnding}
+                      style={{
+                        visibility:
+                          playedSeconds > currentEpisode.outro.start &&
+                          playedSeconds < currentEpisode.outro.end
+                            ? "visible"
+                            : "hidden",
+                      }}
+                    >
+                      Skip Outro
+                    </button>
+                  )}
+                </div>
+                <div className="bg-gray-800 gap-2 border border-white backdrop-blur-lg h-16 flex items-center justify-center px-4 py-auto">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    id="closed-caption"
+                    fill="currentColor"
+                  >
+                    <path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 6.5c0 .28-.22.5-.5.5H10c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5zm7 0c0 .28-.22.5-.5.5H17c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5z"></path>
+                  </svg>
+                  <p className="mb-1">:</p>
+                  {/* TODO:Style sub and dub buttons */}
+                  <button
+                    className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
                     onClick={() => {
-                      handleWatchEpisode(episode.number);
+                      setStreamType(StreamType.sub);
                     }}
                   >
-                    <div className="hidden sm:block hover:text-pink-200 text-border-white ml-2 cursor-pointer font-poppins truncate">
-                      {episode.number}. {episode.title}
-                    </div>
-                    <div className="sm:hidden text-white font-poppins">
-                      E{episode.number}
+                    SUB
+                  </button>
+                  {animeData &&
+                  episodesData[currentEpisodeNumber - 1].gogoDubId ? (
+                    <button
+                      className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+                      onClick={() => {
+                        setStreamType(StreamType.dub);
+                      }}
+                    >
+                      DUB
+                    </button>
+                  ) : null}
+                </div>
+                <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-20 flex flex-row sm:flex-row items-center px-4 py-2">
+                  <div
+                    className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+                    title="Previous Episode"
+                  >
+                    <SkipPrevious className="flex" onClick={handlePrev} />
+                  </div>
+                  <div className="flex-1 flex flex-col sm:flex-row justify-center items-center mt-2 sm:mt-0">
+                    {/* Find the current episode and display its title */}
+                    <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
+                      CURRENT EPISODE:{" "}
+                    </p>
+                    <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
+                      {currentEpisodeNumber} -{" "}
+                      {
+                        episodesData.find(
+                          (episode) => episode.number === currentEpisodeNumber
+                        )?.title
+                      }
+                    </p>
+                  </div>
+                  <div
+                    className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
+                    title="Next Episode"
+                  >
+                    <SkipNext
+                      className="flex cursor-pointer"
+                      onClick={handleNext}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center">
+                <span className="loading loading-spinner text-info"></span>
+                <p className="ml-2 font-poppins font-semibold">loading..</p>
+              </div>
+            )}
+
+            {settingsVisible && (
+              <div className="flex flex-col absolute top-10 right-2.5 shadow-md z-20 mt-3">
+                {[
+                  Quality.lowRes,
+                  Quality.midRes,
+                  Quality.highRes,
+                  Quality.fullRes,
+                ].map((qualityOption: Quality) => (
+                  <div
+                    key={qualityOption}
+                    onClick={() => handleQualityChange(qualityOption)}
+                    style={{
+                      padding: "10px",
+                      cursor: "pointer",
+                    }}
+                    className={`bg-black bg-opacity-50 rounded-md border ${
+                      qualityOption == quality ? "bg-blue-200" : ""
+                    }`}
+                  >
+                    <div className="opacity-100">
+                      {["360p", "480p", "720p", "1080p"][qualityOption]}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
-        <div className="w-full max-w-4xl relative">
-          {isPlayerReady ? (
-            <div>
-              <button
-                onClick={handleDownload}
-                className="absolute top-2.5 right-2.5 mr-12 z-10 p-2 rounded-md bg-black bg-opacity-50 text-white border-none cursor-pointer"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                  />
-                </svg>
-              </button>
-
-              <button
-                onClick={() => setSettingsVisible(!settingsVisible)}
-                className="absolute top-2.5 right-2.5 z-10 p-2 rounded-md bg-black bg-opacity-50 text-white border-none cursor-pointer"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                </svg>
-              </button>
-              <div className="aspect-w-16 aspect-h-9 w-full border border-white rounded-tr-md">
-                <ReactPlayer
-                  ref={playerRef}
-                  url={streamUrl!}
-                  playing={true}
-                  controls={true}
-                  width="100%"
-                  height="100%"
-                  className="w-full h-full"
-                  onProgress={handleProgress}
-                  onDuration={handleDuration}
-                  config={{
-                    file: {
-                      hlsOptions: {
-                        enableWorker: true,
-                        debug: true,
-                      },
-                      attributes: {
-                        crossOrigin: "anonymous",
-                      },
-                      tracks: [
-                        {
-                          kind: "subtitles",
-                          src: subtitleurl,
-                          srcLang: "en",
-                          default: true,
-                          label: "English Subtitles",
-                        },
-                      ],
-                    },
-                  }}
-                />
-              </div>
-              <div className="absolute bottom-0 left-0 w-full h-full flex justify-between items-center pointer-events-none">
-                {currentEpisode && (
-                  <button
-                    className="m-2 ml-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
-                    onClick={handleSkipIntro}
-                    style={{
-                      visibility:
-                        playedSeconds < currentEpisode.intro.end &&
-                          playedSeconds > currentEpisode.intro.start
-                          ? "visible"
-                          : "hidden",
-                    }}
-                  >
-                    Skip Intro
-                  </button>
-                )}
-                {currentEpisode && (
-                  <button
-                    className="m-2 mr-4 border border-white bg-slate-500 bg-opacity-50 p-2 rounded-md pointer-events-auto hover:bg-slate-400"
-                    onClick={handleSkipEnding}
-                    style={{
-                      visibility:
-                        playedSeconds > currentEpisode.outro.start &&
-                          playedSeconds < currentEpisode.outro.end
-                          ? "visible"
-                          : "hidden",
-                    }}
-                  >
-                    Skip Outro
-                  </button>
-                )}
-              </div>
-              <div className="bg-gray-800 gap-2 border border-white backdrop-blur-lg h-16 flex items-center justify-center px-4 py-auto">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  id="closed-caption"
-                  fill="currentColor"
-                >
-                  <path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 6.5c0 .28-.22.5-.5.5H10c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5zm7 0c0 .28-.22.5-.5.5H17c-.28 0-.5-.22-.5-.5h-2v3h2c0-.28.22-.5.5-.5h.5c.28 0 .5.22.5.5v.5c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v.5z"></path>
-                </svg>
-                <p className="mb-1">:</p>
-                {/* TODO:Style sub and dub buttons */}
-                <button
-                  className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
-                  onClick={() => {
-                    setStreamType(StreamType.sub);
-                  }}
-                >
-                  SUB
-                </button>
-                {animeData &&
-                  episodesData[currentEpisodeNumber - 1].gogoDubId ? (
-                  <button
-                    className="cursor-pointer border border-gray-700 rounded-md px-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
-                    onClick={() => {
-                      setStreamType(StreamType.dub);
-                    }}
-                  >
-                    DUB
-                  </button>
-                ) : null}
-              </div>
-              <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-20 flex flex-row sm:flex-row items-center px-4 py-2">
-                <div
-                  className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
-                  title="Previous Episode"
-                >
-                  <SkipPrevious className="flex" onClick={handlePrev} />
-                </div>
-                <div className="flex-1 flex flex-col sm:flex-row justify-center items-center mt-2 sm:mt-0">
-                  {/* Find the current episode and display its title */}
-                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
-                    CURRENT EPISODE:{" "}
-                  </p>
-                  <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
-                    {currentEpisodeNumber} -{" "}
-                    {
-                      episodesData.find(
-                        (episode) => episode.number === currentEpisodeNumber
-                      )?.title
-                    }
-                  </p>
-                </div>
-                <div
-                  className="cursor-pointer ml-auto sm:ml-0 border border-gray-700 rounded-lg px-2 py-2 hover:bg-slate-700 hover:scale-105 transform transition duration-150 ease-in-out"
-                  title="Next Episode"
-                >
-                  <SkipNext
-                    className="flex cursor-pointer"
-                    onClick={handleNext}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center">
-              <span className="loading loading-spinner text-info"></span>
-              <p className="ml-2 font-poppins font-semibold">loading..</p>
-            </div>
-          )}
-
-          {settingsVisible && (
-            <div className="flex flex-col absolute top-10 right-2.5 shadow-md z-20 mt-3">
-              {[
-                Quality.lowRes,
-                Quality.midRes,
-                Quality.highRes,
-                Quality.fullRes,
-              ].map((qualityOption: Quality) => (
-                <div
-                  key={qualityOption}
-                  onClick={() => handleQualityChange(qualityOption)}
-                  style={{
-                    padding: "10px",
-                    cursor: "pointer",
-                  }}
-                  className={`bg-black bg-opacity-50 rounded-md border ${qualityOption == quality ? "bg-blue-200" : ""
-                    }`}
-                >
-                  <div className="opacity-100">
-                    {["360p", "480p", "720p", "1080p"][qualityOption]}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        <div
+          id="jjk"
+          className="bg-gray-300 border border-gray-800 p-5 text-center"
+        >
+          {`${params.id} - ${currentEpisodeNumber}`}
+          <DiscussionEmbed
+            shortname="domain-of-weebs"
+            config={{
+              url: window.location.href,
+              identifier: `${params.id}-${currentEpisodeNumber}`,
+              title: `Episode ${currentEpisodeNumber}`,
+              language: "en", // e.g. for Traditional Chinese (Taiwan)
+            }}
+          />
+          <style>
+            {`
+          #disqus_thread a {
+            color: #39FF14;
+          }
+          #layout {
+            background-color: black;
+          }
+        `}
+          </style>
         </div>
       </div>
     </div>
