@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/api-d/*"
+  to = "https://ed.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}

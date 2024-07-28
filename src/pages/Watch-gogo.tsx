@@ -79,7 +79,7 @@ export const Watchgogo: React.FC = () => {
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [gogoAnimeId, setgogoAnimeId] = useState("");
-  const [zoroId, setZoroId] = useState("");
+  const [zoroAnimeId, setZoroAnimeId] = useState("");
   const [progress, setProgress] = useState<number>();
   const [mediaID, setMediaID] = useState<number>();
   const [subtitleurl, setSubtitleUrl] = useState<string>("");
@@ -237,6 +237,7 @@ export const Watchgogo: React.FC = () => {
         setAnimeData(data);
       });
   }, [params]);
+
   useEffect(() => {
     console.log("Updated Media ID:", mediaID);
   }, [mediaID]);
@@ -246,6 +247,7 @@ export const Watchgogo: React.FC = () => {
 
   useEffect(() => {
     if (!animeData || !animeData.alID) return;
+    if(animeData.malID === parseInt(params.id || "0") && gogoAnimeId && zoroAnimeId) return;
     var gogoId: string;
     var zoroId: string;
     axios
@@ -291,7 +293,7 @@ export const Watchgogo: React.FC = () => {
           if (zoroId.includes("?"))
             zoroId = zoroId.substring(0, zoroId.indexOf("?"));
           console.log("Zoro ID : ", zoroId);
-          setZoroId(zoroId);
+          setZoroAnimeId(zoroId);
         } else {
           console.error("No Zoro ID found for this anime");
         }
@@ -299,14 +301,14 @@ export const Watchgogo: React.FC = () => {
   }, [animeData]);
 
   useEffect(() => {
-    if (!zoroId || !gogoAnimeId) return;
+    if (!zoroAnimeId || !gogoAnimeId) return;
     let zoroEpisodesData: any;
     let gogoEpisodes: string[] = [];
     let gogoDubEpisodes: string[] = [];
     let totalEpisodes: number = 0;
     const fetchEpisodesData = async () => {
       await axios
-        .get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${zoroId}`)
+        .get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${zoroAnimeId}`)
         .then((response) => {
           zoroEpisodesData = response.data.episodes;
           totalEpisodes = response.data.totalEpisodes;
@@ -314,7 +316,7 @@ export const Watchgogo: React.FC = () => {
         .catch((error) => {
           console.error(
             "Error with fetching Zoro Episodes Data\nZoro Id : ",
-            zoroId,
+            zoroAnimeId,
             error
           );
         });
@@ -369,12 +371,12 @@ export const Watchgogo: React.FC = () => {
       console.log(tempEpisodesData);
     };
     fetchEpisodesData();
-  }, [zoroId, gogoAnimeId]);
+  }, [zoroAnimeId, gogoAnimeId]);
 
   useEffect(() => {
     if (
       !gogoAnimeId ||
-      !zoroId ||
+      !zoroAnimeId ||
       episodesData.length === 0 ||
       currentEpisodeNumber < 0
     )
@@ -452,7 +454,7 @@ export const Watchgogo: React.FC = () => {
     };
 
     fetchCurrEpisodeData();
-  }, [gogoAnimeId, zoroId, currentEpisodeNumber, episodesData]);
+  }, [gogoAnimeId, zoroAnimeId, currentEpisodeNumber, episodesData]);
 
   useEffect(() => {
     if (!currentEpisode || !currentEpisode.sources) return;
