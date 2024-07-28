@@ -1,6 +1,41 @@
 [[redirects]]
+  from = "/api-a/*"
+  to = "https://ea.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/api-b/*"
+  to = "https://eb.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/api-c/*"
+  to = "https://ec.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
   from = "/api-d/*"
   to = "https://ed.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/api-e/*"
+  to = "https://ee.netmagcdn.com:2228/hls-playback/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/api-f/*"
+  to = "https://ef.netmagcdn.com:2228/hls-playback/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
