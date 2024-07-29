@@ -162,7 +162,7 @@ export const Watch: React.FC = () => {
               al_id: response.data.alID,
               zoro_id: response.data.id
             }
-            mongo.db("Zoro").collection("mappings").findOneAndReplace({ mal_id: response.data.malID }, newAnime, { upsert: true });
+            await mongo.db("Zoro").collection("mappings").findOneAndReplace({ mal_id: response.data.malID }, newAnime, { upsert: true });
             return;
           }
         } catch (error) {
@@ -188,6 +188,8 @@ export const Watch: React.FC = () => {
         console.log("Anime not found in database");
         fetchAnimeData(mongo);
       }
+      console.log("closing database connection");
+      user.logOut();
     }
     fetchDatabase();
   }, [params]);
