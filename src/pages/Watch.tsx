@@ -8,6 +8,8 @@ import "./Watch.css";
 import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
 import Hls from "hls.js";
+import * as Realm from "realm-web";
+import { MongoDBCollectionNamespace } from "mongodb";
 
 interface Quality {
   level: number;
@@ -56,6 +58,12 @@ enum StreamType {
   dub
 }
 
+interface mongoAnime {
+  mal_id: number;
+  al_id: number;
+  zoro_id: string;
+}
+
 export const Watch: React.FC = () => {
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
@@ -76,6 +84,8 @@ export const Watch: React.FC = () => {
   const [totalDuration, setTotalDuration] = useState<number>(0);
   const params = useParams();
   const playerRef: any = useRef(null);
+  const app = new Realm.App({ id: "application-0-lrdgzin" });
+
 
   useEffect(() => {
     let hls: any;
@@ -132,38 +142,67 @@ export const Watch: React.FC = () => {
     };
   }, [streamUrl, qualityLevel]);
 
-  const fetchAnimeData = async (animeResponses: any) => {
+  useEffect(() => {
     if (animeData?.malID == params.id) return;
-    for (let i = 0; i < animeResponses.length; i++) {
-      const anime = animeResponses[i];
-      try {
-        const response = await axios.get(
-          `https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`
-        );
-        console.log(anime.id);
-        if (response.data.malID == params.id) {
-          setAnimeData(response.data);
-          setEpisodesData(response.data.episodes);
-          console.log("SELECTED:");
-          console.log(response.data);
-          return;
+    let user: Realm.User;
+
+
+    const Login = async () => {
+      user = await app.logIn(Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY));
+    }
+
+    const fetchAnimeData = async () => {
+      const animeResponses: any = (await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("id")}`)).data.results;
+      for (let i = 0; i < animeResponses.length; i++) {
+        const anime = animeResponses[i];
+        try {
+          const response = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`);
+          console.log(anime.id);
+          if (response.data.malID == params.id) {
+            setAnimeData(response.data);
+            setEpisodesData(response.data.episodes);
+            console.log("SELECTED:");
+            console.log(response.data);
+
+            const newAnime: mongoAnime = {
+              mal_id: response.data.malID,
+              al_id: response.data.alID,
+              zoro_id: response.data.id
+            }
+            const mongo = user.mongoClient("mongodb-atlas");
+            mongo.db("Zoro").collection("mappings").findOneAndReplace({ mal_id: response.data.malID }, newAnime, { upsert: true });
+            return;
+          }
+        } catch (error) {
+          console.error("Error fetching anime data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching anime data:", error);
+      }
+    };
+
+    const fetchDatabase = async () => {
+      const mongo = app.currentUser!.mongoClient("mongodb-atlas");
+      const anime = await mongo.db("Zoro").collection("mappings").findOne({ mal_id: parseInt(params.id || "-1") });
+      console.log(anime);
+      if (anime) {
+        const animeData = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.zoro_id}`);
+        setAnimeData(animeData.data);
+        setEpisodesData(animeData.data.episodes);
+        console.log("Anime found in database")
+        console.log("SELECTED:");
+        console.log(animeData.data);
+      }
+      else {
+        console.log("Anime not found in database");
+        fetchAnimeData();
       }
     }
-  };
+
+    Login();
+    fetchDatabase();
+  }, [params]);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get(
-          "id"
-        )}`
-      )
-      .then((response) => {
-        fetchAnimeData(response.data.results);
-      });
+
     setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
   }, [searchParams]);
 
