@@ -143,14 +143,8 @@ export const Watch: React.FC = () => {
 
   useEffect(() => {
     if (animeData?.malID == params.id) return;
-    let user: Realm.User;
 
-
-    const Login = async () => {
-      user = await app.logIn(Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY));
-    }
-
-    const fetchAnimeData = async () => {
+    const fetchAnimeData = async (mongo: globalThis.Realm.Services.MongoDB) => {
       const animeResponses: any = (await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("id")}`)).data.results;
       for (let i = 0; i < animeResponses.length; i++) {
         const anime = animeResponses[i];
@@ -168,7 +162,6 @@ export const Watch: React.FC = () => {
               al_id: response.data.alID,
               zoro_id: response.data.id
             }
-            const mongo = user.mongoClient("mongodb-atlas");
             mongo.db("Zoro").collection("mappings").findOneAndReplace({ mal_id: response.data.malID }, newAnime, { upsert: true });
             return;
           }
@@ -179,15 +172,8 @@ export const Watch: React.FC = () => {
     };
 
     const fetchDatabase = async () => {
-      let mongo;
-      if (user) {
-        mongo = user.mongoClient("mongodb-atlas");
-        console.log("user")
-      }
-      else {
-        mongo = app.currentUser!.mongoClient("mongodb-atlas");
-        console.log("app")
-      }
+      const user = await app.logIn(Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY));
+      const mongo = user.mongoClient("mongodb-atlas");
       const anime = await mongo.db("Zoro").collection("mappings").findOne({ mal_id: parseInt(params.id || "-1") });
       console.log(anime);
       if (anime) {
@@ -200,11 +186,9 @@ export const Watch: React.FC = () => {
       }
       else {
         console.log("Anime not found in database");
-        fetchAnimeData();
+        fetchAnimeData(mongo);
       }
     }
-
-    Login();
     fetchDatabase();
   }, [params]);
 
