@@ -9,7 +9,6 @@ import { SkipPrevious } from "@mui/icons-material";
 import { SkipNext } from "@mui/icons-material";
 import Hls from "hls.js";
 import * as Realm from "realm-web";
-import { MongoDBCollectionNamespace } from "mongodb";
 
 interface Quality {
   level: number;
@@ -180,7 +179,15 @@ export const Watch: React.FC = () => {
     };
 
     const fetchDatabase = async () => {
-      const mongo = app.currentUser!.mongoClient("mongodb-atlas");
+      let mongo;
+      if (user) {
+        mongo = user.mongoClient("mongodb-atlas");
+        console.log("user")
+      }
+      else {
+        mongo = app.currentUser!.mongoClient("mongodb-atlas");
+        console.log("app")
+      }
       const anime = await mongo.db("Zoro").collection("mappings").findOne({ mal_id: parseInt(params.id || "-1") });
       console.log(anime);
       if (anime) {
