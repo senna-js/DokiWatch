@@ -123,7 +123,7 @@ const Sidebar = () => {
 
   const handleHomeClick = () => {
     console.log("Home IconButton clicked");
-    window.location.href = "/home";
+    navigate("/home");
   };
 
   const handleMangaClick = () => {
@@ -132,7 +132,7 @@ const Sidebar = () => {
 
   const handleSearchClick = () => {
     console.log("Search IconButton clicked");
-    window.location.href = "/search";
+    navigate("/search");
   };
 
   const openModal = () => {
@@ -318,7 +318,7 @@ const Sidebar = () => {
           <IconButton
             onClick={toggleSidebar}
             style={{ backgroundColor: "#212529" }}
-            
+
           >
             {isOpen ? (
               <ChevronLeftIcon className="text-white" />
