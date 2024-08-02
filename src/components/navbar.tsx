@@ -179,7 +179,6 @@ export const Navbar = () => {
           />
         </div>
       </div>
-      
       <div className="flex gap-2 sm:gap-4 items-center">
         <SignedIn>
           <div>
