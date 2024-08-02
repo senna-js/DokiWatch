@@ -287,30 +287,33 @@ export const Watch: React.FC = () => {
   return (
     <div className="sm:ml-16 sm:mt-5 ">
       <div className="flex flex-col-reverse sm:flex-row h-fit">
-          <div className="flex flex-col py-2 bg-gray-800 h-[625px] sm:w-72 mx-1 sm:mx-0 border-2 border-white sm:border-r-slate-500 backdrop-blur-lg text-center rounded-l-md rounded-r-md sm:rounded-r-none">
-            <div className="text-center font-poppins font-semibold pb-2">
-              EPISODES
-            </div>
-            <hr className="" />
-            <div className="overflow-y-auto scrollHide">
-              {episodesData.map((episode, index) => (
-                <div
-                  key={index}
-                  className={`episode-row flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
-                    ? "bg-red-700"
-                    : "bg-gray-800 hover:bg-gray-700"
-                    } transition-colors duration-150 ease-in-out`}
-                  onClick={() => {
-                    handleWatchEpisode(episode.number);
-                  }}
-                >
-                  <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
-                    {episode.number}. {episode.title}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="flex flex-col py-2 bg-gray-800 h-[625px] sm:w-72 mx-1 sm:mx-0 border-2 border-white sm:border-r-slate-500 backdrop-blur-lg text-center rounded-l-md rounded-r-md sm:rounded-r-none">
+          <div className="text-center font-poppins font-semibold pb-2">
+            EPISODES
           </div>
+          <hr className="" />
+          <div className="overflow-y-auto scrollHide">
+            {episodesData.map((episode, index) => (
+              <div
+                key={index}
+                className={`episode-row flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
+                  ? "bg-red-700"
+                  : "bg-gray-800 hover:bg-gray-700"
+                  } transition-colors duration-150 ease-in-out`}
+                onClick={() => {
+                  handleWatchEpisode(episode.number);
+                }}
+              >
+                <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
+                  {episode.number}. {episode.title}
+                </div>
+                {/* <div className="sm:hidden text-white mx-auto font-poppins">
+                  E-{episode.number}
+                </div> */}
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="w-full max-w-4xl relative">
           {(currentEpisode && currentEpisodeNumber) ? (
             <div className="sm:w-[1000px]">
