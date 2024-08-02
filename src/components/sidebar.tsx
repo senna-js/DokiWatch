@@ -194,7 +194,7 @@ const Sidebar = () => {
       {isOpen && (
         <Stack
           direction="column"
-          className="fixed top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
+          className="fixed bg-transparent backdrop-blur-lg border border-white top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
           spacing={2}
         >
           {isSignedIn && (
@@ -318,6 +318,7 @@ const Sidebar = () => {
           <IconButton
             onClick={toggleSidebar}
             style={{ backgroundColor: "#212529" }}
+            
           >
             {isOpen ? (
               <ChevronLeftIcon className="text-white" />

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect } from 'react';
 import { AnimeProvider } from "./AnimeContext"; // Import AnimeProvider
 import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeWatchingStack";
@@ -10,10 +11,25 @@ import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
 import { useUser } from "@clerk/clerk-react";
-import {Watchgogo} from "./pages/Watch-gogo";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from 'react-intersection-observer';
+import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
   const { isSignedIn } = useUser();
+  const controls = useAnimation();
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        width: '100%',
+        opacity: 1,
+        transition: { duration: 0.5 },
+      });
+    }
+  }, [controls, inView]);
+
   return (
     <AnimeProvider>
       <div className="min-h-screen bg-gray-900 text-white relative">
@@ -34,22 +50,47 @@ const App = () => {
               path="/home"
               element={
                 <div>
-                  <div className="p-4 sm:p-8 ml-4 sm:ml-24">
-                    <h1 className="text-2xl sm:text-4xl font-bold">
+                  <motion.div
+                    className="p-4 sm:p-8 ml-4 sm:ml-24"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <motion.h1
+                      className="text-2xl sm:text-4xl font-bold"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
                       Welcome to Doki Watch
-                    </h1>
-                    <p className="mt-2 text-sm sm:text-base">
+                    </motion.h1>
+                    <motion.p
+                      className="mt-2 text-sm sm:text-base"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                    >
                       Explore your favorite anime & manga here.
-                    </p>
-                  </div>
-                  <div className="mt-8 sm:mt-16 ml-4 sm:ml-24">
+                    </motion.p>
+                  </motion.div>
+                  <motion.div
+                    className="mt-8 sm:mt-16 ml-4 sm:ml-24"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                  >
                     <TopAiringAnimeStack />
-                  </div>
+                  </motion.div>
                   {isSignedIn && (
-                    <div className="ml-4 sm:ml-24">
+                    <motion.div
+                      className="ml-4 sm:ml-24"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                    >
                       <AnimeAiringStack />
                       <AnimeWatchingStack />
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               }

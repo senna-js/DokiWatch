@@ -7,6 +7,7 @@ import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
 import { AnimeData } from "../interfaces/AnimeData"
 import { AdvancedSearch } from "../components/AdvancedSearch"
+import { motion } from "framer-motion";
 
 const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "Horror", "Mahou Shoujo", "Mecha", "Music", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]
 
@@ -56,6 +57,24 @@ export const Search = () => {
         setSearchTrigger(!searchTrigger);
     }
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 18;
+
+    // Calculate the indices for the current page
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentAnime = anime.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(anime.length / itemsPerPage);
+
+    // Generate page numbers
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    const handlePageClick = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
     useEffect(() => {
         // if(searchParams.get("search"))
         //     setSearchTerm(searchParams.get("search"))
@@ -83,7 +102,7 @@ export const Search = () => {
         console.log("Searched term : " + term.toString())
 
         var query = `{
-                        Page(page: 1, perPage: 24) {
+                        Page(page: 1, perPage: 54) {
                             media(${term} sort: POPULARITY_DESC,type: ANIME) {
                                 idMal
                                 title {
@@ -130,15 +149,29 @@ export const Search = () => {
             <AdvancedSearch genres={genres} handleGenreSelection={handlegenreSelection} handleSearch={handleSearch} />
             <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
                 {
-                    anime.map((anime) => (
-                        <div key={anime.mal_id}>
-                            <AnimeCard
-                                anime={anime}
-                            />
-                        </div>
+                    currentAnime.map((anime, index) => (
+                        <motion.div
+                            key={anime.mal_id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                            <AnimeCard anime={anime} />
+                        </motion.div>
                     ))
                 }
             </Stack>
+            <div className="flex justify-center mx-4 py-4 gap-2">
+                {pageNumbers.map((number) => (
+                    <button
+                        key={number}
+                        onClick={() => handlePageClick(number)}
+                        className={`bg-transparent text-center bg-opacity-50 text-white border border-gray-700 rounded-md px-2.5 py-1.5 font-anime cursor-pointer shadow-md hover:bg-info hover:scale-105 transform transition duration-150 ease-in-out ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}
+                    >
+                        {number}
+                    </button>
+                ))}
+            </div>
         </div>
     )
 }
