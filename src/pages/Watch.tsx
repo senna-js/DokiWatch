@@ -318,7 +318,7 @@ export const Watch: React.FC = () => {
           {(currentEpisode && currentEpisodeNumber) ? (
             <div className="sm:w-[1000px]">
               <VideoPlayer currentEpisode={currentEpisode} handlePreviousEpisode={handlePrev} handleNextEpisode={handleNext}
-                hasPreviousEpisode={currentEpisodeNumber > 0} hasNextEpisode={currentEpisodeNumber < episodesData.length} />
+                hasPreviousEpisode={currentEpisodeNumber > 1} hasNextEpisode={currentEpisodeNumber < episodesData.length} />
             </div>
           ) : (
             <div className="flex justify-center items-center">
