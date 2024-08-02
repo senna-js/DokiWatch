@@ -2,31 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 // import { start } from "repl";
-import { useAnimeContext } from "../AnimeContext";
-import { AnimeCard } from "./AnimeCard";
-import { AnimeData } from "../interfaces/AnimeData";
+import { useAnimeContext } from "../../AnimeContext";
+import { AnimeCard } from "../AnimeCard";
+import { AnimeData } from "../../interfaces/AnimeData";
 
-export const AnimeAiringStack = () => {
+export const AnimeWatchingStack = () => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
   let accessToken: unknown;
-
-  //token is now set inside the user object, prev it was set as a different variable in localstorage
   const user = localStorage.getItem("user");
-  const token = localStorage.getItem("token") as string;
-
-  let userObject;
-
-  if (user) {
-    userObject = JSON.parse(user);
-  } else {
-    userObject = {};
-  }
-  console.log("user ache", user);
-  if (token) {
-    userObject["access_token"] = token;
-  }
-  //localStorage.setItem("user", JSON.stringify(userObject));
-
   ///////////////////////////////
   let username: string | undefined;
   if (user) {
@@ -70,7 +53,6 @@ export const AnimeAiringStack = () => {
   }
   useEffect(() => {
     const fetchData = async () => {
-      //console.log("fetching anime list", accessToken, triggerFetch);
       if (!triggerFetch) return;
 
       const query = `
@@ -123,6 +105,7 @@ export const AnimeAiringStack = () => {
         });
 
         const { data } = await response.json();
+        // console.log(data);
 
         if (
           data &&
@@ -130,10 +113,9 @@ export const AnimeAiringStack = () => {
           data.MediaListCollection.lists
         ) {
           const lists = data.MediaListCollection.lists;
-          console.log(lists);
           const animeList: AnimeData[] = lists.flatMap((list: any) =>
             list.entries
-              .filter((entry: any) => entry.media.status === "RELEASING")
+              .filter((entry: any) => entry.media.status === "FINISHED")
               .map((entry: any) => ({
                 mal_id: entry.media.idMal,
                 title: entry.media.title.romaji,
@@ -142,24 +124,8 @@ export const AnimeAiringStack = () => {
                 mediaId: entry.mediaId,
               }))
           );
-          // console.log(animeList);
-          var mediaIdList = {};
-          if (lists[0].entries.length === 0) {
-            console.log("No anime found in the list");
-          } else {
-            mediaIdList = lists[0].entries.map((entry: any) => ({
-              mal_id: entry.media.idMal,
-              mediaId: entry.mediaId,
-              progress: entry.progress,
-            }));
-          }
-
-          //console.log(mediaIdList);
-          sessionStorage.setItem("mediaIdList", JSON.stringify(mediaIdList));
           setAnimeData(animeList); // Set the fetched data
           setTriggerFetch(false); // Reset the trigger fetch flag
-        } else {
-          console.log("No data found");
         }
       } catch (error) {
         console.error("Error fetching anime list:", error);
@@ -172,7 +138,7 @@ export const AnimeAiringStack = () => {
   // Render the component
   return (
     <div className="flex-row p-4 m-3 rounded-md bg-transparent backdrop-blur-lg border border-white">
-      <h2 className="text-2xl font-poppins pl-3 ">Anime Airing</h2>
+      <h2 className="text-2xl font-poppins pl-3">Watching</h2>
       <hr className="my-4" />
       {animeData && animeData.length > 0 ? (
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">

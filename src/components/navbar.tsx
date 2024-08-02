@@ -88,7 +88,7 @@ export const Navbar = () => {
               access_token: accessToken,
               avatar: data.Viewer.avatar.large,
             };
-            console.log("navbar_User:", user);
+            // console.log("navbar_User:", user);
             //const user = JSON.parse(localStorage.getItem("user") || "{}");
             //user["avatar"] = data.Viewer.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));

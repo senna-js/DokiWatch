@@ -36,6 +36,16 @@ export default defineConfig({
         changeOrigin:true,
         rewrite:(path)=>path.replace(/^\/api-f/,'')
       },
+      '/api-sub':{
+        target:'https://s.megastatics.com/subtitle/',
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/api-sub/,'')
+      },
+      '/api-thumb':{
+        target:'https://s.megastatics.com/thumbnails/',
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/api-thumb/,'')
+      }
     }
   }
 });

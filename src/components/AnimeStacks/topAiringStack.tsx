@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { AnimeCard } from "./AnimeCard";
-import { AnimeData } from "../interfaces/AnimeData";
+import { AnimeCard } from "../AnimeCard";
+import { AnimeData } from "../../interfaces/AnimeData";
 
-const TopAiringAnimeStack = () => {
+export const TopAiringAnimeStack = () => {
   const [topAiringAnime, setTopAiringAnime] = useState<AnimeData[]>([]);
   // const carouselRef = useRef<HTMLDivElement>(null);
 

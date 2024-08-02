@@ -39,3 +39,10 @@
   status = 200
   force = true
   headers = {X-From = "Netlify"}
+
+[[redirects]]
+  from = "/api-subs/*"
+  to = "https://s.megastatics.com/subtitle/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
