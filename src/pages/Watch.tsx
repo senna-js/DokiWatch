@@ -115,7 +115,7 @@ export const Watch: React.FC = () => {
     if (!episodeId) return;
     const fetchEpisodeData = async () => {
       const subResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`)
-      const dubResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId.replace('$both', '$dub')}`)
+      const dubResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId.replace(/(\$both|\$sub)$/, '$dub')}`)
       const results = await Promise.allSettled([subResponse, dubResponse]);
 
       const subData = results[0].status === 'fulfilled' ? results[0].value : null;
@@ -304,7 +304,7 @@ export const Watch: React.FC = () => {
                   handleWatchEpisode(episode.number);
                 }}
               >
-                
+
                 {episode.number == currentEpisodeNumber && (
                   <div className="absolute inset-0 bg-gray-600 animate-slideIn z-0"></div>
                 )}

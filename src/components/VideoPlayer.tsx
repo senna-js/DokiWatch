@@ -20,6 +20,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   const { currentTime } = useMediaStore(player);
   const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
+  const [subtitleTracks, setSubtitleTracks] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    console.log("changed player")
+  }, [player])
 
   useEffect(() => {
     console.log("Changing stream type to ", ["Sub", "Dub"][streamType]);
@@ -32,6 +37,22 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   useEffect(() => {
     console.log("Changing true stream type to ", ["Sub", "Dub"][trueStreamType]);
   }, [trueStreamType])
+
+  useEffect(() => {
+    if (trueStreamType === StreamType.sub) {
+      setSubtitleTracks(currentEpisode.subtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />)))
+    }
+    else {
+      if (!currentEpisode.dubSubtitles) {
+        console.log("No dub subtitles found");
+        return;
+      }
+      setSubtitleTracks(currentEpisode.dubSubtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />)))
+    }
+    return () => {
+      setSubtitleTracks([]);
+    }
+  }, [currentEpisode.subtitles, currentEpisode.dubSubtitles, trueStreamType])
 
   const loadSkipButton: boolean = (currentTime > currentEpisode.intro.start && currentTime < currentEpisode.intro.end)
     || (currentTime > currentEpisode.outro.start && currentTime < currentEpisode.outro.end);
@@ -51,11 +72,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   return (
     <div className="relative border border-white">
       {(currentEpisode) && <>
-        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player} autoPlay crossOrigin>
-          {(trueStreamType === StreamType.sub) ?
+        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player}>
+          {/* {(trueStreamType === StreamType.sub) ?
             currentEpisode.subtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))
             : currentEpisode.dubSubtitles?.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))
-          }
+          } */}
+          {subtitleTracks}
           <MediaProvider />
           <DefaultVideoLayout icons={defaultLayoutIcons}
             slots={{
