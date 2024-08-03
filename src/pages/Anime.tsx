@@ -63,7 +63,7 @@ export const Anime = () => {
   }, [params.id]);
 
   const handleWatch = () => {
-    const navString = `/watch/${animeData?.mal_id}?EpId=${animeData?.title}&ep=1`;
+    const navString = `/watch/${animeData?.mal_id}?id=${animeData?.title}&ep=1`;
     navigate(navString);
   };
 
