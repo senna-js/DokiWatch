@@ -2,7 +2,7 @@ import { currEpisodeData } from "../interfaces/CurrEpisodeData"
 import { useState, useRef, useEffect } from "react";
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
-import { MediaPlayer, useMediaStore, useMediaRemote, type MediaPlayerInstance, MediaProvider, Track } from '@vidstack/react';
+import { MediaPlayer, useMediaStore, useMediaRemote, type MediaPlayerInstance, MediaProvider, TextTrack } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import { CustomMenu } from "./VideoPlayerComponents/CustomMenu";
 import { SkipButtons } from "./VideoPlayerComponents/SkipButtons";
@@ -20,10 +20,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   const { currentTime } = useMediaStore(player);
   const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
-  const [subtitleTracks, setSubtitleTracks] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    console.log("changed player")
+    console.warn("changed player")
   }, [player])
 
   useEffect(() => {
@@ -40,17 +39,25 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
 
   useEffect(() => {
     if (trueStreamType === StreamType.sub) {
-      setSubtitleTracks(currentEpisode.subtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />)))
+      console.log("Adding subtitle tracks");
+      currentEpisode.subtitles.forEach((subtitle) => {
+        player.current?.textTracks.add(new TextTrack({ src: subtitle.url, kind: "subtitles", label: subtitle.lang, default: subtitle.lang === "English",id:subtitle.lang }));
+      })
     }
     else {
-      if (!currentEpisode.dubSubtitles) {
-        console.log("No dub subtitles found");
-        return;
-      }
-      setSubtitleTracks(currentEpisode.dubSubtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />)))
+      console.log("Adding dub subtitle tracks");
+      currentEpisode.dubSubtitles?.forEach((subtitle) => {
+        player.current?.textTracks.add(new TextTrack({ src: subtitle.url, kind: "subtitles", label: subtitle.lang, default: subtitle.lang === "English", id: subtitle.lang }));
+      })
+    }
+    const textTrack = player.current?.textTracks.getById("English");
+    if (textTrack) {
+      console.log("English text track found",textTrack);
+      textTrack.mode = "showing";
     }
     return () => {
-      setSubtitleTracks([]);
+      console.log("Clearing text tracks");
+      player.current?.textTracks.clear()
     }
   }, [currentEpisode.subtitles, currentEpisode.dubSubtitles, trueStreamType])
 
@@ -72,12 +79,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   return (
     <div className="relative border border-white">
       {(currentEpisode) && <>
-        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player}>
-          {/* {(trueStreamType === StreamType.sub) ?
-            currentEpisode.subtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))
-            : currentEpisode.dubSubtitles?.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))
-          } */}
-          {subtitleTracks}
+        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player} autoPlay>
           <MediaProvider />
           <DefaultVideoLayout icons={defaultLayoutIcons}
             slots={{
