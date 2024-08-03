@@ -51,7 +51,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   return (
     <div className="relative border border-white">
       {(currentEpisode) && <>
-        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player} autoPlay crossOrigin logLevel="debug">
+        <MediaPlayer className="mb-0 pb-0" src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]} ref={player} autoPlay crossOrigin>
           {(trueStreamType === StreamType.sub) ?
             currentEpisode.subtitles.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))
             : currentEpisode.dubSubtitles?.map((subtitle) => (<Track src={subtitle.url} kind="subtitles" label={subtitle.lang} default={subtitle.lang === "English"} key={subtitle.lang} />))

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Content from "../components/ReadMore";
@@ -10,7 +10,6 @@ export const Anime = () => {
   const [animeData, setAnimeData] = useState<any>();
   const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
-  const [searchParams] = useSearchParams();
 
   const handleTitleClick = (animeId: number) => {
     navigate(`/anime/${animeId}`);
@@ -63,7 +62,11 @@ export const Anime = () => {
   }, [params.id]);
 
   const handleWatch = () => {
-    const navString = `/watch/${animeData?.mal_id}?EpId=${animeData?.title}&ep=1`;
+    let cleanTitle = animeData.title;
+    cleanTitle = cleanTitle.replace(/"/g, ' ');
+    cleanTitle = cleanTitle.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    cleanTitle = cleanTitle.replace(/[^\x00-\x7F]/g, ' ')
+    const navString = `/watch/${animeData?.mal_id}?id=${cleanTitle}&ep=1`;
     navigate(navString);
   };
 
