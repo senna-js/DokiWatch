@@ -287,7 +287,7 @@ export const Watch: React.FC = () => {
   return (
     <div className="sm:ml-16 sm:mt-5 ">
       <div className="flex flex-col-reverse sm:flex-row h-fit">
-        <div className="flex flex-col py-2 bg-gray-800 h-[625px] sm:w-72 mx-1 sm:mx-0 border-2 border-white sm:border-r-slate-500 backdrop-blur-lg text-center rounded-l-md rounded-r-md sm:rounded-r-none">
+        <div className="flex flex-col py-2 bg-gray-800 h-fit max-h-[560px] sm:max-h-[624px] sm:h-[624px] sm:w-72 mx-1 sm:mx-0 border border-white sm:border-r-slate-500 backdrop-blur-lg text-center rounded-l-md rounded-r-md sm:rounded-r-none">
           <div className="text-center font-poppins font-semibold pb-2">
             EPISODES
           </div>
@@ -296,15 +296,23 @@ export const Watch: React.FC = () => {
             {episodesData.map((episode, index) => (
               <div
                 key={index}
-                className={`episode-row flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
-                  ? "bg-red-700"
+                className={`relative flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
+                  ? "bg-gray-700"
                   : "bg-gray-800 hover:bg-gray-700"
                   } transition-colors duration-150 ease-in-out`}
                 onClick={() => {
                   handleWatchEpisode(episode.number);
                 }}
               >
-                <div className="hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
+                
+                {episode.number == currentEpisodeNumber && (
+                  <div className="absolute inset-0 bg-gray-600 animate-slideIn z-0"></div>
+                )}
+                <div
+                  className={`w-1 relative bg-blue-500 h-full transition-opacity duration-500 ease-in-out ${episode.number == currentEpisodeNumber ? 'opacity-100' : 'opacity-0'
+                    }`}
+                ></div>
+                <div className="relative z-10 hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
                   {episode.number}. {episode.title}
                 </div>
                 {/* <div className="sm:hidden text-white mx-auto font-poppins">
@@ -319,6 +327,23 @@ export const Watch: React.FC = () => {
             <div className="sm:w-[1000px]">
               <VideoPlayer currentEpisode={currentEpisode} handlePreviousEpisode={handlePrev} handleNextEpisode={handleNext}
                 hasPreviousEpisode={currentEpisodeNumber > 1} hasNextEpisode={currentEpisodeNumber < episodesData.length} />
+              <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-14 flex flex-row sm:flex-row items-center mb-1 mx-1 sm:mx-0 px-4 py-1 mt-1 sm:mt-0">
+
+                <div className="flex-1 flex flex-col sm:flex-row justify-center items-center sm:mt-0">
+                  {/* Find the current episode and display its title */}
+                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
+                    CURRENT EPISODE:{" "}
+                  </p>
+                  <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
+                    {currentEpisodeNumber} -{" "}
+                    {
+                      episodesData.find(
+                        (episode) => episode.number === currentEpisodeNumber
+                      )?.title
+                    }
+                  </p>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="flex justify-center items-center">

@@ -29,11 +29,16 @@ export default {
           "50%": { backgroundPosition: "center bottom" },
           "100%": { backgroundPosition: "center top" },
         },
+        slideIn: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
       },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
         fadeIn: "fadeIn 2s ease-out",
         scroll: "scroll 15s linear infinite",
+        slideIn: 'slideIn 0.5s ease-in-out forwards',
       },
     },
     variants: {
