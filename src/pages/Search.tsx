@@ -166,7 +166,7 @@ export const Search = () => {
                     <button
                         key={number}
                         onClick={() => handlePageClick(number)}
-                        className={`bg-transparent text-center bg-opacity-50 text-white border border-gray-700 rounded-md px-2.5 py-1.5 font-anime cursor-pointer shadow-md hover:bg-info hover:scale-105 transform transition duration-150 ease-in-out ${currentPage === number ? 'bg-info text-white' : ''}`}
+                        className={`text-center bg-opacity-50 text-white border border-gray-700 rounded-md px-2.5 py-1.5 font-anime cursor-pointer shadow-md hover:bg-info hover:scale-105 transform transition duration-150 ease-in-out ${currentPage === number ? 'bg-info text-white' : ''}`}
                     >
                         {number}
                     </button>
