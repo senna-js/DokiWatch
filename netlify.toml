@@ -1,9 +1,4 @@
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-
-[[redirects]]
   from = "/api-a/*"
   to = "https://ea.netmagcdn.com:2228/hls-playback/:splat"
   status = 200
@@ -51,3 +46,8 @@ status = 200
   status = 200
   force = true
   headers = {X-From = "Netlify"}
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
