@@ -45,7 +45,7 @@ export const Watch: React.FC = () => {
     if (animeData?.malID == params.id) return;
 
     const fetchAnimeData = async (mongo: globalThis.Realm.Services.MongoDB) => {
-      const animeResponses: any = (await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("id")}`)).data.results;
+      const animeResponses: any = (await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get("EpId")}`)).data.results;
       for (let i = 0; i < animeResponses.length; i++) {
         const anime = animeResponses[i];
         try {
