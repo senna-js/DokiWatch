@@ -8,7 +8,7 @@ export const EpisodeControlButtons = (props: EpisodeControlButtonsProps) => {
                 <Menu.Root className="vds-menu">
                     <Tooltip.Root>
                         <Tooltip.Trigger asChild className="vds-tooltip-trigger">
-                            <Menu.Button className="vds-menu-button vds-button" onClick={props.handlePreviousEpisode} aria-label="Previous Episode">
+                            <Menu.Button className="vds-menu-button vds-button" onSelect={props.handlePreviousEpisode} aria-label="Previous Episode">
                                 <PreviousIcon className="vds-icon" />
                             </Menu.Button>
                         </Tooltip.Trigger>
@@ -16,13 +16,14 @@ export const EpisodeControlButtons = (props: EpisodeControlButtonsProps) => {
                             Previous Episode
                         </Tooltip.Content>
                     </Tooltip.Root >
-                </Menu.Root>
+                </Menu.Root >
             }
-            {props.hasNextEpisode &&
+            {
+                props.hasNextEpisode &&
                 <Menu.Root className="vds-menu">
                     <Tooltip.Root >
                         <Tooltip.Trigger asChild className="vds-tooltip-trigger">
-                            <Menu.Button className="vds-menu-button vds-button" onClick={props.handleNextEpisode} aria-label="Next Episode">
+                            <Menu.Button className="vds-menu-button vds-button" onSelect={props.handleNextEpisode} aria-label="Next Episode">
                                 <NextIcon className="vds-icon" />
                             </Menu.Button>
                         </Tooltip.Trigger>
