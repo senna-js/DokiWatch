@@ -7,6 +7,8 @@ import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/l
 import { CustomMenu } from "./VideoPlayerComponents/CustomMenu";
 import { SkipButtons } from "./VideoPlayerComponents/SkipButtons";
 import { EpisodeControlButtons } from "./VideoPlayerComponents/EpisodeControlButtons";
+import { VTTtoJSON, type VTTJSON } from "./VideoPlayerComponents/ThumbnailsHandler";
+import axios from "axios";
 
 enum StreamType {
   sub,
@@ -20,6 +22,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
   const { currentTime } = useMediaStore(player);
   const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
+  const [thumbnails, setThumbnails] = useState<VTTJSON[]>();
 
   useEffect(() => {
     console.warn("changed player")
@@ -41,7 +44,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
     if (trueStreamType === StreamType.sub) {
       console.log("Adding subtitle tracks");
       currentEpisode.subtitles.forEach((subtitle) => {
-        player.current?.textTracks.add(new TextTrack({ src: subtitle.url, kind: "subtitles", label: subtitle.lang, default: subtitle.lang === "English",id:subtitle.lang }));
+        player.current?.textTracks.add(new TextTrack({ src: subtitle.url, kind: "subtitles", label: subtitle.lang, default: subtitle.lang === "English", id: subtitle.lang }));
       })
     }
     else {
@@ -52,7 +55,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
     }
     const textTrack = player.current?.textTracks.getById("English");
     if (textTrack) {
-      console.log("English text track found",textTrack);
+      console.log("English text track found", textTrack);
       textTrack.mode = "showing";
     }
     return () => {
@@ -60,6 +63,35 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
       player.current?.textTracks.clear()
     }
   }, [currentEpisode.subtitles, currentEpisode.dubSubtitles, trueStreamType])
+
+  useEffect(() => {
+    const fetchThumbnails = async (src: string) => {
+      console.log("Source: ", src);
+      const response = await axios.get(src);
+      const thumbnailsVTT = response.data;
+      const cleanSrc = src.replace(/thumbnails\.vtt$/, '');
+
+      const thumbnails = VTTtoJSON(thumbnailsVTT, cleanSrc);
+      console.log("Thumbnails: ", thumbnails);
+      setThumbnails(thumbnails);
+    }
+    if (trueStreamType === StreamType.sub) {
+      console.log("Changing to Sub thumbnails ");
+      if (!currentEpisode.thumbnailSrc) {
+        console.log("Sub Thumbnail not found");
+        return;
+      }
+      fetchThumbnails(currentEpisode.thumbnailSrc);
+    }
+    else {
+      console.log("Changing to Dub thumbnails ");
+      if (!currentEpisode.dubThumbnailSrc) {
+        console.log("Dub thumbnail not found");
+        return;
+      }
+      fetchThumbnails(currentEpisode.dubThumbnailSrc);
+    }
+  }, [currentEpisode.thumbnailSrc, currentEpisode.dubThumbnailSrc, trueStreamType])
 
   const loadSkipButton: boolean = (currentTime > currentEpisode.intro.start && currentTime < currentEpisode.intro.end)
     || (currentTime > currentEpisode.outro.start && currentTime < currentEpisode.outro.end);
@@ -88,7 +120,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
               afterEndTime: (<SkipButtons handleSkip={handleSkip} skipText={skipText} loadSkipButton={loadSkipButton} />),
               beforeCaptionButton: (<EpisodeControlButtons hasPreviousEpisode={hasPreviousEpisode} hasNextEpisode={hasNextEpisode} handlePreviousEpisode={handlePreviousEpisode} handleNextEpisode={handleNextEpisode} />),
             }}
-          // thumbnails={[currentEpisode.thumbnailSrc,currentEpisode.dubThumbnailSrc][streamType]}
+            thumbnails={
+              thumbnails
+            }
           />
         </MediaPlayer>
       </>}
