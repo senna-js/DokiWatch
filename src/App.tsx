@@ -6,7 +6,7 @@ import { AnimeWatchingStack } from "./components/AnimeStacks/AnimeWatchingStack"
 import { AnimeAiringStack } from "./components/AnimeStacks/AnimeAiringStack";
 import { TopAiringAnimeStack } from "./components/AnimeStacks/topAiringStack";
 import scene from "./assests/scene6.mp4";
-import redragon from "./assests/redragon.jpg";
+import bg from "./assests/bg1.jpg";
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
@@ -33,7 +33,7 @@ const App = () => {
 
   return (
     <AnimeProvider>
-      <div className="min-h-screen bg-gray-900 text-white relative">
+      <div className="min-h-screen bg-gray-900 text-white relative overflow-x-hidden overflow-y-hidden">
         {/* <div className="absolute z-0 w-full h-full bg-gradient-to-br from-slate-700 via-gray-800 to-zinc-900 opacity-25"></div> */}
         {/* <video
           autoPlay
@@ -46,7 +46,7 @@ const App = () => {
           Your browser does not support the video tag.
         </video> */}
         <img
-          src={redragon}
+          src={bg}
           alt="Background"
           className="absolute z-0 w-full h-full object-cover opacity-25"
         />

@@ -292,7 +292,7 @@ export const Watch: React.FC = () => {
             EPISODES
           </div>
           <hr className="" />
-          <div className="overflow-y-auto scrollHide">
+          <div className="overflow-y-auto cursor-pointer scrollHide">
             {episodesData.map((episode, index) => (
               <div
                 key={index}
@@ -331,10 +331,10 @@ export const Watch: React.FC = () => {
 
                 <div className="flex-1 flex flex-col sm:flex-row justify-center items-center sm:mt-0">
                   {/* Find the current episode and display its title */}
-                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
+                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1 truncate">
                     CURRENT EPISODE:{" "}
                   </p>
-                  <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
+                  <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
                     {currentEpisodeNumber} -{" "}
                     {
                       episodesData.find(

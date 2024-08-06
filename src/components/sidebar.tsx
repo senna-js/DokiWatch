@@ -22,6 +22,7 @@ import styled from "@mui/material/styles/styled";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useUser } from "@clerk/clerk-react";
+import { motion } from 'framer-motion';
 
 const AnimeDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
@@ -192,126 +193,133 @@ const Sidebar = () => {
   return (
     <>
       {isOpen && (
-        <Stack
-          direction="column"
-          className="fixed bg-transparent backdrop-blur-lg border border-white top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
-          spacing={2}
+        <motion.div
+          initial={{ x: '-100%' }}
+          animate={isOpen ? { x: '0%' } : { x: '-100%' }}
+          transition={isOpen ? { type: 'spring', stiffness: 300 } : { duration: 0.5, ease: 'easeInOut' }}
+          className="fixed bg-transparent backdrop-blur-lg border border-white top-1/3 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
         >
-          {isSignedIn && (
-            <Tooltip title="Connect to Anilist" placement="right">
-              <IconButton onClick={handleSubmit}>
-                <ConnectIcon className="text-white" />
+          <Stack
+            direction="column"
+            // className={`fixed bg-transparent backdrop-blur-lg border border-white top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            spacing={2}
+          >
+            {isSignedIn && (
+              <Tooltip title="Connect to Anilist" placement="right">
+                <IconButton onClick={handleSubmit}>
+                  <ConnectIcon className="text-white" />
+                </IconButton>
+              </Tooltip>
+            )}
+            <AnimeDialog open={open} onClose={handleClose}>
+              <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
+              <AnimeDialogContent>
+                <AnimeTextField
+                  autoFocus
+                  margin="dense"
+                  id="username"
+                  label="AniList Username"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  onChange={handleUsernameChange}
+                />
+              </AnimeDialogContent>
+              <DialogActions className="bg-[#9fadbd] flex justify-between space-x-2">
+                <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
+                <AnimeButton onClick={handleSubmit}>Confirm</AnimeButton>
+              </DialogActions>
+            </AnimeDialog>
+            <Tooltip title="Home" placement="right">
+              <IconButton onClick={handleHomeClick}>
+                <HomeIcon className="text-white" />
               </IconButton>
             </Tooltip>
-          )}
-          <AnimeDialog open={open} onClose={handleClose}>
-            <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
-            <AnimeDialogContent>
-              <AnimeTextField
-                autoFocus
-                margin="dense"
-                id="username"
-                label="AniList Username"
-                type="text"
-                fullWidth
-                variant="outlined"
-                onChange={handleUsernameChange}
-              />
-            </AnimeDialogContent>
-            <DialogActions className="bg-[#9fadbd] flex justify-between space-x-2">
-              <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
-              <AnimeButton onClick={handleSubmit}>Confirm</AnimeButton>
-            </DialogActions>
-          </AnimeDialog>
-          <Tooltip title="Home" placement="right">
-            <IconButton onClick={handleHomeClick}>
-              <HomeIcon className="text-white" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Browse" placement="right">
-            <IconButton onClick={handleSearchClick}>
-              <SearchIcon className="text-white" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Coming Soon" placement="right">
-            <IconButton onClick={handleMangaClick}>
-              <MangaIcon className="text-white" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Anime Schedule" placement="right">
-            <IconButton onClick={openModal}>
-              <ScheduleIcon className="text-white" id="schedule" />
-            </IconButton>
-          </Tooltip>
-          <dialog
-            id="my_modal_5"
-            className="modal modal-bottom sm:modal-middle"
-            ref={modalRef}
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                closeModal();
-              }
-            }}
-          >
-            <div className="modal-box bg-transparent backdrop-blur-lg">
-              <h3 className="font-bold text-lg">Anime Schedule</h3>
-              <hr className="mt-2" />
-              <div className="py-4">
-                <div>
-                  <p className="py-2">
-                    <strong>Current Date and Time:</strong>{" "}
-                    {`${new Intl.DateTimeFormat("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "2-digit",
-                      weekday: "long",
-                    }).format(currentDate)} - ${new Intl.DateTimeFormat(
-                      "en-US",
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                        hour12: true,
-                      }
-                    ).format(currentDate)}`}
-                  </p>
-                </div>
-                {schedule.map((anime: any) => (
-                  <div
-                    id={anime.mal_id}
-                    key={anime.mal_id}
-                    className="relative text-white p-4 rounded-lg border border-blue-500 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-cover bg-center bg-no-repeat mb-4 hover:animate-scroll"
-                    style={{
-                      backgroundImage: `url(${anime.images.jpg.large_image_url})`,
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-black opacity-50 rounded-lg"></div>
-                    <p className="relative">
-                      <strong className="cursor-default">Title:</strong>{" "}
-                      <span
-                        onClick={() => handleTitleClick(anime.mal_id)}
-                        style={{ cursor: "pointer", color: "#04d9ff" }}
-                      >
-                        {anime.title_english || anime.title}
-                      </span>
+            <Tooltip title="Browse" placement="right">
+              <IconButton onClick={handleSearchClick}>
+                <SearchIcon className="text-white" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Coming Soon" placement="right">
+              <IconButton onClick={handleMangaClick}>
+                <MangaIcon className="text-white" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Anime Schedule" placement="right">
+              <IconButton onClick={openModal}>
+                <ScheduleIcon className="text-white" id="schedule" />
+              </IconButton>
+            </Tooltip>
+            <dialog
+              id="my_modal_5"
+              className="modal modal-bottom sm:modal-middle"
+              ref={modalRef}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  closeModal();
+                }
+              }}
+            >
+              <div className="modal-box bg-transparent backdrop-blur-lg">
+                <h3 className="font-bold text-lg">Anime Schedule</h3>
+                <hr className="mt-2" />
+                <div className="py-4">
+                  <div>
+                    <p className="py-2">
+                      <strong>Current Date and Time:</strong>{" "}
+                      {`${new Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "2-digit",
+                        weekday: "long",
+                      }).format(currentDate)} - ${new Intl.DateTimeFormat(
+                        "en-US",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: true,
+                        }
+                      ).format(currentDate)}`}
                     </p>
-                    <p className="relative cursor-default">
-                      <strong></strong>{" "}
-                      {convertToUserTime(anime.broadcast.time)}
-                    </p>
-                    {/* <hr className="relative" /> */}
                   </div>
-                ))}
+                  {schedule.map((anime: any) => (
+                    <div
+                      id={anime.mal_id}
+                      key={anime.mal_id}
+                      className="relative text-white p-4 rounded-lg border border-blue-500 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-cover bg-center bg-no-repeat mb-4 hover:animate-scroll"
+                      style={{
+                        backgroundImage: `url(${anime.images.jpg.large_image_url})`,
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+                      <p className="relative">
+                        <strong className="cursor-default">Title:</strong>{" "}
+                        <span
+                          onClick={() => handleTitleClick(anime.mal_id)}
+                          style={{ cursor: "pointer", color: "#04d9ff" }}
+                        >
+                          {anime.title_english || anime.title}
+                        </span>
+                      </p>
+                      <p className="relative cursor-default">
+                        <strong></strong>{" "}
+                        {convertToUserTime(anime.broadcast.time)}
+                      </p>
+                      {/* <hr className="relative" /> */}
+                    </div>
+                  ))}
+                </div>
+                <div className="modal-action bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
+                  <form method="dialog" onClick={closeModal} className="w-full">
+                    <button className="w-full rounded-lg">Close</button>
+                  </form>
+                </div>
               </div>
-              <div className="modal-action bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
-                <form method="dialog" onClick={closeModal} className="w-full">
-                  <button className="w-full rounded-lg">Close</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-        </Stack>
+            </dialog>
+          </Stack>
+        </motion.div>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
         <div className="fixed top-[90vh] left-0 z-50 -translate-y-1/2 mx-4">
