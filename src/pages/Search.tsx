@@ -145,7 +145,7 @@ export const Search = () => {
     }, [searchTrigger])
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center bg-pink-950 sm:bg-transparent">
             <AdvancedSearch genres={genres} handleGenreSelection={handlegenreSelection} handleSearch={handleSearch} />
             <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
                 {

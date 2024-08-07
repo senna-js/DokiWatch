@@ -5,7 +5,7 @@ import { Navbar } from "./components/navbar";
 import { AnimeWatchingStack } from "./components/AnimeStacks/AnimeWatchingStack";
 import { AnimeAiringStack } from "./components/AnimeStacks/AnimeAiringStack";
 import { TopAiringAnimeStack } from "./components/AnimeStacks/topAiringStack";
-import scene from "./assests/scene6.mp4";
+// import scene from "./assests/scene6.mp4";
 import bg from "./assests/bg1.jpg";
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
@@ -14,7 +14,7 @@ import { Search } from "./pages/Search";
 import { useUser } from "@clerk/clerk-react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
-import { Watchgogo } from "./pages/Watch-gogo";
+// import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
   const { isSignedIn } = useUser();
