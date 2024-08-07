@@ -114,16 +114,21 @@ export const Watch: React.FC = () => {
   useEffect(() => {
     if (!episodeId) return;
     const fetchEpisodeData = async () => {
-      const subResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`)
+
+      const subResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`);
       const dubResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId.replace(/(\$both|\$sub)$/, '$dub')}`)
       const results = await Promise.allSettled([subResponse, dubResponse]);
 
-      const subData = results[0].status === 'fulfilled' ? results[0].value : null;
+      let subData = results[0].status === 'fulfilled' ? results[0].value : null;
       const dubData = results[1].status === 'fulfilled' ? results[1].value : null;
 
+      if (!subData) {
+        console.log("Converting episode id");
+        const newId = episodeId.includes('$both') ? episodeId.replace('$both', '$sub') : episodeId.replace('$sub', '$both');
+        subData = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${newId}`)
+      }
       if (!subData && !dubData) {
         console.log("Incorrect Episode id");
-        setCurrentEpisode(undefined);
       }
       else if (subData) {
         const episodeData: currEpisodeData = {
