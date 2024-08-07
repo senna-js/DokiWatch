@@ -45,7 +45,28 @@
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
 }
+.disqus-container {
+  background-color: transparent; /* Transparent background */
+  color: #ffffff; /* Light text color */
+  padding-left: 16px; /* Add left padding */
+  padding-right: 16px; /* Add right padding */
+}
 
+.disqus-container .disqus-comment-count {
+  color: #ffffff; /* Light text color for comment count */
+}
+
+/* Additional styles to ensure Disqus elements match dark mode */
+.disqus-container iframe {
+  background-color: transparent; /* Transparent background for iframe */
+  color: #ffffff; /* Light text color for iframe content */
+}
+
+/* Override Disqus default styles */
+.disqus-container .disqus-thread {
+  background-color: transparent !important; /* Transparent background for thread */
+  color: #ffffff !important; /* Light text color for thread */
+}
 /* .custom-player video::-webkit-media-text-track-display {
   background: transparent !important;
 }
@@ -55,3 +76,49 @@
   color: white; 
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5); 
 } */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;; /* Adjust margin as needed */
+}
+
+.toggle-checkbox {
+  display: none;
+}
+
+.toggle-label {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s
+}
+
+.toggle-inner {
+  position: absolute;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+}
+
+.toggle-switch {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-checkbox:checked + .toggle-label .toggle-inner {
+  background-color: #4caf50;
+}
+
+.toggle-checkbox:checked + .toggle-label .toggle-switch {
+  transform: translateX(20px);
+}

@@ -6,6 +6,8 @@ import "./Watch.css";
 import * as Realm from "realm-web";
 import { currEpisodeData } from "../interfaces/CurrEpisodeData";
 import { VideoPlayer } from "../components/VideoPlayer";
+import { DiscussionEmbed } from "disqus-react";
+import { CommentCount } from 'disqus-react';
 
 interface AnimeData {
   id: string;
@@ -40,6 +42,12 @@ export const Watch: React.FC = () => {
   const [currentEpisode, setCurrentEpisode] = useState<currEpisodeData>();
   const params = useParams();
   const app = new Realm.App({ id: "application-0-lrdgzin" });
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+
+  // Toggle function
+  const toggleCommentsVisibility = () => {
+    setIsCommentsVisible(!isCommentsVisible);
+  };
 
   useEffect(() => {
     if (animeData?.malID == params.id) return;
@@ -358,6 +366,55 @@ export const Watch: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+      <div
+        id="jjk"
+        className="mt-2 bg-transparent backdrop-blur-lg border border-white text-center rounded-md py-2"
+      >
+        {/* {`${params.id} - ${currentEpisodeNumber}`} */}
+        {/* Toggle Button */}
+        <div className="toggle-container justify-center items-center mb-4">
+          <input
+            type="checkbox"
+            id="toggle-comments"
+            className="toggle-checkbox"
+            onChange={toggleCommentsVisibility}
+          />
+          <label htmlFor="toggle-comments" className="toggle-label">
+            <span className="toggle-inner" />
+            <span className="toggle-switch" />
+          </label>
+          <span className="whitespace-nowrap font-anime">{isCommentsVisible ? 'Hide Comments' : 'Show Comments'}</span>
+        </div>
+
+        {/* Conditional rendering based on isCommentsVisible */}
+        {isCommentsVisible && (
+          <>
+            <div className="disqus-container">
+              <DiscussionEmbed
+                shortname="doki-watch"
+                config={{
+                  url: window.location.href,
+                  identifier: `${params.id}-${currentEpisodeNumber}`,
+                  title: `Episode ${currentEpisodeNumber}`,
+                  language: "en", // e.g. for Traditional Chinese (Taiwan)
+                }}
+              />
+              <CommentCount
+                shortname='doki-watch'
+                config={{
+                  url: window.location.href,
+                  identifier: `${params.id}-${currentEpisodeNumber}`,
+                  title: `Episode ${currentEpisodeNumber}`,
+                }}
+              >
+                {/* Placeholder Text */}
+                Comments
+              </CommentCount>
+            </div>
+          </>
+        )}
+      </div>
+
+    </div >
   );
 };
