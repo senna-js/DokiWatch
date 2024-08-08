@@ -6,6 +6,8 @@ import "./Watch.css";
 import * as Realm from "realm-web";
 import { currEpisodeData } from "../interfaces/CurrEpisodeData";
 import { VideoPlayer } from "../components/VideoPlayer";
+import { DiscussionEmbed } from "disqus-react";
+import { CommentCount } from 'disqus-react';
 
 interface AnimeData {
   id: string;
@@ -40,6 +42,12 @@ export const Watch: React.FC = () => {
   const [currentEpisode, setCurrentEpisode] = useState<currEpisodeData>();
   const params = useParams();
   const app = new Realm.App({ id: "application-0-lrdgzin" });
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+
+  // Toggle function
+  const toggleCommentsVisibility = () => {
+    setIsCommentsVisible(!isCommentsVisible);
+  };
 
   useEffect(() => {
     if (animeData?.malID == params.id) return;
@@ -114,16 +122,21 @@ export const Watch: React.FC = () => {
   useEffect(() => {
     if (!episodeId) return;
     const fetchEpisodeData = async () => {
-      const subResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`)
+
+      const subResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`);
       const dubResponse = axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId.replace(/(\$both|\$sub)$/, '$dub')}`)
       const results = await Promise.allSettled([subResponse, dubResponse]);
 
-      const subData = results[0].status === 'fulfilled' ? results[0].value : null;
+      let subData = results[0].status === 'fulfilled' ? results[0].value : null;
       const dubData = results[1].status === 'fulfilled' ? results[1].value : null;
 
+      if (!subData) {
+        console.log("Converting episode id");
+        const newId = episodeId.includes('$both') ? episodeId.replace('$both', '$sub') : episodeId.replace('$sub', '$both');
+        subData = await axios.get(`https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${newId}`)
+      }
       if (!subData && !dubData) {
         console.log("Incorrect Episode id");
-        setCurrentEpisode(undefined);
       }
       else if (subData) {
         const episodeData: currEpisodeData = {
@@ -292,7 +305,7 @@ export const Watch: React.FC = () => {
             EPISODES
           </div>
           <hr className="" />
-          <div className="overflow-y-auto scrollHide">
+          <div className="overflow-y-auto cursor-pointer scrollHide">
             {episodesData.map((episode, index) => (
               <div
                 key={index}
@@ -331,10 +344,10 @@ export const Watch: React.FC = () => {
 
                 <div className="flex-1 flex flex-col sm:flex-row justify-center items-center sm:mt-0">
                   {/* Find the current episode and display its title */}
-                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1">
+                  <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1 truncate">
                     CURRENT EPISODE:{" "}
                   </p>
-                  <p className="whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
+                  <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
                     {currentEpisodeNumber} -{" "}
                     {
                       episodesData.find(
@@ -353,6 +366,55 @@ export const Watch: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+      <div
+        id="jjk"
+        className="mt-2 bg-transparent backdrop-blur-lg border border-white text-center rounded-md py-2"
+      >
+        {/* {`${params.id} - ${currentEpisodeNumber}`} */}
+        {/* Toggle Button */}
+        <div className="toggle-container justify-center items-center mb-4">
+          <input
+            type="checkbox"
+            id="toggle-comments"
+            className="toggle-checkbox"
+            onChange={toggleCommentsVisibility}
+          />
+          <label htmlFor="toggle-comments" className="toggle-label">
+            <span className="toggle-inner" />
+            <span className="toggle-switch" />
+          </label>
+          <span className="whitespace-nowrap font-anime">{isCommentsVisible ? 'Hide Comments' : 'Show Comments'}</span>
+        </div>
+
+        {/* Conditional rendering based on isCommentsVisible */}
+        {isCommentsVisible && (
+          <>
+            <div className="disqus-container">
+              <DiscussionEmbed
+                shortname="doki-watch"
+                config={{
+                  url: window.location.href,
+                  identifier: `${params.id}-${currentEpisodeNumber}`,
+                  title: `Episode ${currentEpisodeNumber}`,
+                  language: "en", // e.g. for Traditional Chinese (Taiwan)
+                }}
+              />
+              <CommentCount
+                shortname='doki-watch'
+                config={{
+                  url: window.location.href,
+                  identifier: `${params.id}-${currentEpisodeNumber}`,
+                  title: `Episode ${currentEpisodeNumber}`,
+                }}
+              >
+                {/* Placeholder Text */}
+                Comments
+              </CommentCount>
+            </div>
+          </>
+        )}
+      </div>
+
+    </div >
   );
 };
