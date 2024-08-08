@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-var */
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Sidebar from "./sidebar";
@@ -121,6 +119,7 @@ export const Navbar = () => {
   const executeSearch = () => {
     console.log("Searching for:", searchTerm);
     navigate(`/search?search=${searchTerm}`);
+    setSearchTerm("");
   };
 
   // Define the SVG component

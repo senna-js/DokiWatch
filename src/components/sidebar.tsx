@@ -116,7 +116,7 @@ const Sidebar = () => {
   const handleSubmit = () => {
     console.log("Username submitted:", username);
     window.open(
-      "https://anilist.co/api/v2/oauth/authorize?client_id=19753&response_type=token",
+      "https://anilist.co/api/v2/oauth/authorize?client_id=19791&response_type=token",
       "_blank"
     );
     setOpen(false);

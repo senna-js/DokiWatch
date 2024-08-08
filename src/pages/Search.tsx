@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-var */
 import { useSearchParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axios from "axios"
@@ -13,11 +11,17 @@ const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "H
 
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
-    const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
     var genreTerm, genreNotTerm, term;
     const [anime, setAnime] = useState<AnimeData[]>([])
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
+
+    useEffect(() => {
+        const search = searchParams.get('search')
+        if (search) {
+            setSearchTerm(search)
+        }
+    }, [searchParams])
 
     const handlegenreSelection = (index: number, set: number) => {
         console.log("Index: " + index + " Set: " + set, "Genre : " + genres[index])
@@ -54,7 +58,6 @@ export const Search = () => {
         }
 
         setSearchParams(params);
-        setSearchTrigger(!searchTrigger);
     }
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -133,16 +136,22 @@ export const Search = () => {
         }).then(response => {
             // Log the data to the console
             console.log(response.data);
-            setAnime(response.data.data.Page.media.map((item: any) => ({
-                mal_id: item.idMal,
-                title: item.title.romaji,
-                title_english: item.title.english,
-                image: item.coverImage.extraLarge
-            })));
+            const animeData: AnimeData[] = response.data.data.Page.media.map((item: any) => {
+                if (!item.idMal) {
+                    return null;
+                }
+                return {
+                    mal_id: item.idMal,
+                    title: item.title.romaji,
+                    title_english: item.title.english,
+                    image: item.coverImage.extraLarge
+                };
+            });
+            setAnime(animeData.filter((item: AnimeData) => item !== null));
         }).catch(error => {
             console.error(error);
         });
-    }, [searchTrigger])
+    }, [searchParams])
 
     return (
         <div className="flex flex-col items-center justify-center bg-pink-950 sm:bg-transparent">
