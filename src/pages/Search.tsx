@@ -16,12 +16,12 @@ export const Search = () => {
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
 
-    useEffect(()=>{
+    useEffect(() => {
         const search = searchParams.get('search')
-        if(search){
+        if (search) {
             setSearchTerm(search)
         }
-    },[searchParams])
+    }, [searchParams])
 
     const handlegenreSelection = (index: number, set: number) => {
         console.log("Index: " + index + " Set: " + set, "Genre : " + genres[index])
@@ -136,12 +136,18 @@ export const Search = () => {
         }).then(response => {
             // Log the data to the console
             console.log(response.data);
-            setAnime(response.data.data.Page.media.map((item: any) => ({
-                mal_id: item.idMal,
-                title: item.title.romaji,
-                title_english: item.title.english,
-                image: item.coverImage.extraLarge
-            })));
+            const animeData: AnimeData[] = response.data.data.Page.media.map((item: any) => {
+                if (!item.idMal) {
+                    return null;
+                }
+                return {
+                    mal_id: item.idMal,
+                    title: item.title.romaji,
+                    title_english: item.title.english,
+                    image: item.coverImage.extraLarge
+                };
+            });
+            setAnime(animeData.filter((item: AnimeData) => item !== null));
         }).catch(error => {
             console.error(error);
         });
