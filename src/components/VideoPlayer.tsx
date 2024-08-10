@@ -91,6 +91,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ currentEpisode, hasPre
       }
       fetchThumbnails(currentEpisode.dubThumbnailSrc);
     }
+    return () => {
+      console.log("Clearing thumbnails");
+      setThumbnails([]);
+    }
   }, [currentEpisode.thumbnailSrc, currentEpisode.dubThumbnailSrc, trueStreamType])
 
   const loadSkipButton: boolean = (currentTime > currentEpisode.intro.start && currentTime < currentEpisode.intro.end)
