@@ -79,7 +79,7 @@
 .toggle-container {
   display: flex;
   align-items: center;
-  gap: 8px;; /* Adjust margin as needed */
+  gap: 8px; /* Adjust margin as needed */
 }
 
 .toggle-checkbox {
@@ -93,7 +93,7 @@
   background-color: #ccc;
   border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.2s
+  transition: background-color 0.2s;
 }
 
 .toggle-inner {
@@ -121,4 +121,26 @@
 
 .toggle-checkbox:checked + .toggle-label .toggle-switch {
   transform: translateX(20px);
+}
+
+/* Ensure light mode for the Disqus container */
+@media (prefers-color-scheme: dark) {
+  .disqus-container {
+    background-color: transparent !important;
+    color: #ffffff !important; /* Light text color */
+  }
+
+  .disqus-container .disqus-comment-count {
+    color: #ffffff !important; /* Light text color for comment count */
+  }
+
+  .disqus-container iframe {
+    background-color: transparent !important; /* Transparent background for iframe */
+    color: #ffffff !important; /* Light text color for iframe content */
+  }
+
+  .disqus-container .disqus-thread {
+    background-color: transparent !important; /* Transparent background for thread */
+    color: #ffffff !important; /* Light text color for thread */
+  }
 }
