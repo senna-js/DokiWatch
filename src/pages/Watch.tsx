@@ -153,6 +153,10 @@ export const Watch: React.FC = () => {
           subtitles: subData.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails").map((sub: any) => ({ url: sub.url.replace("https://s.megastatics.com/subtitle", "/api-sub"), lang: sub.lang })),
           dubSubtitles: dubData?.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails").map((sub: any) => ({ url: sub.url.replace("https://s.megastatics.com/subtitle", "/api-sub"), lang: sub.lang })),
         }
+        //remove duplicate subtitles
+        episodeData.subtitles = episodeData.subtitles.filter((sub, index, self) => index === self.findIndex((t) => (t.lang === sub.lang)));
+        episodeData.dubSubtitles = episodeData.dubSubtitles?.filter((sub, index, self) => index === self.findIndex((t) => (t.lang === sub.lang)));
+        
         console.log(episodeData);
         setCurrentEpisode(episodeData);
       }
