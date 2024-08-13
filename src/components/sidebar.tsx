@@ -129,6 +129,7 @@ const Sidebar = () => {
 
   const handleMangaClick = () => {
     console.log("Manga IconButton clicked");
+    navigate("/manga");
   };
 
   const handleSearchClick = () => {
