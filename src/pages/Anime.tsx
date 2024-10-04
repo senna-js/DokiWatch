@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Content from "../components/ReadMore";
+import { useAnimeList } from "../AnimeListContext";
 
 export const Anime = () => {
   const params = useParams();
@@ -10,6 +11,20 @@ export const Anime = () => {
   const [animeData, setAnimeData] = useState<any>();
   const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
+  const { addToWatching, addToCompleted, addToPlanToWatch } = useAnimeList();
+
+  const handleAddToWatching = () => {
+    addToWatching({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
+    console.log(animeData);
+  };
+
+  const handleAddToCompleted = () => {
+    addToCompleted({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
+  };
+
+  const handleAddToPlanToWatch = () => {
+    addToPlanToWatch({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
+  };
 
   const handleTitleClick = (animeId: number) => {
     navigate(`/anime/${animeId}`);
@@ -217,6 +232,9 @@ export const Anime = () => {
                   {animeData?.status}
                 </span>
               </div>
+              {/* <button onClick={handleAddToWatching}>Add to Watching</button>
+              <button onClick={handleAddToCompleted}>Add to Completed</button>
+              <button onClick={handleAddToPlanToWatch}>Add to Plan to Watch</button> */}
             </div>
             <div className="flex border border-white items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
               {relationData.length > 0 ? (

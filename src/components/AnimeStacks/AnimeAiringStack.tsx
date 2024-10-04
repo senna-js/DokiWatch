@@ -172,7 +172,13 @@ export const AnimeAiringStack = () => {
   // Render the component
   return (
     <div className="flex-row p-4 m-3 rounded-md bg-transparent backdrop-blur-lg border border-white">
-      <h2 className="text-2xl font-poppins pl-3 ">Anime Airing</h2>
+      <h2 className="text-2xl font-poppins pl-3 flex items-center">
+        Watching
+        <span className="flex items-center ml-2">
+          <span className="w-2.5 h-2.5 bg-green-500 rounded-full mr-1"></span>
+          <p className="text-base text-white font-poppins text-opacity-50">Airing</p>
+        </span>
+      </h2>
       <hr className="my-4" />
       {animeData && animeData.length > 0 ? (
         <div className="flex gap-2 overflow-x-auto overflow-y-hidden">
