@@ -12,6 +12,7 @@ import { Anime } from "./pages/Anime";
 import { Watch } from "./pages/Watch";
 import { Search } from "./pages/Search";
 import Manga from "./pages/Manga";
+import Read from './pages/Read';
 import { useUser } from "@clerk/clerk-react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
@@ -108,6 +109,7 @@ const App = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/watch/:id" element={<Watch />} />
             <Route path="/manga" element={<Manga />} />
+            <Route path="/read/:mangaName" element={<Read/>} />
             {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
           </Routes>
         </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -112,7 +113,7 @@ const Manga = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const itemsPerPage = 24;
-
+    const navigate = useNavigate();
 
 
     // Handle page change
@@ -194,6 +195,11 @@ const Manga = () => {
     // Get the items for the current page
     const currentItems = mangas.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+    // Handle manga click
+    const handleMangaClick = (mangaName: string) => {
+        navigate(`/read/${encodeURIComponent(mangaName)}`);
+    };
+
     return (
         <div>
             {isLoading ? (
@@ -207,7 +213,8 @@ const Manga = () => {
                             <motion.div key={manga.id} className='w-[201px] h-[280px] m-4'
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 10, duration: 0.5 }}>
+                                transition={{ type: "spring", stiffness: 300, damping: 10, duration: 0.5 }}
+                                onClick={() => handleMangaClick(manga.title.english)}>
                                 <div className='cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110'>
                                     <img src={manga.coverImage.extraLarge} alt={manga.title.romaji} className='rounded-sm shadow-xl mx-auto object-cover w-48 h-[268px]' />
                                     <h3 className='text-md text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins'>{manga.title.english}</h3>
