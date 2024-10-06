@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Content from "../components/ReadMore";
 import { useAnimeList } from "../AnimeListContext";
 
@@ -12,27 +12,42 @@ export const Anime = () => {
   const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
   const { addToWatching, addToCompleted, addToPlanToWatch } = useAnimeList();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleAddToWatching = () => {
     addToWatching({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
     console.log(animeData);
+    setDropdownOpen(false);
   };
 
   const handleAddToCompleted = () => {
     addToCompleted({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
+    console.log(animeData);
+    setDropdownOpen(false);
   };
 
   const handleAddToPlanToWatch = () => {
     addToPlanToWatch({ id: animeData.mal_id, title: animeData.title, image: animeData.images.jpg.large_image_url, rating: 0 });
+    console.log(animeData);
+    setDropdownOpen(false);
   };
 
   const handleTitleClick = (animeId: number) => {
     navigate(`/anime/${animeId}`);
   };
+
   const handleRating = (ratingValue: number) => {
     setUserRating(ratingValue);
     // Here you can add a function to update the rating in your database or state management system
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setDropdownOpen(false);
+    }
+  };
+
   useEffect(() => {
     axios
       .get(`https://api.jikan.moe/v4/anime/${params.id}/full`)
@@ -74,6 +89,10 @@ export const Anime = () => {
         fetchRelationData();
         setAnimeData(res.data.data);
       });
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
   }, [params.id]);
 
   const handleWatch = () => {
@@ -232,9 +251,46 @@ export const Anime = () => {
                   {animeData?.status}
                 </span>
               </div>
-              {/* <button onClick={handleAddToWatching}>Add to Watching</button>
-              <button onClick={handleAddToCompleted}>Add to Completed</button>
-              <button onClick={handleAddToPlanToWatch}>Add to Plan to Watch</button> */}
+              <div className="relative inline-block text-left" ref={dropdownRef}>
+                <div>
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+                  >
+                    +
+                  </button>
+                </div>
+                {dropdownOpen && (
+                  <div className="origin-top-left absolute ml-16 bottom-0 mb-2 w-56 rounded-md shadow-lg border border-white bg-black bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                      <div
+                        role="menuitem"
+                        tabIndex={0}
+                        onClick={handleAddToWatching}
+                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                      >
+                        Add to Watching
+                      </div>
+                      <div
+                        role="menuitem"
+                        tabIndex={0}
+                        onClick={handleAddToCompleted}
+                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                      >
+                        Add to Completed
+                      </div>
+                      <div
+                        role="menuitem"
+                        tabIndex={0}
+                        onClick={handleAddToPlanToWatch}
+                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                      >
+                        Add to Plan to Watch
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="flex border border-white items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
               {relationData.length > 0 ? (
@@ -272,7 +328,7 @@ export const Anime = () => {
       </div>
       {animeData?.trailer && animeData?.trailer.embed_url ? (
         <div
-          className="video-container relative w-full overflow-hidden"
+          className="video-container relative w-full overflow-hidden z-20"
           style={{
 
             paddingBottom: "56.25%",
@@ -281,7 +337,7 @@ export const Anime = () => {
         >
           <iframe
             src={animeData?.trailer.embed_url}
-            className="mt-2 absolute top-0 left-0 w-full h-[500px] aspect-video rounded-lg"
+            className="mt-2 absolute top-0 left-0 w-full h-[500px] aspect-video rounded-lg z-20"
             style={{
               position: "absolute",
               top: 0,

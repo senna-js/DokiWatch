@@ -363,7 +363,7 @@ export const Watch: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center min-h-screen">
               <span className="loading loading-spinner text-info"></span>
               <p className="ml-2 font-poppins font-semibold">loading..</p>
             </div>

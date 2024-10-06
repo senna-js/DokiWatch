@@ -10,7 +10,7 @@ export const AnimeList: React.FC<AnimeListProps> = ({ title, list }) => {
     const { watching, completed, planToWatch, rateAnime } = useAnimeList();
     const animeList = list === 'watching' ? watching : list === 'completed' ? completed : planToWatch;
 
-    console.log('Rendering AnimeList:', animeList);
+    console.log('Rendering AnimeList:', title, animeList);
     
     return (
         <div>
