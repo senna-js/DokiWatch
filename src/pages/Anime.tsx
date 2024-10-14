@@ -110,6 +110,8 @@ export const Anime = () => {
     navigate(navString);
   };
 
+  // console.log("animeData:", animeData);
+
   return (
     <div className="flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -232,6 +234,13 @@ export const Anime = () => {
                     {studio.name}
                   </span>
                 ))}
+                {animeData?.rating && (
+                  <span
+                    className="bg-black border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg"
+                  >
+                    {animeData.rating.match(/^(R - 17\+|PG-13|R\+|Rx - Hentai)/)?.[0]}
+                  </span>
+                )}
               </div>
               <div className="pb-4 flex gap-2 flex-wrap">
                 <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
