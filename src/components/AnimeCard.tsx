@@ -1,4 +1,4 @@
-import { Card, CardMedia, Tooltip } from "@mui/material";
+import { Card, CardMedia, Tooltip, Zoom } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
 import { AnimeData } from "../interfaces/AnimeData";
 
@@ -11,6 +11,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
 
   return (
     <Tooltip
+      TransitionComponent={Zoom}
       title={
         <>
           <h3>{anime?.title_english || anime?.title}</h3>
@@ -20,15 +21,10 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       arrow
       sx={{
         "& .MuiTooltip-tooltip": {
-          color: "white",
-          backgroundColor: "rgba(0, 0, 0, 0.7)", // Adjust transparency here
-          backdropFilter: "blur(4px)", // Adjust blur effect here
-          borderColor: "red",
-          borderWidth: "1px",
-          borderStyle: "solid",
+
         },
         "& .MuiTooltip-arrow": {
-          color: "rgba(0, 0, 0, 0.7)",
+          color: "#f5f5f5",
         },
       }}
     >
