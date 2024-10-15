@@ -18,6 +18,7 @@ import { useUser } from "@clerk/clerk-react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
 import { AnimeList } from "./pages/AnimeList";
+import KoFiButton from "./components/KofiButton";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
@@ -119,6 +120,7 @@ const App = () => {
               {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
             </Routes>
           </div>
+          <KoFiButton />
         </div>
       </AnimeListProvider>
     </AnimeProvider>
