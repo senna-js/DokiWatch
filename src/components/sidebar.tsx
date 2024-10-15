@@ -241,9 +241,9 @@ const Sidebar = () => {
                 <SearchIcon className="text-white" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Manga" placement="right">
-              <IconButton onClick={handleMangaClick}>
-                <MangaIcon className="text-white" />
+            <Tooltip title="Manga Coming Soon" placement="right">
+              <IconButton>
+                <MangaIcon className="text-gray-400 cursor-not-allowed" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Anime Schedule" placement="right">

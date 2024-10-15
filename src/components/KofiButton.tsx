@@ -11,7 +11,7 @@ const KoFiButton: React.FC = () => {
 
     return (
         <div
-            className="fixed bottom-6 right-4 z-50 flex items-center"
+            className="fixed bottom-10 right-4 z-50 flex items-center"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
