@@ -121,7 +121,7 @@ export const Anime = () => {
               animeData?.title ||
               "Title Not Available"}
             <button
-              className="border-2 border-white hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg font-poppins text-white font-bold py-2 px-4 rounded-lg flex gap-2 items-center"
+              className="border-2 border-gray-300 hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg hover:scale-105 transform transition duration-150 ease-in-out font-poppins text-white font-bold py-2 px-4 rounded-lg flex gap-2 items-center"
               onClick={handleWatch}
               style={{
                 boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)',
