@@ -116,11 +116,47 @@ export const Anime = () => {
     <div className="flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
         <div>
-          <h1 className="text-2xl sm:text-4xl font-bold">
+          <h1 className="text-2xl sm:text-4xl font-bold flex items-center gap-4">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
+            <button
+              className="border-2 border-white hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg font-poppins text-white font-bold py-2 px-4 rounded-lg flex gap-2 items-center"
+              onClick={handleWatch}
+              style={{
+                boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 10px 5px rgba(255, 255, 255, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 rgba(255, 255, 255, 0.5)';
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-12 w-12 text-white mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Watch
+            </button>
           </h1>
+
           <h2 className="mt-1 sm:mt-2 text-lg sm:text-xl font-semibold text-gray-500">
             {animeData?.title}
           </h2>
