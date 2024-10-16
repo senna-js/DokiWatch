@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Content from "../components/ReadMore";
 import { useAnimeList } from "../AnimeListContext";
+import { Tooltip, Zoom } from "@mui/material";
 
 export const Anime = () => {
   const params = useParams();
@@ -116,47 +117,11 @@ export const Anime = () => {
     <div className="flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
         <div>
-          <h1 className="text-2xl sm:text-4xl font-bold flex items-center gap-4">
+          <h1 className="text-2xl sm:text-4xl font-bold flex">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
-            <button
-              className="border-2 border-gray-300 hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg hover:scale-105 transform transition duration-150 ease-in-out font-poppins text-white font-bold py-2 px-4 rounded-lg flex gap-2 items-center"
-              onClick={handleWatch}
-              style={{
-                boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 10px 5px rgba(255, 255, 255, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 rgba(255, 255, 255, 0.5)';
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-white mx-auto"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Watch
-            </button>
           </h1>
-
           <h2 className="mt-1 sm:mt-2 text-lg sm:text-xl font-semibold text-gray-500">
             {animeData?.title}
           </h2>
@@ -296,14 +261,54 @@ export const Anime = () => {
                   {animeData?.status}
                 </span>
               </div>
-              <div className="relative inline-block text-left" ref={dropdownRef}>
-                <div>
-                  <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4"
+              <div className="relative mt-2 flex gap-4 text-left" ref={dropdownRef}>
+                <button
+                  className="bg-blue-700 mt-2 border-2 border-blue-500 hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg hover:scale-105 transform transition duration-150 ease-in-out font-poppins text-white text-lg font-bold py-2 px-4 rounded-2xl flex gap-2 items-center"
+                  onClick={handleWatch}
+                  style={{
+                    boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 0 10px 5px rgba(255, 255, 255, 0.5)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 0 0 0 rgba(255, 255, 255, 0.5)';
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-12 w-12 text-white mx-auto"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    +
-                  </button>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  Watch Now
+                </button>
+                <div>
+                  <Tooltip TransitionComponent={Zoom} placement="right" arrow title={<>
+                    <h3>Coming Soon</h3>
+                  </>}>
+                    <button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      disabled
+                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 cursor-not-allowed"
+                    >
+                      +
+                    </button>
+                  </Tooltip>
                 </div>
                 {dropdownOpen && (
                   <div className="origin-top-left absolute ml-16 bottom-0 mb-2 w-56 rounded-md shadow-lg border border-white bg-black bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
