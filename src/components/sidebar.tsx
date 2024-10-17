@@ -198,11 +198,11 @@ const Sidebar = () => {
           initial={{ x: '-100%' }}
           animate={isOpen ? { x: '0%' } : { x: '-100%' }}
           transition={isOpen ? { type: 'spring', stiffness: 300 } : { duration: 0.5, ease: 'easeInOut' }}
-          className="fixed bg-transparent backdrop-blur-lg border border-white top-1/3 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
+          className="fixed bg-black backdrop-blur-lg border border-white top-1/3 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
         >
           <Stack
             direction="column"
-            // className={`fixed bg-transparent backdrop-blur-lg border border-white top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            //className={`fixed bg-transparent backdrop-blur-lg border border-white top-1/2 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
             spacing={2}
           >
             {isSignedIn && (

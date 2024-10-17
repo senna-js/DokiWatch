@@ -141,7 +141,7 @@ export const Navbar = () => {
   );
 
   return (
-    <div className="flex justify-between items-center w-full p-2 sm:p-4 bg-gray-800 text-white">
+    <div className="flex justify-between items-center w-full p-2 sm:p-4 bg-gray-800 text-white fixed z-50">
       <Sidebar /> {/* Render the Sidebar component */}
       <div className="cursor-pointer"
         onClick={() => {
