@@ -17,7 +17,11 @@ const KoFiButton: React.FC = () => {
     };
 
     const handleDiscordClick = () => {
-        window.open('https://discord.gg/dsXMkGcW5j', '_blank', 'noopener,noreferrer');
+        window.open(
+          "https://discord.gg/tpEhcq2vc6",
+          "_blank",
+          "noopener,noreferrer"
+        );
     };
 
     return (
