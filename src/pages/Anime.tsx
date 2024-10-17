@@ -422,7 +422,7 @@ export const Anime = () => {
 				>
 					<div className="h-[200px] mt-4">
 						<iframe
-							src={animeData?.trailer.embed_url}
+							src={`${animeData?.trailer.embed_url}?autoplay=0`}
 							className="aspect-video rounded-lg"
 							style={{
 								position: "absolute",
