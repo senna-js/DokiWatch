@@ -9,6 +9,10 @@ const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 if (!clerkKey) {
   throw new Error("Missing Publishable Key")
 }
+const doki_mode = "production";
+if (doki_mode == "production") {
+  console.log = () => {};
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
