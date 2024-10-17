@@ -36,11 +36,30 @@
         "url": "https://doki-watch.netlify.app/"
       }
     </script>
-    <script>
-      if (import.meta.env.VITE_NODE_ENV !== "development") {
-        console.log = () => {};
+    <!-- <script async defer>
+      async function clearConsoleEverySecond() {
+        while (true) {
+          console.clear();
+          // Attempt to bypass "Preserve log" settings
+          if (window.console && console.clear) {
+            console.clear();
+            console.log = () => {};
+            console.warn = () => {};
+            console.error = () => {};
+            console.info = () => {};
+          }
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
       }
-    </script>
+
+      async function startClearingConsole() {
+        console.log("Starting to clear console every second...");
+        await clearConsoleEverySecond(); // Will run indefinitely
+        console.log("This will never be printed.");
+      }
+
+      startClearingConsole();
+    </script> -->
   </head>
   <body>
     <div id="root"></div>
