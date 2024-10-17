@@ -140,18 +140,33 @@ export const Navbar = () => {
     </svg>
   );
 
+  const handleDragStart = (event: React.DragEvent<HTMLImageElement>) => {
+    event.dataTransfer.setData('text/plain', window.location.origin + '/home');
+    event.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (event.ctrlKey || event.metaKey) {
+      window.open(window.location.origin + '/home', '_blank');
+    } else {
+      navigate('/home');
+    }
+  };
+
   return (
     <div className="flex justify-between items-center w-full p-2 sm:p-4 bg-gray-800 text-white fixed z-50">
       <Sidebar /> {/* Render the Sidebar component */}
       <div className="cursor-pointer"
-        onClick={() => {
-          navigate("/home");
-        }}
+        onClick={handleClick}
       >
         <img
           src="/Color_combo_full.png"
           alt="Doki Watch"
           className="w-20 h-auto sm:w-28 cursor-pointer"
+          draggable="true"
+          onDragStart={handleDragStart}
+          onDragOver={(e) => e.preventDefault()} // Prevent default behavior
+          onDrop={(e) => e.preventDefault()}
         />
       </div>
       <div className="sm:hidden flex items-center">
