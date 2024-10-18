@@ -40,14 +40,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (duration) {
       onDuration(duration);
     }
-  }, [duration, onDuration]);
+  }, [duration]);
 
   // Handle progress tracking
   useEffect(() => {
     if (currentTime) {
       onProgress({ playedSeconds: currentTime });
     }
-  }, [currentTime, onProgress]);
+  }, [currentTime]);
   useEffect(() => {
     console.log("Changing stream type to ", ["Sub", "Dub"][streamType]);
     if (streamType === StreamType.dub && !currentEpisode.sources.dub)
