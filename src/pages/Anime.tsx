@@ -335,8 +335,8 @@ export const Anime = () => {
 									>
 										<button
 											onClick={() => setDropdownOpen(!dropdownOpen)}
-											disabled
-											className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 cursor-not-allowed"
+
+											className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 "
 										>
 											+
 										</button>
@@ -422,7 +422,7 @@ export const Anime = () => {
 				>
 					<div className="h-[200px] mt-4">
 						<iframe
-							src={animeData?.trailer.embed_url}
+							src={`${animeData?.trailer.embed_url}?autoplay=0`}
 							className="aspect-video rounded-lg"
 							style={{
 								position: "absolute",
