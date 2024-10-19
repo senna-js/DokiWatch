@@ -1,4 +1,4 @@
-const parseVttCueToJson = (cue: string,src:string) => {
+const parseVttCueToJson = (cue: string, src: string): VTTJSON | null => {
   if (!cue) return null;
   const [time, image] = cue.split("\n");
   const [startTime, endTime] = time.split(" --> ");
@@ -38,10 +38,12 @@ const vttToArray = (vtt: string) => {
   return vttArray;
 };
 
-export const VTTtoJSON = (vtt: string,src:string) => {
+export const VTTtoJSON = (vtt: string, src: string): VTTJSON[] => {
   const vttArray = vttToArray(vtt);
-  return vttArray.map(vtt=>parseVttCueToJson(vtt,src)).filter(item=> item !== null);
-}
+  return vttArray
+    .map((vtt) => parseVttCueToJson(vtt, src))
+    .filter((item) => item !== null);
+};
 
 export interface VTTJSON {
   startTime: number;
