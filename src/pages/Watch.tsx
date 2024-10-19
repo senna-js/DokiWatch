@@ -348,6 +348,7 @@ export const Watch: React.FC = () => {
       percentageWatched >= 80 &&
       !isQueried &&
       !isNaN(mid) &&
+      currentEpisodeNumber &&
       currentEpisodeNumber > progress
     ) {
       let success = await updateAnilist(
