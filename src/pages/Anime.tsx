@@ -257,7 +257,7 @@ export const Anime = () => {
 									<span className="bg-black border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
 										{
 											animeData.rating.match(
-												/^(R - 17\+|PG-13|R\+|Rx - Hentai)/,
+												/^(R - 17\+|PG-13|R\+|Rx - Hentai|PG - Children)/,
 											)?.[0]
 										}
 									</span>
