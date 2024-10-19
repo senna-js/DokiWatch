@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { type ComponentType } from 'react';
 
 import { Menu, usePlaybackRateOptions } from '@vidstack/react';
 // See "Icons" component page for setup before importing the following:
@@ -9,7 +9,6 @@ export const SpeedSubmenu = ()=> {
     hint = options.selectedValue === '1' ? 'Normal' : options.selectedValue + 'x';
   return (
     <Menu.Root>
-        {/* @ts-ignore */}
       <SubmenuButton label="Speed" hint={hint} disabled={options.disabled} icon={OdometerIcon} />
       <Menu.Content className="vds-menu-items">
         <Menu.RadioGroup className="vds-radio-group h-48" value={options.selectedValue}>
@@ -29,14 +28,13 @@ interface SubmenuButtonProps {
   label: string;
   hint: string;
   disabled?: boolean;
-  icon: ReactElement;
+  icon: ComponentType<React.SVGProps<any>>; // Ensures className can be passed
 }
 
 function SubmenuButton({ label, hint, icon: Icon, disabled }: SubmenuButtonProps) {
   return (
     <Menu.Button className="vds-menu-item" disabled={disabled}>
       <ChevronLeftIcon className="vds-menu-close-icon" />
-      {/* @ts-ignore */}
       <Icon className="vds-icons"/>
       <span className="vds-menu-item-icon">{label}</span>
       <span className="vds-menu-item-hint">{hint}</span>
