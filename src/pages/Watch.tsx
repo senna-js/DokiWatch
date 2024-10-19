@@ -321,7 +321,9 @@ export const Watch: React.FC = () => {
     }
   };
 
-  const handleProgress = async (state: any) => {
+  const handleProgress = async (state: { playedSeconds: number }) => {
+    //save playedSeconds in sessionStorage and 
+    //update mongodb when user leaves page or changes episode
     setPlayedSeconds(state.playedSeconds);
     const percentageWatched = totalDuration
       ? (state.playedSeconds / totalDuration) * 100
@@ -417,11 +419,10 @@ export const Watch: React.FC = () => {
             {episodesData.map((episode, index) => (
               <div
                 key={index}
-                className={`relative flex justify-start items-center h-14 ${
-                  episode.number == currentEpisodeNumber
-                    ? "bg-gray-700"
-                    : "bg-gray-800 hover:bg-gray-700"
-                } transition-colors duration-150 ease-in-out`}
+                className={`relative flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
+                  ? "bg-gray-700"
+                  : "bg-gray-800 hover:bg-gray-700"
+                  } transition-colors duration-150 ease-in-out`}
                 onClick={() => {
                   handleWatchEpisode(episode.number);
                 }}
@@ -430,11 +431,10 @@ export const Watch: React.FC = () => {
                   <div className="absolute inset-0 bg-gray-600 animate-slideIn z-0"></div>
                 )}
                 <div
-                  className={`w-1 relative bg-blue-500 h-full transition-opacity duration-500 ease-in-out ${
-                    episode.number == currentEpisodeNumber
-                      ? "opacity-100"
-                      : "opacity-0"
-                  }`}
+                  className={`w-1 relative bg-blue-500 h-full transition-opacity duration-500 ease-in-out ${episode.number == currentEpisodeNumber
+                    ? "opacity-100"
+                    : "opacity-0"
+                    }`}
                 ></div>
                 <div className="relative z-10 hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
                   {episode.number}. {episode.title}

@@ -27,7 +27,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const player = useRef<MediaPlayerInstance>(null);
   const remote = useMediaRemote(player);
   const { currentTime, duration } = useMediaStore(player);
-  const [streamType, setStreamType] = useState<StreamType>(StreamType.sub);
+  const [streamType, setStreamType] = useState<StreamType>(JSON.parse(localStorage.getItem("streamType") || "0"));
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
   const [thumbnails, setThumbnails] = useState<VTTJSON[]>();
 
@@ -40,15 +40,16 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (duration) {
       onDuration(duration);
     }
-  }, [duration, onDuration]);
+  }, [duration]);
 
   // Handle progress tracking
   useEffect(() => {
     if (currentTime) {
       onProgress({ playedSeconds: currentTime });
     }
-  }, [currentTime, onProgress]);
+  }, [currentTime]);
   useEffect(() => {
+    localStorage.setItem("streamType", JSON.stringify(streamType));
     console.log("Changing stream type to ", ["Sub", "Dub"][streamType]);
     if (streamType === StreamType.dub && !currentEpisode.sources.dub)
       setTrueStreamType(StreamType.sub);
