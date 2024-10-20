@@ -18,6 +18,8 @@ export default {
         anime: ['"Roboto Condensed"', "sans-serif"],
         comicSans: ['"Comic Sans MS"', "cursive", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        lato: ["Lato-extra-bold"],
+        hpSimplifiedbold: ["Hp-Simplified-Bold"],
       },
       keyframes: {
         wiggle: {
