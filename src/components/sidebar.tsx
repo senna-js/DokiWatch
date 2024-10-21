@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import {
+  AddLink as LinkIcon,
   Link as ConnectIcon,
   Home as HomeIcon,
   CollectionsBookmark as MangaIcon,
@@ -203,7 +204,7 @@ const Sidebar = () => {
           className="fixed sm:top-1/3 top-1/2 left-0 -translate-y-1/2 z-50
            mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
         >
-          <Stack direction="column" spacing={3}>
+          <Stack direction="column" gap={1.5}>
             {isSignedIn && (
               <Tooltip
                 title="Connect to Anilist"
@@ -211,7 +212,7 @@ const Sidebar = () => {
                 sx={{ width: 56, height: 56 }}
               >
                 <IconButton onClick={handleSubmit}>
-                  <ConnectIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
+                  <LinkIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
                 </IconButton>
               </Tooltip>
             )}
@@ -236,23 +237,23 @@ const Sidebar = () => {
             </AnimeDialog>
             <Tooltip title="Home" placement="right">
               <IconButton onClick={handleHomeClick}>
-                <HomeIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
+                <HomeIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Browse" placement="right">
               <IconButton onClick={handleSearchClick}>
-                <SearchIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
+                <SearchIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Manga Coming Soon" placement="right">
               <IconButton>
-                <MangaIcon className="text-doki-light-grey cursor-not-allowed" />
+                <MangaIcon className="text-doki-light-grey cursor-not-allowed" sx={{ fontSize: 32 }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Anime Schedule" placement="right">
               <IconButton onClick={openModal}>
                 <ScheduleIcon
-                  className="text-doki-purple rounded-full bg-doki-light-grey"
+                  className="text-doki-purple rounded-full" sx={{ fontSize: 32 }}
                   id="schedule"
                 />
               </IconButton>
