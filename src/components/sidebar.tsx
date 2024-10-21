@@ -19,10 +19,8 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useUser } from "@clerk/clerk-react";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 const AnimeDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
@@ -195,19 +193,25 @@ const Sidebar = () => {
     <>
       {isOpen && (
         <motion.div
-          initial={{ x: '-100%' }}
-          animate={isOpen ? { x: '0%' } : { x: '-100%' }}
-          transition={isOpen ? { type: 'spring', stiffness: 300 } : { duration: 0.5, ease: 'easeInOut' }}
-          className="fixed bg-black backdrop-blur-lg border border-white top-1/3 left-0 -translate-y-1/2 z-50 mx-4 bg-gray-800 p-2 rounded-lg"
+          initial={{ x: "-100%" }}
+          animate={isOpen ? { x: "0%" } : { x: "-100%" }}
+          transition={
+            isOpen
+              ? { type: "spring", stiffness: 300 }
+              : { duration: 0.5, ease: "easeInOut" }
+          }
+          className="fixed sm:top-1/3 top-1/2 left-0 -translate-y-1/2 z-50
+           mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
         >
-          <Stack
-            direction="column"
-            spacing={2}
-          >
+          <Stack direction="column" spacing={3}>
             {isSignedIn && (
-              <Tooltip title="Connect to Anilist" placement="right">
+              <Tooltip
+                title="Connect to Anilist"
+                placement="right"
+                sx={{ width: 56, height: 56 }}
+              >
                 <IconButton onClick={handleSubmit}>
-                  <ConnectIcon className="text-white" />
+                  <ConnectIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
                 </IconButton>
               </Tooltip>
             )}
@@ -232,22 +236,25 @@ const Sidebar = () => {
             </AnimeDialog>
             <Tooltip title="Home" placement="right">
               <IconButton onClick={handleHomeClick}>
-                <HomeIcon className="text-white" />
+                <HomeIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Browse" placement="right">
               <IconButton onClick={handleSearchClick}>
-                <SearchIcon className="text-white" />
+                <SearchIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Manga Coming Soon" placement="right">
               <IconButton>
-                <MangaIcon className="text-gray-400 cursor-not-allowed" />
+                <MangaIcon className="text-doki-light-grey cursor-not-allowed" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Anime Schedule" placement="right">
               <IconButton onClick={openModal}>
-                <ScheduleIcon className="text-white" id="schedule" />
+                <ScheduleIcon
+                  className="text-doki-purple rounded-full bg-doki-light-grey"
+                  id="schedule"
+                />
               </IconButton>
             </Tooltip>
             <dialog
@@ -322,16 +329,64 @@ const Sidebar = () => {
         </motion.div>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
-        <div className="fixed top-[90vh] left-0 z-50 -translate-y-1/2 mx-4">
+        <div className="fixed top-[91vh] left-0 z-50 -translate-y-1/2 mx-[25px]">
           <IconButton
             onClick={toggleSidebar}
-            style={{ backgroundColor: "#212529" }}
-
+            style={{ backgroundColor: "#6E78CB" }}
           >
             {isOpen ? (
-              <ChevronLeftIcon className="text-white" />
+              <svg
+                width="30"
+                height="29"
+                viewBox="0 0 30 29"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-doki-purple w-8 h-8 p-1 sm:w-10 sm:h-10 sm:p-2"
+              >
+                <path
+                  d="M3 3L27 26"
+                  stroke="#2F3672"
+                  stroke-width="8"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M27 3L3 26"
+                  stroke="#2F3672"
+                  stroke-width="8"
+                  stroke-linecap="round"
+                />
+              </svg>
             ) : (
-              <ChevronRightIcon className="text-white" />
+              <svg
+                width="46"
+                height="46"
+                viewBox="0 0 46 46"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-doki-purple w-8 h-8 p-1 sm:w-10 sm:h-10 sm:p-2"
+              >
+                <path
+                  d="M5 5H41"
+                  stroke="#2F3672"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M5 23H41"
+                  stroke="#2F3672"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M5 41H41"
+                  stroke="#2F3672"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             )}
           </IconButton>
         </div>

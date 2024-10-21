@@ -5,6 +5,10 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "doki-girl": "url('./src/assets/doki-firl.png')",
+        "red-anime-girl": "url('./src/assets/reddragon.png')",
+      },
       colors: {
         "anime-red": "#FF0000", // Example color, replace with your choice
         "anime-blue": "#0000FF", // Example color, replace with your choice
