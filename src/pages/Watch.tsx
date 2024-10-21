@@ -127,7 +127,7 @@ export const Watch: React.FC = () => {
       alert("Invalid episode Id in params");
       return;
     }
-    useMemo(()=> fetchDatabase(epId) , [epId]);
+    fetchDatabase(epId);
 
     return () => {
       console.log("closing database connection");
@@ -332,6 +332,7 @@ export const Watch: React.FC = () => {
   };
 
   const handleProgress = async (state: { playedSeconds: number }) => {
+    console.log(state.playedSeconds);
     //save playedSeconds in sessionStorage and 
     //update mongodb when user leaves page or changes episode
     setPlayedSeconds(state.playedSeconds);
@@ -396,6 +397,7 @@ export const Watch: React.FC = () => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("ep", episodeId.toString());
     setSearchParams(newSearchParams);
+    setCurrentEpisode(dummyCurrEpisodeData) //this is unsafe
   };
 
   const handlePrev = () => {
@@ -427,7 +429,7 @@ export const Watch: React.FC = () => {
           <hr className="" />
           <div className="overflow-y-auto cursor-pointer scrollHide">
             {episodesData.map((episode, index) => (
-              <div
+              <div role="button"
                 key={index}
                 className={`relative flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
                   ? "bg-gray-700"
@@ -457,14 +459,14 @@ export const Watch: React.FC = () => {
           </div>
         </div>
         <div className="w-full max-w-4xl relative">
-          {currentEpisode && currentEpisodeNumber ? (
+          {true ? (
             <div className="sm:w-[1000px]">
               <VideoPlayer
-                currentEpisode={currentEpisode}
+                currentEpisode={currentEpisode || dummyCurrEpisodeData}
                 handlePreviousEpisode={handlePrev}
                 handleNextEpisode={handleNext}
-                hasPreviousEpisode={currentEpisodeNumber > 1}
-                hasNextEpisode={currentEpisodeNumber < episodesData.length}
+                hasPreviousEpisode={(currentEpisodeNumber || 0) > 1}
+                hasNextEpisode={(currentEpisodeNumber || 0) < episodesData.length}
                 onProgress={handleProgress}
                 onDuration={handleDuration}
               />
@@ -546,3 +548,21 @@ export const Watch: React.FC = () => {
     </div>
   );
 };
+
+const dummyCurrEpisodeData: currEpisodeData = {
+  intro:{
+    start:0,
+    end:0
+  },
+  outro:{
+    start:0,
+    end:0
+  },
+  sources:{
+    sub:"",
+    dub:""
+  },
+  thumbnailSrc:"",
+  dubThumbnailSrc:"",
+  subtitles:[],
+}
