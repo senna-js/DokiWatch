@@ -2,13 +2,14 @@ import { currEpisodeData } from "../interfaces/CurrEpisodeData"
 import { useState, useRef, useEffect } from "react";
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
-import { MediaPlayer, useMediaStore, useMediaRemote, type MediaPlayerInstance, MediaProvider, TextTrack } from '@vidstack/react';
+import { MediaPlayer, useMediaStore, useMediaRemote, type MediaPlayerInstance, MediaProvider, TextTrack, Poster } from '@vidstack/react';
 import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import { CustomMenu } from "./VideoPlayerComponents/CustomMenu";
 import { SkipButtons } from "./VideoPlayerComponents/SkipButtons";
 import { EpisodeControlButtons } from "./VideoPlayerComponents/EpisodeControlButtons";
 import { VTTtoJSON, type VTTJSON } from "./VideoPlayerComponents/ThumbnailsHandler";
 import axios from "axios";
+import loadingSpinner from "../assests/Loading-Spinner.webp"
 
 enum StreamType {
   sub,
@@ -44,9 +45,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Handle progress tracking
   useEffect(() => {
-    if (currentTime) {
+    if (currentTime)
       onProgress({ playedSeconds: currentTime });
-    }
   }, [currentTime]);
   useEffect(() => {
     localStorage.setItem("streamType", JSON.stringify(streamType));
@@ -146,7 +146,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const skipText: string =
     currentTime > currentEpisode.intro.start &&
-    currentTime < currentEpisode.intro.end
+      currentTime < currentEpisode.intro.end
       ? "Skip Intro"
       : "Skip Outro";
 
@@ -170,16 +170,23 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       {currentEpisode && (
         <>
           <MediaPlayer
+            aspectRatio="16/9"
             className="mb-0 pb-0"
             src={
               [currentEpisode.sources.sub, currentEpisode.sources.dub][
-                trueStreamType
+              trueStreamType
               ]
             }
             ref={player}
             autoPlay
           >
-            <MediaProvider />
+            <MediaProvider>
+              <Poster
+                className="vds-poster"
+                src={loadingSpinner}
+                alt="Loading Screen"
+              />
+            </MediaProvider>
             <DefaultVideoLayout
               icons={defaultLayoutIcons}
               slots={{
