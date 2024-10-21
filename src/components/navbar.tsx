@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { IconButton } from "@mui/material";
+import { AddLink as LinkIcon } from "@mui/icons-material";
 import Sidebar from "./sidebar";
 import {
   SignedIn,
@@ -41,6 +43,8 @@ export const Navbar = () => {
   const [profilePic, setProfilePic] = useState("");
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const { setTriggerFetch } = useAnimeContext(); // Use the context
+  const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(true);
+  const [username, setUsername] = useState("");
 
   const getAccessTokenFromHash = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -181,6 +185,21 @@ export const Navbar = () => {
 
   const handleGroup = () => {
     setIsGroupOpen((prev) => !prev);
+  };
+
+  const handleUsernameChange = (event: any) => {
+    setUsername(event.target.value);
+    const user = { username: event.target.value };
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const handleSubmit = () => {
+    console.log("Username submitted:", username);
+    window.open(
+      "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token",
+      "_blank"
+    );
+    setIsChatBubbleOpen(false);
   };
 
   return (
@@ -334,15 +353,37 @@ export const Navbar = () => {
       </div>
       <div className="flex gap-2 sm:gap-4 items-center">
         <SignedIn>
-          <div>
-            {profilePic ? (
-              <img
-                src={profilePic || ""}
-                alt="Profile"
-                className="sm:h-10 sm:w-10 h-8 w-8 rounded-full"
-              />
-            ) : (
-              <DefaultProfileIcon />
+          <div className="relative">
+            <div onClick={() => setIsChatBubbleOpen(!isChatBubbleOpen)} className="cursor-pointer">
+              {profilePic ? (
+                <img
+                  src={profilePic || ""}
+                  alt="Profile"
+                  className="sm:h-10 sm:w-10 h-8 w-8 rounded-full cursor-pointer"
+                />
+              ) : (
+                <DefaultProfileIcon />
+              )}
+            </div>
+            {isChatBubbleOpen && (
+              <div className="absolute mt-4 top-12 right-0 bg-doki-dark-grey text-doki-white border border-gray-700 p-4 shadow-lg w-64 font-lato rounded-[12px]">
+                <div className="absolute top-[-8px] right-4">
+                  <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
+                </div>
+                <p className="text-sm mb-2">Connect to Anilist to sync your watchlist.</p>
+                <button
+                  onClick={handleSubmit}
+                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                >
+                  Connect to Anilist
+                </button>
+                <button
+                  onClick={() => setIsChatBubbleOpen(false)}
+                  className="mt-2 ml-4 text-sm text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out"
+                >
+                  Close
+                </button>
+              </div>
             )}
           </div>
           <div
