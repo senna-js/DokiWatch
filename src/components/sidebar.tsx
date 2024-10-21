@@ -201,7 +201,7 @@ const Sidebar = () => {
               ? { type: "spring", stiffness: 300 }
               : { duration: 0.5, ease: "easeInOut" }
           }
-          className="fixed sm:top-1/3 top-1/2 left-0 -translate-y-1/2 z-50
+          className="fixed top-1/3 left-0 -translate-y-1/2 z-50
            mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
         >
           <Stack direction="column" gap={1.5}>
@@ -212,29 +212,42 @@ const Sidebar = () => {
                 sx={{ width: 56, height: 56 }}
               >
                 <IconButton onClick={handleSubmit}>
-                  <LinkIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
+                  <LinkIcon
+                    className="text-doki-purple rounded-full"
+                    sx={{ fontSize: 32 }}
+                  />
                 </IconButton>
               </Tooltip>
             )}
             <Tooltip title="Home" placement="right">
               <IconButton onClick={handleHomeClick}>
-                <HomeIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
+                <HomeIcon
+                  className="text-doki-purple rounded-full"
+                  sx={{ fontSize: 32 }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title="Browse" placement="right">
               <IconButton onClick={handleSearchClick}>
-                <SearchIcon className="text-doki-purple rounded-full" sx={{ fontSize: 32 }} />
+                <SearchIcon
+                  className="text-doki-purple rounded-full"
+                  sx={{ fontSize: 32 }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title="Manga Coming Soon" placement="right">
               <IconButton>
-                <MangaIcon className="text-doki-light-grey cursor-not-allowed" sx={{ fontSize: 32 }} />
+                <MangaIcon
+                  className="text-doki-light-grey cursor-not-allowed"
+                  sx={{ fontSize: 32 }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title="Anime Schedule" placement="right">
               <IconButton onClick={openModal}>
                 <ScheduleIcon
-                  className="text-doki-purple rounded-full" sx={{ fontSize: 32 }}
+                  className="text-doki-purple rounded-full"
+                  sx={{ fontSize: 32 }}
                   id="schedule"
                 />
               </IconButton>
@@ -311,10 +324,17 @@ const Sidebar = () => {
         </motion.div>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
-        <div className="fixed top-[91vh] left-0 z-50 -translate-y-1/2 mx-[25px]">
+        <div className="fixed top-[85vh] left-0 z-50 -translate-y-1/2 mx-[25px]">
           <IconButton
             onClick={toggleSidebar}
             style={{ backgroundColor: "#6E78CB" }}
+            sx={{
+              backgroundColor: "#6E78CB",
+              width: 56,
+              height: 56,
+              borderRadius: "20px",
+              padding: "8px",
+            }}
           >
             {isOpen ? (
               <svg
@@ -328,14 +348,14 @@ const Sidebar = () => {
                 <path
                   d="M3 3L27 26"
                   stroke="#2F3672"
-                  stroke-width="8"
-                  stroke-linecap="round"
+                  strokeWidth="8"
+                  strokeLinecap="round"
                 />
                 <path
                   d="M27 3L3 26"
                   stroke="#2F3672"
-                  stroke-width="8"
-                  stroke-linecap="round"
+                  strokeWidth="8"
+                  strokeLinecap="round"
                 />
               </svg>
             ) : (
@@ -350,23 +370,23 @@ const Sidebar = () => {
                 <path
                   d="M5 5H41"
                   stroke="#2F3672"
-                  stroke-width="12"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M5 23H41"
                   stroke="#2F3672"
-                  stroke-width="12"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M5 41H41"
                   stroke="#2F3672"
-                  stroke-width="12"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             )}

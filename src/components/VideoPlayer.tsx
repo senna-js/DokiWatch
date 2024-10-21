@@ -1,19 +1,33 @@
-import { currEpisodeData } from "../interfaces/CurrEpisodeData"
+import { currEpisodeData } from "../interfaces/CurrEpisodeData";
 import { useState, useRef, useEffect } from "react";
-import '@vidstack/react/player/styles/default/theme.css';
-import '@vidstack/react/player/styles/default/layouts/video.css';
-import { MediaPlayer, useMediaStore, useMediaRemote, type MediaPlayerInstance, MediaProvider, TextTrack, Poster } from '@vidstack/react';
-import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
+import "@vidstack/react/player/styles/default/theme.css";
+import "@vidstack/react/player/styles/default/layouts/video.css";
+import {
+  MediaPlayer,
+  useMediaStore,
+  useMediaRemote,
+  type MediaPlayerInstance,
+  MediaProvider,
+  TextTrack,
+  Poster,
+} from "@vidstack/react";
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout,
+} from "@vidstack/react/player/layouts/default";
 import { CustomMenu } from "./VideoPlayerComponents/CustomMenu";
 import { SkipButtons } from "./VideoPlayerComponents/SkipButtons";
 import { EpisodeControlButtons } from "./VideoPlayerComponents/EpisodeControlButtons";
-import { VTTtoJSON, type VTTJSON } from "./VideoPlayerComponents/ThumbnailsHandler";
+import {
+  VTTtoJSON,
+  type VTTJSON,
+} from "./VideoPlayerComponents/ThumbnailsHandler";
 import axios from "axios";
-import loadingSpinner from "../assests/Loading-Spinner.webp"
+import loadingSpinner from "../assests/Loading-Spinner.webp";
 
 enum StreamType {
   sub,
-  dub
+  dub,
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -28,7 +42,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const player = useRef<MediaPlayerInstance>(null);
   const remote = useMediaRemote(player);
   const { currentTime, duration } = useMediaStore(player);
-  const [streamType, setStreamType] = useState<StreamType>(JSON.parse(localStorage.getItem("streamType") || "0"));
+  const [streamType, setStreamType] = useState<StreamType>(
+    JSON.parse(localStorage.getItem("streamType") || "0")
+  );
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
   const [thumbnails, setThumbnails] = useState<VTTJSON[]>();
 
@@ -45,8 +61,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Handle progress tracking
   useEffect(() => {
-    if (currentTime)
-      onProgress({ playedSeconds: currentTime });
+    if (currentTime) onProgress({ playedSeconds: currentTime });
   }, [currentTime]);
   useEffect(() => {
     localStorage.setItem("streamType", JSON.stringify(streamType));
@@ -146,7 +161,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const skipText: string =
     currentTime > currentEpisode.intro.start &&
-      currentTime < currentEpisode.intro.end
+    currentTime < currentEpisode.intro.end
       ? "Skip Intro"
       : "Skip Outro";
 
@@ -174,7 +189,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             className="mb-0 pb-0"
             src={
               [currentEpisode.sources.sub, currentEpisode.sources.dub][
-              trueStreamType
+                trueStreamType
               ]
             }
             ref={player}
