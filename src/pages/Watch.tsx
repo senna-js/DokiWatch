@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 import axios from "axios";
 import "./Watch.css";
@@ -43,7 +43,7 @@ export const Watch: React.FC = () => {
   const [currentEpisode, setCurrentEpisode] = useState<currEpisodeData>();
   const params = useParams();
   const { id: pathId } = useParams();
-  const app = new Realm.App({ id: "application-0-lrdgzin" });
+  const app = useMemo(() => new Realm.App({ id: "application-0-lrdgzin" }), []);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -97,15 +97,16 @@ export const Watch: React.FC = () => {
       }
     };
 
-    const fetchDatabase = async () => {
+    const fetchDatabase = async (epId:number) => {
       const user = await app.logIn(
         Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY)
       );
       const mongo = user.mongoClient("mongodb-atlas");
+
       const anime = await mongo
         .db("Zoro")
         .collection("mappings")
-        .findOne({ mal_id: parseInt(params.id || "-1") });
+        .findOne({ mal_id: epId });
       console.log(anime);
       if (anime) {
         const animeData = await axios.get(
@@ -121,7 +122,12 @@ export const Watch: React.FC = () => {
         fetchAnimeData(mongo);
       }
     };
-    fetchDatabase();
+    const epId = parseInt(params.id || "-1");
+    if (epId === -1) {
+      alert("Invalid episode Id in params");
+      return;
+    }
+    useMemo(()=> fetchDatabase(epId) , [epId]);
 
     return () => {
       console.log("closing database connection");
@@ -130,7 +136,11 @@ export const Watch: React.FC = () => {
   }, [params]);
 
   useEffect(() => {
-    setCurrentEpisodeNumber(parseInt(searchParams.get("ep") || "-1"));
+    const epNumber = parseInt(searchParams.get("ep") || "-1");
+    if (epNumber !== -1)
+      setCurrentEpisodeNumber(epNumber);
+    else
+      alert("No ep found in searchParams")
   }, [searchParams]);
 
   useEffect(() => {
