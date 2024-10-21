@@ -360,7 +360,7 @@ export const Navbar = () => {
           whitespace-nowrap bg-doki-dark-grey text-doki-white 
           border border-gray-700 rounded-[22px] p-2.5 sm:p-3.5 
           font-lato inline-block 
-          hover:bg-doki-light-grey hover:text-doki-purple hover:scale-105 transform transition duration-150 ease-in-out"
+          hover:bg-doki-light-grey hover:text-doki-purple hover:scale-105 transform transition duration-150 ease-in-out cursor-pointer"
           >
             <SignOutButton />
           </div>

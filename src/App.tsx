@@ -37,8 +37,8 @@ const App = () => {
   return (
     <AnimeProvider>
       <AnimeListProvider>
-        <div className="min-h-screen text-white relative overflow-x-hidden overflow-y-hidden">
-          {/* <div className="absolute z-0 w-full h-full bg-gradient-to-br from-slate-700 via-gray-800 to-zinc-900 opacity-25"></div> */}
+        <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
+          <div className="absolute z-0 w-full h-full bg-doki-purple text-doki-white"></div>
           {/* <video
           autoPlay
           muted
@@ -57,27 +57,27 @@ const App = () => {
               element={
                 <div>
                   <motion.div
-                    className="p-4 sm:p-8 m-4"
+                    className="p-4 sm:p-8 m-4 relative"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
                     <motion.h1
-                      className="text-2xl sm:text-4xl font-bold"
+                      className="text-2xl sm:text-[70px] font-bold font-hpSimplifiedbold"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
                       Welcome to Doki Watch
                     </motion.h1>
-                    <motion.p
+                    {/* <motion.p
                       className="mt-2 text-sm sm:text-base"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
                     >
                       Explore your favorite anime & manga here.
-                    </motion.p>
+                    </motion.p> */}
                   </motion.div>
                   <motion.div
                     className="mt-8 sm:mt-16 m-7"
