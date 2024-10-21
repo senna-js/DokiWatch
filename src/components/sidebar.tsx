@@ -215,25 +215,6 @@ const Sidebar = () => {
                 </IconButton>
               </Tooltip>
             )}
-            <AnimeDialog open={open} onClose={handleClose}>
-              <AnimeDialogTitle>Enter AniList Username</AnimeDialogTitle>
-              <AnimeDialogContent>
-                <AnimeTextField
-                  autoFocus
-                  margin="dense"
-                  id="username"
-                  label="AniList Username"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  onChange={handleUsernameChange}
-                />
-              </AnimeDialogContent>
-              <DialogActions className="bg-[#9fadbd] flex justify-between space-x-2">
-                <AnimeButton onClick={handleClose}>Cancel</AnimeButton>
-                <AnimeButton onClick={handleSubmit}>Confirm</AnimeButton>
-              </DialogActions>
-            </AnimeDialog>
             <Tooltip title="Home" placement="right">
               <IconButton onClick={handleHomeClick}>
                 <HomeIcon className="text-doki-purple rounded-full bg-doki-light-grey" />
