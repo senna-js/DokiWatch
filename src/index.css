@@ -1,3 +1,15 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@font-face {
+  font-family: "Lato-extra-bold";
+  src: url("/public/fonts/Lato-ExtraBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+    font-family: "Hp-Simplified-Bold";
+    src: url("/public/fonts/HP-Simplified-Bold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
