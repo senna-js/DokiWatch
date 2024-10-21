@@ -132,8 +132,8 @@ export const Anime = () => {
 	// console.log("animeData:", animeData);
 
 	return (
-		<div className="flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
-			<div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+		<div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-24 my-4 sm:my-6">
+			<div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
 				<div>
 					<h1 className="text-2xl sm:text-4xl font-bold flex">
 						{animeData?.title_english ||
