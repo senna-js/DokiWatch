@@ -5,9 +5,17 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "doki-girl": "url('./src/assets/doki-firl.png')",
+        "red-anime-girl": "url('./src/assets/reddragon.png')",
+      },
       colors: {
         "anime-red": "#FF0000", // Example color, replace with your choice
         "anime-blue": "#0000FF", // Example color, replace with your choice
+        "doki-light-grey": "#989ED3",
+        "doki-dark-grey": "#6E78CB",
+        "doki-purple": "#2F3672",
+        "doki-white": "#DADAE8",
         // Add more colors as needed
       },
       fontFamily: {
