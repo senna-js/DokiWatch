@@ -308,7 +308,7 @@ export const Navbar = () => {
       sm:flex sm:justify-evenly sm:gap-7 sm:items-center sm:bg-doki-dark-grey sm:rounded-full
        sm:pl-4 sm:pr-4 sm:pt-2 sm:pb-2 sm:mr-3"
       >
-        <div className="bg-doki-light-grey w-10 h-10 rounded-full p-1">
+        <div className="bg-transparent w-10 h-10 rounded-full p-1">
           <button onClick={handleCoffeeClick}>
             <img
               src={coffeeImage}
@@ -317,12 +317,12 @@ export const Navbar = () => {
             />
           </button>
         </div>
-        <div className="rounded-full p-1 bg-doki-light-grey w-10 h-10">
+        <div className="rounded-full p-1 bg-transparent w-10 h-10">
           <button onClick={handleCoffeeClick}>
             <img src={kofiImage} alt="Ko-fi" className="w-8 h-8 rounded-full" />
           </button>
         </div>
-        <div className=" bg-doki-light-grey rounded-full p-1 w-10 h-10">
+        <div className=" bg-transparent rounded-full p-1 w-10 h-10">
           <button onClick={handleDiscordClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

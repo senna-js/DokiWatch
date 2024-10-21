@@ -3,13 +3,13 @@
 @import "tailwindcss/utilities";
 @font-face {
   font-family: "Lato-extra-bold";
-  src: url("/public/fonts/Lato-ExtraBold.ttf") format("truetype");
+  src: url("/fonts/Lato-ExtraBold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-    font-family: "Hp-Simplified-Bold";
-    src: url("/public/fonts/HP-Simplified-Bold.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Hp-Simplified-Bold";
+  src: url("/fonts/HP-Simplified-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
