@@ -9,7 +9,7 @@ import { VideoPlayer } from "../components/VideoPlayer";
 import { DiscussionEmbed } from "disqus-react";
 import { CommentCount } from 'disqus-react';
 import { Console } from "console";
-
+import { consumetZoro } from "../components/LoadBalancer";
 interface AnimeData {
   id: string;
   title: string;
@@ -56,19 +56,11 @@ export const Watch: React.FC = () => {
     if (animeData?.malID == params.id) return;
 
     const fetchAnimeData = async (mongo: globalThis.Realm.Services.MongoDB) => {
-      const animeResponses: any = (
-        await axios.get(
-          `https://consumet-deploy.vercel.app/anime/zoro/${searchParams.get(
-            "id"
-          )}`
-        )
-      ).data.results;
+      const animeResponses: any = (await consumetZoro(searchParams.get("id"))).data.results
       for (let i = 0; i < animeResponses.length; i++) {
         const anime = animeResponses[i];
         try {
-          const response = await axios.get(
-            `https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.id}`
-          );
+          const response = await consumetZoro(`info?id=${anime.id}`);
           console.log(anime.id);
           if (response.data.malID == params.id) {
             setAnimeData(response.data);
@@ -109,9 +101,7 @@ export const Watch: React.FC = () => {
         .findOne({ mal_id: epId });
       console.log(anime);
       if (anime) {
-        const animeData = await axios.get(
-          `https://consumet-deploy.vercel.app/anime/zoro/info?id=${anime.zoro_id}`
-        );
+        const animeData = await consumetZoro(`info?id=${anime.zoro_id}`);
         setAnimeData(animeData.data);
         setEpisodesData(animeData.data.episodes);
         console.log("Anime found in database");
@@ -152,15 +142,8 @@ export const Watch: React.FC = () => {
   useEffect(() => {
     if (!episodeId) return;
     const fetchEpisodeData = async () => {
-      const subResponse = axios.get(
-        `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId}`
-      );
-      const dubResponse = axios.get(
-        `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${episodeId.replace(
-          /(\$both|\$sub)$/,
-          "$dub"
-        )}`
-      );
+      const subResponse = consumetZoro(`watch?episodeId=${episodeId}`);
+      const dubResponse = consumetZoro(`watch?episodeId=${episodeId.replace(/(\$both|\$sub)$/, "$dub")}`);
       const results = await Promise.allSettled([subResponse, dubResponse]);
 
       let subData = results[0].status === "fulfilled" ? results[0].value : null;
@@ -172,9 +155,7 @@ export const Watch: React.FC = () => {
         const newId = episodeId.includes("$both")
           ? episodeId.replace("$both", "$sub")
           : episodeId.replace("$sub", "$both");
-        subData = await axios.get(
-          `https://consumet-deploy.vercel.app/anime/zoro/watch?episodeId=${newId}`
-        );
+        subData = await consumetZoro(`watch?episodeId=${newId}`);
       }
       if (!subData && !dubData) {
         console.log("Incorrect Episode id");
@@ -332,7 +313,6 @@ export const Watch: React.FC = () => {
   };
 
   const handleProgress = async (state: { playedSeconds: number }) => {
-    console.log(state.playedSeconds);
     //save playedSeconds in sessionStorage and 
     //update mongodb when user leaves page or changes episode
     setPlayedSeconds(state.playedSeconds);
