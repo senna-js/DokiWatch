@@ -4,12 +4,12 @@ import {
   IconButton,
   Tooltip,
   Stack,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  TextField,
+  // Dialog,
+  // DialogActions,
+  // DialogContent,
+  // DialogTitle,
+  // Button,
+  // TextField,
 } from "@mui/material";
 import {
   AddLink as LinkIcon,
@@ -19,63 +19,63 @@ import {
   Schedule as ScheduleIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import styled from "@mui/material/styles/styled";
+// import styled from "@mui/material/styles/styled";
 import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 
-const AnimeDialog = styled(Dialog)({
-  "& .MuiDialog-paper": {
-    backgroundColor: "transparent", // Making background semi-transparent
-    backdropFilter: "blur(50px)", // Applying backdrop blur
-    borderRadius: "10px",
-    border: "2px solid white",
-  },
-});
+// const AnimeDialog = styled(Dialog)({
+//   "& .MuiDialog-paper": {
+//     backgroundColor: "transparent", // Making background semi-transparent
+//     backdropFilter: "blur(50px)", // Applying backdrop blur
+//     borderRadius: "10px",
+//     border: "2px solid white",
+//   },
+// });
 
-const AnimeDialogTitle = styled(DialogTitle)({
-  fontFamily: "Poppins, sans-serif",
-  backgroundColor: "rgba(238, 130, 238, 0)", // Making background fully transparent
-  backdropFilter: "blur(10px)", // Applying backdrop blur
-  color: "#FFFFFF", // Setting text color to white
-});
+// const AnimeDialogTitle = styled(DialogTitle)({
+//   fontFamily: "Poppins, sans-serif",
+//   backgroundColor: "rgba(238, 130, 238, 0)", // Making background fully transparent
+//   backdropFilter: "blur(10px)", // Applying backdrop blur
+//   color: "#FFFFFF", // Setting text color to white
+// });
 
-const AnimeDialogContent = styled(DialogContent)({
-  backgroundColor: "#9FADBD",
-  color: "white",
-});
+// const AnimeDialogContent = styled(DialogContent)({
+//   backgroundColor: "#9FADBD",
+//   color: "white",
+// });
 
-const AnimeButton = styled(Button)({
-  color: "white",
-  cursor: "pointer",
-  marginLeft: "auto",
-  border: "1px solid #4B5563", // border-gray-700
-  borderRadius: "0.5rem", // rounded-lg
-  padding: "0.5rem 1rem", // px-2 py-2
-  transition: "transform 150ms ease-in-out, background-color 150ms ease-in-out", // transition duration-150 ease-in-out
-  "&:hover": {
-    backgroundColor: "#374151", // hover:bg-slate-700
-    transform: "scale(1.05)", // hover:scale-105
-  },
-  display: "flex",
-  justifyContent: "space-between",
-});
+// const AnimeButton = styled(Button)({
+//   color: "white",
+//   cursor: "pointer",
+//   marginLeft: "auto",
+//   border: "1px solid #4B5563", // border-gray-700
+//   borderRadius: "0.5rem", // rounded-lg
+//   padding: "0.5rem 1rem", // px-2 py-2
+//   transition: "transform 150ms ease-in-out, background-color 150ms ease-in-out", // transition duration-150 ease-in-out
+//   "&:hover": {
+//     backgroundColor: "#374151", // hover:bg-slate-700
+//     transform: "scale(1.05)", // hover:scale-105
+//   },
+//   display: "flex",
+//   justifyContent: "space-between",
+// });
 
-const AnimeTextField = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#3A0CA3",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "lightgrey",
-    },
-    "&:hover fieldset": {
-      borderColor: "#4CC9F0",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#4CC9F0",
-    },
-  },
-});
+// const AnimeTextField = styled(TextField)({
+//   "& label.Mui-focused": {
+//     color: "#3A0CA3",
+//   },
+//   "& .MuiOutlinedInput-root": {
+//     "& fieldset": {
+//       borderColor: "lightgrey",
+//     },
+//     "&:hover fieldset": {
+//       borderColor: "#4CC9F0",
+//     },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#4CC9F0",
+//     },
+//   },
+// });
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
@@ -202,7 +202,7 @@ const Sidebar = () => {
               : { duration: 0.5, ease: "easeInOut" }
           }
           className="fixed top-1/3 left-0 -translate-y-1/2 z-50
-           mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
+           mx-[5px] md:mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
         >
           <Stack direction="column" gap={1.5}>
             {isSignedIn && (
@@ -324,7 +324,7 @@ const Sidebar = () => {
         </motion.div>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
-        <div className="fixed top-[85vh] left-0 z-50 -translate-y-1/2 mx-[25px]">
+        <div className="fixed top-[85vh] left-0 z-50 -translate-y-1/2 sm:ml-[25px] ml-[5px]">
           <IconButton
             onClick={toggleSidebar}
             style={{ backgroundColor: "#6E78CB" }}
