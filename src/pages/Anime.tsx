@@ -133,9 +133,9 @@ export const Anime = () => {
 
   return (
     <div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-[150px] my-4 sm:my-6">
-      <div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div className="relative flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2">
         <div>
-          <h1 className="text-2xl sm:text-7xl font-hpSimplifiedbold flex">
+          <h1 className="text-5xl sm:text-7xl font-hpSimplifiedbold flex">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
@@ -293,7 +293,7 @@ export const Anime = () => {
               <div
                 className="relative mt-4 flex gap-6 text-center text-doki-white
 				 bg-doki-dark-grey px-4 py-1 rounded-full hover:bg-doki-white 
-				 hover:text-doki-purple w-full"
+				 hover:text-doki-purple"
                 ref={dropdownRef}
               >
                 <button
@@ -303,7 +303,7 @@ export const Anime = () => {
                 >
                   WATCH NOW
                 </button>
-                <div className="">
+                <div>
                   <Tooltip
                     TransitionComponent={Zoom}
                     placement="right"
@@ -344,7 +344,12 @@ export const Anime = () => {
                   </Tooltip>
                 </div>
                 {dropdownOpen && (
-                  <div className="origin-top-left absolute ml-16 bottom-0 mb-2 w-56 rounded-md shadow-lg border border-white bg-black bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                  <div
+                    className="origin-top-right absolute ml-40 sm:ml-[295px] bottom-0 
+				  mb-2 w-36 sm:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
+				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
+				  ring-opacity-5 focus:outline-none z-50"
+                  >
                     <div
                       className="py-1"
                       role="menu"
@@ -355,7 +360,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToWatching}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 font-lato text-sm text-doki-white 
+						hover:text-doki-purple hover:bg-doki-white w-full text-left 
+						cursor-pointer"
                       >
                         Add to Watching
                       </div>
@@ -363,7 +370,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToCompleted}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 text-sm
+						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 w-full text-left font-lato cursor-pointer"
                       >
                         Add to Completed
                       </div>
@@ -371,7 +380,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToPlanToWatch}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 text-sm
+						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 w-full text-left cursor-pointer"
                       >
                         Add to Plan to Watch
                       </div>
