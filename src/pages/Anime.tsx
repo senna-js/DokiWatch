@@ -426,26 +426,21 @@ export const Anime = () => {
       </div>
       {animeData?.trailer && animeData?.trailer.embed_url ? (
         <div
-          className="relative w-full overflow-hidden z-20 flex justify-center items-center"
+          className="relative w-full flex justify-center items-center"
           style={{
-            paddingBottom: "56.25%",
+            paddingBottom: "56.25%", // Maintain aspect ratio for the video (16:9)
           }}
         >
-          <div className="mt-4">
-            <iframe
-              src={`${animeData?.trailer.embed_url}?autoplay=0`}
-              className="aspect-video rounded-lg block"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "60%",
-                height: "60%",
-              }}
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <iframe
+            src={`${animeData?.trailer.embed_url}?autoplay=0`}
+            className="rounded-lg"
+            style={{
+              width: "60%", // You can adjust the size of the iframe here
+              height: "60%",
+            }}
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
       ) : (
         <div className="flex justify-center items-center h-screen">
