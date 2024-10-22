@@ -42,6 +42,7 @@ export const Navbar = () => {
   const { setTriggerFetch } = useAnimeContext(); // Use the context
   const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(true);
   const [username, setUsername] = useState("");
+  const [isAnilistConnect, setIsAnilistConnect] = useState(false);
 
   const getAccessTokenFromHash = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -120,7 +121,7 @@ export const Navbar = () => {
             //user["avatar"] = data.Viewer.avatar.large;
             localStorage.setItem("user", JSON.stringify(user));
             setProfilePic(data.Viewer.avatar.large);
-
+            setIsAnilistConnect(true);
             // Update anime data in the context
             setTriggerFetch(true);
           }
@@ -194,10 +195,15 @@ export const Navbar = () => {
 
   const handleSubmit = () => {
     console.log("Username submitted:", username);
-    window.open(
-      "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token",
-      "_blank"
-    );
+    let anilink = "";
+    if (import.meta.env.PROD) {
+      anilink =
+        "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token";
+    } else {
+      anilink =
+        "https://anilist.co/api/v2/oauth/authorize?client_id=19786&response_type=token";
+    }
+    window.location.href = anilink;
     setIsChatBubbleOpen(false);
   };
 
@@ -367,7 +373,7 @@ export const Navbar = () => {
                 <DefaultProfileIcon />
               )}
             </div>
-            {isChatBubbleOpen && (
+            {isChatBubbleOpen && !isAnilistConnect && (
               <div className="absolute mt-4 top-12 right-0 bg-doki-dark-grey text-doki-white border border-gray-700 p-4 shadow-lg w-64 font-lato rounded-[12px]">
                 <div className="absolute top-[-8px] right-4">
                   <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
