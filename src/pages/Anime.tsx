@@ -185,7 +185,7 @@ export const Anime = () => {
           <img
             src={animeData?.images.jpg.large_image_url}
             alt={animeData?.title}
-            className="sm:ml-1 rounded-[22px] shadow-xl mx-auto h-full w-full 
+            className="rounded-[22px] shadow-xl mx-auto h-full w-full 
 			object-cover border-doki-purple border-[4px]"
           />
           <div
@@ -238,7 +238,7 @@ export const Anime = () => {
           <hr className="bg-doki-purple rounded-md h-[4px] border-0" />
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div
-              className="flex border-doki-purple border-4 border-l-0 border-b-0 border-t-0  flex-col 
+              className="flex border-doki-purple sm:border-4 sm:border-l-0 sm:border-b-0 sm:border-t-0  flex-col 
 			items-start font-lato p-3 sm:p-4 font-semibold text-sm sm:text-md "
             >
               <div className="pb-4 items-center flex gap-2 flex-wrap">
@@ -257,7 +257,7 @@ export const Anime = () => {
                 {animeData?.studios.map((studio: any) => (
                   <span
                     key={studio.mal_id}
-                    className="bg-transparent border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg"
+                    className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full"
                   >
                     {studio.name}
                   </span>
@@ -387,7 +387,10 @@ export const Anime = () => {
                 )}
               </div>
             </div>
-            <div className="flex border border-white items-center justify-center font-poppins bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-4 rounded-lg font-semibold text-md text-white">
+            <div
+              className="flex items-center justify-center 
+			font-lato p-4 text-md text-doki-purple text-[30px]"
+            >
               {relationData.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                   {relationData.map((relation) => (
@@ -423,21 +426,21 @@ export const Anime = () => {
       </div>
       {animeData?.trailer && animeData?.trailer.embed_url ? (
         <div
-          className="video-container relative w-full overflow-hidden z-20"
+          className="relative w-full overflow-hidden z-20 flex justify-center items-center"
           style={{
             paddingBottom: "56.25%",
           }}
         >
-          <div className="h-[200px] mt-4">
+          <div className="mt-4">
             <iframe
               src={`${animeData?.trailer.embed_url}?autoplay=0`}
-              className="aspect-video rounded-lg"
+              className="aspect-video rounded-lg block"
               style={{
                 position: "absolute",
                 top: 0,
                 left: 0,
-                width: "100%",
-                height: "100%",
+                width: "60%",
+                height: "60%",
               }}
               allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -446,9 +449,7 @@ export const Anime = () => {
         </div>
       ) : (
         <div className="flex justify-center items-center h-screen">
-          <p className="text-4xl text-center font-poppins">
-            No Trailer Available
-          </p>
+          <p className="text-4xl text-center font-lato">No Trailer Available</p>
         </div>
       )}
     </div>
