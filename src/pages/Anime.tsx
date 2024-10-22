@@ -172,7 +172,10 @@ export const Anime = () => {
 
   return (
     <div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-[150px] my-4 sm:my-6">
-      <div className="relative flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2">
+      <div
+        className="relative flex flex-col sm:flex-row sm:items-center items-start 
+	  justify-between gap-2"
+      >
         <div>
           <h1 className="text-5xl sm:text-7xl font-hpSimplifiedbold flex">
             {animeData?.title_english ||
@@ -219,8 +222,8 @@ export const Anime = () => {
         </div> */}
       </div>
       <hr className="bg-doki-light-grey rounded-md h-[4px] border-0" />
-      <div className="flex flex-col md:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3">
-        <div className="relative group h-auto">
+      <div className="flex flex-col md:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3 pb-0">
+        <div className="relative group h-auto mb-3">
           <img
             src={animeData?.images.jpg.large_image_url}
             alt={animeData?.title}
@@ -263,7 +266,7 @@ export const Anime = () => {
             </button>
           </div>
         </div>
-        <div className="flex mt-3 flex-col w-full">
+        <div className="flex mt-3 flex-col w-full justify-between">
           <div
             className="flex items-center font-lato p-2 
 		  sm:p-4 text-sm sm:text-lg text-justify text-doki-purple"
@@ -274,195 +277,198 @@ export const Anime = () => {
                 .trim()}
             />
           </div>
-          <hr className="bg-doki-purple rounded-md h-[4px] border-0" />
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            <div
-              className="flex border-doki-purple sm:border-4 sm:border-l-0 sm:border-b-0 sm:border-t-0  flex-col 
-			items-start font-lato p-3 sm:p-4 font-semibold text-sm sm:text-md "
-            >
-              <div className="pb-4 items-center flex gap-2 flex-wrap">
-                {animeData?.genres.map((genre: any) => (
-                  <span
-                    onClick={handleGenreClick}
-                    key={genre.mal_id}
-                    className="cursor-pointer bg-doki-dark-grey font-lato text-doki-white 
-					px-2 py-1 rounded-full hover:bg-doki-white hover:text-doki-purple"
-                  >
-                    {genre.name}
-                  </span>
-                ))}
-              </div>
-              <div className="pb-4 flex gap-2 flex-wrap">
-                {animeData?.studios.map((studio: any) => (
-                  <span
-                    key={studio.mal_id}
-                    className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full"
-                  >
-                    {studio.name}
-                  </span>
-                ))}
-                {animeData?.rating && (
-                  <span className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full">
-                    {
-                      animeData.rating.match(
-                        /^(R - 17\+|PG-13|R\+|Rx - Hentai|PG - Children)/
-                      )?.[0]
-                    }
-                  </span>
-                )}
-              </div>
-              <div className="pb-4 flex gap-2 flex-wrap">
-                <span className="font-lato bg-doki-white text-doki-purple px-2 py-1 rounded-full">
-                  Episodes: {animeData?.episodes || "To be decided"}
-                </span>
-                {animeData?.year && (
-                  <span className="font-lato bg-doki-white  text-doki-purple px-2 py-1 rounded-full">
-                    {animeData.year}
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2 flex-wrap">
-                <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
-                  Duration: {animeData?.duration.replace("per ep", "")}
-                </span>
-                <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
-                  {animeData?.status}
-                </span>
-              </div>
+          {/* Ankit ekhane dekhbi */}
+          <div className="h-auto">
+            <hr className="bg-doki-purple rounded-md h-[4px] border-0" />
+            <div className="grid grid-cols-1 md:grid-cols-2">
               <div
-                className="relative mt-4 flex gap-6 text-center text-doki-white
+                className="flex border-doki-purple sm:border-4 sm:border-l-0 sm:border-b-0 sm:border-t-0  flex-col 
+			items-start font-lato p-3 sm:p-4 font-semibold text-sm sm:text-md "
+              >
+                <div className="pb-4 items-center flex gap-2 flex-wrap">
+                  {animeData?.genres.map((genre: any) => (
+                    <span
+                      onClick={handleGenreClick}
+                      key={genre.mal_id}
+                      className="cursor-pointer bg-doki-dark-grey font-lato text-doki-white 
+					px-2 py-1 rounded-full hover:bg-doki-white hover:text-doki-purple"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="pb-4 flex gap-2 flex-wrap">
+                  {animeData?.studios.map((studio: any) => (
+                    <span
+                      key={studio.mal_id}
+                      className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full"
+                    >
+                      {studio.name}
+                    </span>
+                  ))}
+                  {animeData?.rating && (
+                    <span className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full">
+                      {
+                        animeData.rating.match(
+                          /^(R - 17\+|PG-13|R\+|Rx - Hentai|PG - Children)/
+                        )?.[0]
+                      }
+                    </span>
+                  )}
+                </div>
+                <div className="pb-4 flex gap-2 flex-wrap">
+                  <span className="font-lato bg-doki-white text-doki-purple px-2 py-1 rounded-full">
+                    Episodes: {animeData?.episodes || "To be decided"}
+                  </span>
+                  {animeData?.year && (
+                    <span className="font-lato bg-doki-white  text-doki-purple px-2 py-1 rounded-full">
+                      {animeData.year}
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
+                    Duration: {animeData?.duration.replace("per ep", "")}
+                  </span>
+                  <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
+                    {animeData?.status}
+                  </span>
+                </div>
+                <div
+                  className="relative mt-4 flex gap-6 text-center text-doki-white
 				 bg-doki-dark-grey px-4 py-1 rounded-full hover:bg-doki-white 
 				 hover:text-doki-purple"
-                ref={dropdownRef}
-              >
-                <button
-                  className="text-doki-purple text[13px] sm:text[21px] md:text-[34px] 
-				  flex items-center"
-                  onClick={handleWatch}
+                  ref={dropdownRef}
                 >
-                  WATCH NOW
-                </button>
-                <div>
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    placement="right"
-                    arrow
-                    title={
-                      <>
-                        <h3>Add to Anilist</h3>
-                      </>
-                    }
+                  <button
+                    className="text-doki-purple text[13px] sm:text[21px] md:text-[34px] 
+				  flex items-center"
+                    onClick={handleWatch}
                   >
-                    <button
-                      onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="inline-flex justify-center w-full rounded-full
+                    WATCH NOW
+                  </button>
+                  <div>
+                    <Tooltip
+                      TransitionComponent={Zoom}
+                      placement="right"
+                      arrow
+                      title={
+                        <>
+                          <h3>Add to Anilist</h3>
+                        </>
+                      }
+                    >
+                      <button
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        className="inline-flex justify-center w-full rounded-full
 					  bg-doki-light-grey 
 					  shadow-sm px-2 py-2"
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M12 3V21"
-                          stroke="#2F3672"
-                          stroke-width="6"
-                          stroke-linecap="round"
-                        />
-                        <path
-                          d="M3 12L21 12"
-                          stroke="#2F3672"
-                          stroke-width="6"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                    </button>
-                  </Tooltip>
-                </div>
-                {dropdownOpen && (
-                  <div
-                    className="origin-top-right absolute ml-40 sm:ml-[295px] bottom-0 
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 3V21"
+                            stroke="#2F3672"
+                            stroke-width="6"
+                            stroke-linecap="round"
+                          />
+                          <path
+                            d="M3 12L21 12"
+                            stroke="#2F3672"
+                            stroke-width="6"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </button>
+                    </Tooltip>
+                  </div>
+                  {dropdownOpen && (
+                    <div
+                      className="origin-top-right absolute ml-40 sm:ml-[295px] bottom-0 
 				  mb-2 w-36 sm:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
 				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
 				  ring-opacity-5 focus:outline-none z-50"
-                  >
-                    <div
-                      className="py-1"
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="options-menu"
                     >
                       <div
-                        role="menuitem"
-                        tabIndex={0}
-                        onClick={handleAddToWatching}
-                        className="block px-4 py-2 font-lato text-sm text-doki-white 
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                      >
+                        <div
+                          role="menuitem"
+                          tabIndex={0}
+                          onClick={handleAddToWatching}
+                          className="block px-4 py-2 font-lato text-sm text-doki-white 
 						hover:text-doki-purple hover:bg-doki-white w-full text-left 
 						cursor-pointer"
-                      >
-                        Add to Watching
-                      </div>
-                      <div
-                        role="menuitem"
-                        tabIndex={0}
-                        onClick={handleAddToCompleted}
-                        className="block px-4 py-2 text-sm
+                        >
+                          Add to Watching
+                        </div>
+                        <div
+                          role="menuitem"
+                          tabIndex={0}
+                          onClick={handleAddToCompleted}
+                          className="block px-4 py-2 text-sm
 						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
 						 w-full text-left font-lato cursor-pointer"
-                      >
-                        Add to Completed
-                      </div>
-                      <div
-                        role="menuitem"
-                        tabIndex={0}
-                        onClick={handleAddToPlanToWatch}
-                        className="block px-4 py-2 text-sm
+                        >
+                          Add to Completed
+                        </div>
+                        <div
+                          role="menuitem"
+                          tabIndex={0}
+                          onClick={handleAddToPlanToWatch}
+                          className="block px-4 py-2 text-sm
 						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
 						 w-full text-left cursor-pointer"
-                      >
-                        Add to Plan to Watch
+                        >
+                          Add to Plan to Watch
+                        </div>
                       </div>
                     </div>
+                  )}
+                </div>
+              </div>
+              <div
+                className="flex items-center justify-center 
+			font-lato p-4 text-md text-doki-purple text-[30px]"
+              >
+                {relationData.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                    {relationData.map((relation) => (
+                      <div
+                        key={relation.id}
+                        className="relative flex flex-col items-center cursor-pointer group"
+                        onClick={() => handleTitleClick(relation.id)}
+                      >
+                        <img
+                          src={relation.image}
+                          alt={relation.title}
+                          className="rounded-lg bottom-0 shadow-xl w-full h-48 object-cover mb-2"
+                        />
+                        <div
+                          className="rounded-lg absolute top-0 left-0 w-full h-48 bg-black bg-opacity-0 group-hover:backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+                          style={{ background: "rgba(0, 0, 0, 0.5)" }}
+                        ></div>{" "}
+                        {/* Overlay */}
+                        <div className="absolute bottom-0 w-full h-full flex items-center">
+                          <h3 className="text-center font-semibold text-white w-full p-2 text-sm">
+                            {relation.title_english || relation.title}
+                          </h3>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                  <p>No Related Seasons Found</p>
                 )}
               </div>
-            </div>
-            <div
-              className="flex items-center justify-center 
-			font-lato p-4 text-md text-doki-purple text-[30px]"
-            >
-              {relationData.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                  {relationData.map((relation) => (
-                    <div
-                      key={relation.id}
-                      className="relative flex flex-col items-center cursor-pointer group"
-                      onClick={() => handleTitleClick(relation.id)}
-                    >
-                      <img
-                        src={relation.image}
-                        alt={relation.title}
-                        className="rounded-lg bottom-0 shadow-xl w-full h-48 object-cover mb-2"
-                      />
-                      <div
-                        className="rounded-lg absolute top-0 left-0 w-full h-48 bg-black bg-opacity-0 group-hover:backdrop-blur-sm transition-opacity duration-300 ease-in-out"
-                        style={{ background: "rgba(0, 0, 0, 0.5)" }}
-                      ></div>{" "}
-                      {/* Overlay */}
-                      <div className="absolute bottom-0 w-full h-full flex items-center">
-                        <h3 className="text-center font-semibold text-white w-full p-2 text-sm">
-                          {relation.title_english || relation.title}
-                        </h3>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No Related Seasons Found</p>
-              )}
             </div>
           </div>
         </div>
