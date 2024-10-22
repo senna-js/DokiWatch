@@ -1,4 +1,4 @@
-import { type ComponentType, useEffect } from 'react';
+import { type ComponentType } from 'react';
 import { Menu, useVideoQualityOptions } from '@vidstack/react';
 // See "Icons" component page for setup before importing the following:
 import {
@@ -16,11 +16,12 @@ export const QualitySubmenu = () => {
                 ? `${currentQuality}p`
                 : `Auto${currentQuality ? ` (${currentQuality}p)` : ''}`;
 
-    useEffect(() => {
-        if (!options[1])
-            return;
-        options[1].select()
-    }, [options])
+    //to select highest quality by default
+    // useEffect(() => {
+    //     if (!options[1])
+    //         return;
+    //     options[1].select()
+    // }, [options])
 
     return (
         <Menu.Root>

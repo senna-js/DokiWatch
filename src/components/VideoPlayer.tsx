@@ -193,6 +193,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               ]
             }
             ref={player}
+            load="eager"
+            posterLoad="eager"
+            storage="vidstack-storage"
             autoPlay
           >
             <MediaProvider>

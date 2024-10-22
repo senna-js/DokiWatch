@@ -43,10 +43,16 @@ export const Watch: React.FC = () => {
   const [currentEpisode, setCurrentEpisode] = useState<currEpisodeData>();
   const params = useParams();
   const { id: pathId } = useParams();
-  const app = useMemo(() => new Realm.App({ id: "application-0-lrdgzin" }), []);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+
+  const initialiazeMongo = async () => {
+    const app = useMemo(() => new Realm.App({ id: "application-0-lrdgzin" }), []);
+    const user = await app.logIn(Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY));
+    return user.mongoClient("mongodb-atlas");
+  }
+  const mongo = initialiazeMongo()
   // Toggle function
   const toggleCommentsVisibility = () => {
     setIsCommentsVisible(!isCommentsVisible);
@@ -55,7 +61,8 @@ export const Watch: React.FC = () => {
   useEffect(() => {
     if (animeData?.malID == params.id) return;
 
-    const fetchAnimeData = async (mongo: globalThis.Realm.Services.MongoDB) => {
+    const fetchAnimeData = async () => {
+      //potential vulnerability
       const animeResponses: any = (await consumetZoro(searchParams.get("id"))).data.results
       for (let i = 0; i < animeResponses.length; i++) {
         const anime = animeResponses[i];
@@ -73,13 +80,10 @@ export const Watch: React.FC = () => {
               al_id: response.data.alID,
               zoro_id: response.data.id,
             };
-            const databaseAnime = await mongo
-              .db("Zoro")
-              .collection("mappings")
-              .findOne({ mal_id: response.data.malID });
+            const databaseAnime = await (await mongo).db("Zoro").collection("mappings").findOne({ mal_id: response.data.malID });
             if (!databaseAnime) {
               console.log("Inserting new anime into database", newAnime);
-              await mongo.db("Zoro").collection("mappings").insertOne(newAnime);
+              await (await mongo).db("Zoro").collection("mappings").insertOne(newAnime);
             }
             return;
           }
@@ -89,16 +93,9 @@ export const Watch: React.FC = () => {
       }
     };
 
-    const fetchDatabase = async (epId:number) => {
-      const user = await app.logIn(
-        Realm.Credentials.apiKey(import.meta.env.VITE_MONGO_API_KEY)
-      );
-      const mongo = user.mongoClient("mongodb-atlas");
+    const fetchDatabase = async (animeId: number) => {
 
-      const anime = await mongo
-        .db("Zoro")
-        .collection("mappings")
-        .findOne({ mal_id: epId });
+      const anime = await (await mongo).db("Zoro").collection("mappings").findOne({ mal_id: animeId });
       console.log(anime);
       if (anime) {
         const animeData = await consumetZoro(`info?id=${anime.zoro_id}`);
@@ -109,20 +106,15 @@ export const Watch: React.FC = () => {
         console.log(animeData.data);
       } else {
         console.log("Anime not found in database");
-        fetchAnimeData(mongo);
+        fetchAnimeData();
       }
     };
-    const epId = parseInt(params.id || "-1");
-    if (epId === -1) {
+    const animeId = parseInt(params.id || "-1");
+    if (animeId === -1) {
       alert("Invalid episode Id in params");
       return;
     }
-    fetchDatabase(epId);
-
-    return () => {
-      console.log("closing database connection");
-      app.currentUser?.logOut();
-    };
+    fetchDatabase(animeId);
   }, [params]);
 
   useEffect(() => {
@@ -142,6 +134,7 @@ export const Watch: React.FC = () => {
   useEffect(() => {
     if (!episodeId) return;
     const fetchEpisodeData = async () => {
+      //potential improv based on user preference
       const subResponse = consumetZoro(`watch?episodeId=${episodeId}`);
       const dubResponse = consumetZoro(`watch?episodeId=${episodeId.replace(/(\$both|\$sub)$/, "$dub")}`);
       const results = await Promise.allSettled([subResponse, dubResponse]);
@@ -530,19 +523,19 @@ export const Watch: React.FC = () => {
 };
 
 const dummyCurrEpisodeData: currEpisodeData = {
-  intro:{
-    start:0,
-    end:0
+  intro: {
+    start: 0,
+    end: 0
   },
-  outro:{
-    start:0,
-    end:0
+  outro: {
+    start: 0,
+    end: 0
   },
-  sources:{
-    sub:"",
-    dub:""
+  sources: {
+    sub: "",
+    dub: ""
   },
-  thumbnailSrc:"",
-  dubThumbnailSrc:"",
-  subtitles:[],
+  thumbnailSrc: "",
+  dubThumbnailSrc: "",
+  subtitles: [],
 }
