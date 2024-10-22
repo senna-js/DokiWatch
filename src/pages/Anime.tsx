@@ -172,9 +172,9 @@ export const Anime = () => {
 
   return (
     <div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-[150px] my-4 sm:my-6">
-      <div className="relative flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div className="relative flex flex-col sm:flex-row sm:items-center items-start justify-between gap-2">
         <div>
-          <h1 className="text-2xl sm:text-7xl font-hpSimplifiedbold flex">
+          <h1 className="text-5xl sm:text-7xl font-hpSimplifiedbold flex">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
@@ -285,8 +285,8 @@ export const Anime = () => {
                   <span
                     onClick={handleGenreClick}
                     key={genre.mal_id}
-                    className="cursor-pointer bg-doki-white font-lato text-doki-purple 
-					px-2 py-1 rounded-full hover:bg-doki-purple hover:text-doki-white"
+                    className="cursor-pointer bg-doki-dark-grey font-lato text-doki-white 
+					px-2 py-1 rounded-full hover:bg-doki-white hover:text-doki-purple"
                   >
                     {genre.name}
                   </span>
@@ -302,7 +302,7 @@ export const Anime = () => {
                   </span>
                 ))}
                 {animeData?.rating && (
-                  <span className="bg-black border border-white font-poppins bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                  <span className="bg-doki-white font-lato text-doki-purple px-2 py-1 rounded-full">
                     {
                       animeData.rating.match(
                         /^(R - 17\+|PG-13|R\+|Rx - Hentai|PG - Children)/
@@ -312,63 +312,35 @@ export const Anime = () => {
                 )}
               </div>
               <div className="pb-4 flex gap-2 flex-wrap">
-                <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                <span className="font-lato bg-doki-white text-doki-purple px-2 py-1 rounded-full">
                   Episodes: {animeData?.episodes || "To be decided"}
                 </span>
                 {animeData?.year && (
-                  <span className="font-poppins border border-white bg-green-500 bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                  <span className="font-lato bg-doki-white  text-doki-purple px-2 py-1 rounded-full">
                     {animeData.year}
                   </span>
                 )}
               </div>
               <div className="flex gap-2 flex-wrap">
-                <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
                   Duration: {animeData?.duration.replace("per ep", "")}
                 </span>
-                <span className="font-poppins border border-white bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg text-white px-2 py-1 rounded-lg">
+                <span className="font-lato text-doki-purple bg-doki-white px-2 py-1 rounded-full">
                   {animeData?.status}
                 </span>
               </div>
               <div
-                className="relative mt-2 flex gap-4 text-left"
+                className="relative mt-4 flex gap-6 text-center text-doki-white
+				 bg-doki-dark-grey px-4 py-1 rounded-full hover:bg-doki-white 
+				 hover:text-doki-purple"
                 ref={dropdownRef}
               >
                 <button
-                  className="bg-blue-700 mt-2 border-2 border-blue-500 hover:bg-black hover:bg-opacity-20 hover:backdrop-blur-lg hover:scale-105 transform transition duration-150 ease-in-out font-poppins text-white text-lg font-bold py-2 px-4 rounded-2xl flex gap-2 items-center"
+                  className="text-doki-purple text[13px] sm:text[21px] md:text-[34px] 
+				  flex items-center"
                   onClick={handleWatch}
-                  style={{
-                    boxShadow: "0 0 0 0 rgba(255, 255, 255, 0.5)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow =
-                      "0 0 10px 5px rgba(255, 255, 255, 0.5)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow =
-                      "0 0 0 0 rgba(255, 255, 255, 0.5)";
-                  }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-12 w-12 text-white mx-auto"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Watch Now
+                  WATCH NOW
                 </button>
                 <div>
                   <Tooltip
@@ -377,20 +349,46 @@ export const Anime = () => {
                     arrow
                     title={
                       <>
-                        <h3>Coming Soon</h3>
+                        <h3>Add to Anilist</h3>
                       </>
                     }
                   >
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-transparent backdrop-blur-md text-lg font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 "
+                      className="inline-flex justify-center w-full rounded-full
+					  bg-doki-light-grey 
+					  shadow-sm px-2 py-2"
                     >
-                      +
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 3V21"
+                          stroke="#2F3672"
+                          stroke-width="6"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M3 12L21 12"
+                          stroke="#2F3672"
+                          stroke-width="6"
+                          stroke-linecap="round"
+                        />
+                      </svg>
                     </button>
                   </Tooltip>
                 </div>
                 {dropdownOpen && (
-                  <div className="origin-top-left absolute ml-16 bottom-0 mb-2 w-56 rounded-md shadow-lg border border-white bg-black bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                  <div
+                    className="origin-top-right absolute ml-40 sm:ml-[295px] bottom-0 
+				  mb-2 w-36 sm:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
+				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
+				  ring-opacity-5 focus:outline-none z-50"
+                  >
                     <div
                       className="py-1"
                       role="menu"
@@ -401,7 +399,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToWatching}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 font-lato text-sm text-doki-white 
+						hover:text-doki-purple hover:bg-doki-white w-full text-left 
+						cursor-pointer"
                       >
                         Add to Watching
                       </div>
@@ -409,7 +409,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToCompleted}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 text-sm
+						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 w-full text-left font-lato cursor-pointer"
                       >
                         Add to Completed
                       </div>
@@ -417,7 +419,9 @@ export const Anime = () => {
                         role="menuitem"
                         tabIndex={0}
                         onClick={handleAddToPlanToWatch}
-                        className="block px-4 py-2 text-sm text-white hover:text-gray-700 hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 text-sm
+						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 w-full text-left cursor-pointer"
                       >
                         Add to Plan to Watch
                       </div>
@@ -464,17 +468,12 @@ export const Anime = () => {
         </div>
       </div>
       {animeData?.trailer && animeData?.trailer.embed_url ? (
-        <div
-          className="relative w-full flex justify-center items-center"
-          style={{
-            paddingBottom: "56.25%", // Maintain aspect ratio for the video (16:9)
-          }}
-        >
+        <div className="relative flex justify-center items-center pb-2">
           <iframe
             src={`${animeData?.trailer.embed_url}?autoplay=0`}
-            className="rounded-lg"
+            className="rounded-[22px] border-doki-light-grey border-2"
             style={{
-              width: "60%", // You can adjust the size of the iframe here
+              width: "60%",
               height: "60%",
             }}
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
