@@ -5,7 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import Content from "../components/ReadMore";
 import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
-
+interface CharacterData {
+  characterName: string;
+  role: string;
+  characterImage: string;
+  characterUrl: string; // Added character URL
+  staffName: string | null;
+  staffImage: string | null;
+  staffUrl: string | null; // Added staff URL
+}
 export const Anime = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -15,7 +23,7 @@ export const Anime = () => {
   const { addToWatching, addToCompleted, addToPlanToWatch } = useAnimeList();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const [charAndStaffData, setCharAndStaffData] = useState<CharacterData[]>([]);
   const handleAddToWatching = () => {
     addToWatching({
       id: animeData.mal_id,
@@ -107,6 +115,37 @@ export const Anime = () => {
 
         fetchRelationData();
         setAnimeData(res.data.data);
+      });
+    axios
+      .get(`https://api.jikan.moe/v4/anime/${params.id}/characters`)
+      .then((res) => {
+        const charactersData = res.data.data.map(
+          (characterData: {
+            character: any;
+            voice_actors: any[];
+            role: any;
+          }) => {
+            const character = characterData.character;
+            const voiceActor = characterData.voice_actors[0]; // Get the first voice actor
+
+            return {
+              characterName: character.name,
+              role: characterData.role,
+              characterImage: character.images.webp.image_url,
+              characterUrl: character.url, // Added character URL
+              staffName: voiceActor ? voiceActor.person.name : null,
+              staffImage: voiceActor
+                ? voiceActor.person.images.jpg.image_url
+                : null,
+              staffUrl: voiceActor ? voiceActor.person.url : null, // Added staff URL
+            };
+          }
+        );
+
+        console.log(JSON.stringify(charactersData, null, 2)); // Print the JSON structure
+      })
+      .catch((error) => {
+        console.error("Error fetching characters:", error);
       });
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
