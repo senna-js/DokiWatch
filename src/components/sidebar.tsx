@@ -202,7 +202,7 @@ const Sidebar = () => {
               : { duration: 0.5, ease: "easeInOut" }
           }
           className="fixed top-1/3 left-0 -translate-y-1/2 z-50
-           mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
+           mx-[5px] md:mx-[25px] bg-doki-dark-grey rounded-[22px] pt-2 pb-2"
         >
           <Stack direction="column" gap={1.5}>
             {isSignedIn && (
@@ -324,7 +324,7 @@ const Sidebar = () => {
         </motion.div>
       )}
       <Tooltip title="Toggle Sidebar" placement="right">
-        <div className="fixed top-[85vh] left-0 z-50 -translate-y-1/2 mx-[25px]">
+        <div className="fixed top-[85vh] left-0 z-50 -translate-y-1/2 sm:ml-[25px] ml-[5px]">
           <IconButton
             onClick={toggleSidebar}
             style={{ backgroundColor: "#6E78CB" }}

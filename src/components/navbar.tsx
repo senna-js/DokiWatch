@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import { IconButton } from "@mui/material";
-import { AddLink as LinkIcon } from "@mui/icons-material";
 import Sidebar from "./sidebar";
 import {
   SignedIn,
@@ -77,6 +74,8 @@ export const Navbar = () => {
 
       if (accessToken) {
         // console.log("Access Token:", accessToken);
+        // if access token is present don't show popup
+        setIsChatBubbleOpen(false);
         const query = `
           query {
             Viewer { 
@@ -354,7 +353,10 @@ export const Navbar = () => {
       <div className="flex gap-2 sm:gap-4 items-center">
         <SignedIn>
           <div className="relative">
-            <div onClick={() => setIsChatBubbleOpen(!isChatBubbleOpen)} className="cursor-pointer">
+            <div
+              onClick={() => setIsChatBubbleOpen(!isChatBubbleOpen)}
+              className="cursor-pointer"
+            >
               {profilePic ? (
                 <img
                   src={profilePic || ""}
@@ -370,7 +372,9 @@ export const Navbar = () => {
                 <div className="absolute top-[-8px] right-4">
                   <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
                 </div>
-                <p className="text-sm mb-2">Connect to Anilist to sync your watchlist.</p>
+                <p className="text-sm mb-2">
+                  Connect to Anilist to sync your watchlist.
+                </p>
                 <button
                   onClick={handleSubmit}
                   className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"

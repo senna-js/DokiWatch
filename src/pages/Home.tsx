@@ -7,7 +7,7 @@ import { useUser } from "@clerk/clerk-react";
 const Home = () => {
   const { isSignedIn } = useUser();
   return (
-    <div className="ml-[70px] md:ml-[70px] md:mr-[70px]">
+    <div className="md:mx-[150px]">
       <motion.div
         className="p-2 sm:p-4 relative"
         initial={{ opacity: 0, y: -20 }}
