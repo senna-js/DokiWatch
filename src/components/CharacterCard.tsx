@@ -32,7 +32,7 @@ const CharacterCard: React.FC<CharacterProps> = ({
             <img
               src={characterImage}
               alt={characterName}
-              className="w-[80px] rounded-[12px] object-cover border-[3px] border-doki-purple aspect-square"
+              className="w-[51px] rounded-[12px] object-cover aspect-square"
             />
           </a>
         </div>
@@ -57,8 +57,8 @@ const CharacterCard: React.FC<CharacterProps> = ({
               <img
                 src={staffImage || ""}
                 alt={staffName}
-                className="w-[80px] rounded-[12px] 
-              object-cover border-[3px] border-doki-purple aspect-square"
+                className="w-[51px] rounded-[12px] 
+              object-cover aspect-square"
               />
             </a>
           </div>
