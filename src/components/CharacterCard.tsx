@@ -22,47 +22,53 @@ const CharacterCard: React.FC<CharacterProps> = ({
 }) => {
   return (
     <div
-      className="flex flex-row items-center justify-between w-full bg-doki-dark-grey 
-    rounded-[22px] m-2 p-2 gap-3"
+      className="w-full bg-doki-dark-grey 
+    rounded-[22px] m-2 p-2 gap-5"
     >
-      <div className="flex flex-row items-center justify-items-start">
-        {/* Character Image */}
-        <div className="flex-shrink-0">
-          <a href={characterUrl} target="_blank" rel="noopener noreferrer">
-            <img
-              src={characterImage}
-              alt={characterName}
-              className="w-[51px] rounded-[12px] object-cover aspect-square"
-            />
-          </a>
-        </div>
-
-        {/* Character Details */}
-        <div className="flex-col justify-center items-center md:px-4 px-2 max-w-full">
-          <h2 className="text-[10px] md:text-[14px] font-lato text-doki-white break-words">
-            {characterName}
-          </h2>
-          <p className="opacity-65 text-doki-purple text-[10px] md:text-[14px] font-lato break-words">
-            {role}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-row items-center justify-end sm:gap-1">
-        {/* Staff Details */}
-        <p className="text-[10px] md:text-[14px] font-lato">{staffName}</p>
-        {staffName && (
-          <div className="hidden sm:block flex-shrink-0">
-            <a href={staffUrl || "#"} target="_blank" rel="noopener noreferrer">
+      <div className="flex flex-row lg:flex-col 2xl:flex-row items-center justify-between ">
+        <div className="flex flex-row items-center justify-items-start">
+          {/* Character Image */}
+          <div className="flex-shrink-0">
+            <a href={characterUrl} target="_blank" rel="noopener noreferrer">
               <img
-                src={staffImage || ""}
-                alt={staffName}
-                className="w-[51px] rounded-[12px] 
-              object-cover aspect-square"
+                src={characterImage}
+                alt={characterName}
+                className="w-[51px] rounded-[12px] object-cover aspect-square"
               />
             </a>
           </div>
-        )}
+
+          {/* Character Details */}
+          <div className="flex-col justify-center items-center lg:px-4 px-2 max-w-full">
+            <h2 className="text-[10px] lg:text-[14px] font-lato text-doki-white break-words">
+              {characterName}
+            </h2>
+            <p className="opacity-65 text-doki-purple text-[10px] lg:text-[10px] font-lato break-words">
+              {role}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-row items-center justify-end gap-1">
+          {/* Staff Details */}
+          <p className="text-[10px] lg:text-[14px] font-lato">{staffName}</p>
+          {staffName && (
+            <div className="lg:hidden 2xl:block flex-shrink-0">
+              <a
+                href={staffUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={staffImage || ""}
+                  alt={staffName}
+                  className="w-[51px] rounded-[12px] 
+              object-cover aspect-square"
+                />
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

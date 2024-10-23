@@ -191,23 +191,23 @@ export const Anime = () => {
   };
 
   return (
-    <div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-[150px] my-4 sm:my-6">
+    <div className="relative flex flex-col gap-4 lg:gap-6 mx-4 lg:mx-[150px] my-4 lg:my-6">
       <div
-        className="relative flex flex-col sm:flex-row sm:items-center items-start 
+        className="relative flex flex-col lg:flex-row lg:items-center items-start 
 	  justify-between gap-2"
       >
         <div>
-          <h1 className="text-5xl sm:text-7xl font-hpSimplifiedbold flex">
+          <h1 className="text-5xl lg:text-7xl font-hpSimplifiedbold flex">
             {animeData?.title_english ||
               animeData?.title ||
               "Title Not Available"}
           </h1>
-          <h2 className="mt-1 sm:mt-2 sm:text-[27px] font-hpSimplifiedbold text-doki-light-grey">
+          <h2 className="mt-1 lg:mt-2 lg:text-[27px] font-hpSimplifiedbold text-doki-light-grey">
             {animeData?.title}
           </h2>
         </div>
         {/*Commented out rating*/
-        /* <div className="flex-none w-auto bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-2 sm:p-4 rounded-lg text-white">
+        /* <div className="flex-none w-auto bg-transparent bg-opacity-50 backdrop-filter backdrop-blur-lg p-2 lg:p-4 rounded-lg text-white">
           <div className="flex items-center justify-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -242,7 +242,7 @@ export const Anime = () => {
         </div> */}
       </div>
       <hr className="bg-doki-light-grey rounded-md h-[4px] border-0" />
-      <div className="flex flex-col md:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3 pb-0">
+      <div className="flex flex-col lg:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3 pb-0">
         <div className="relative group h-auto mb-3">
           <img
             src={animeData?.images.jpg.large_image_url}
@@ -289,7 +289,7 @@ export const Anime = () => {
         <div className="flex mt-3 flex-col w-full justify-between">
           <div
             className="flex items-center font-lato p-2 
-		  sm:p-4 text-sm sm:text-lg text-justify text-doki-purple"
+		  lg:p-4 text-sm lg:text-lg text-justify text-doki-purple"
           >
             <Content
               text={animeData?.synopsis
@@ -300,10 +300,10 @@ export const Anime = () => {
           {/* Ankit ekhane dekhbi */}
           <div className="h-auto">
             <hr className="bg-doki-purple rounded-md h-[4px] border-0" />
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
               <div
-                className="flex border-doki-purple sm:border-4 sm:border-l-0 sm:border-b-0 sm:border-t-0  flex-col 
-			items-start font-lato p-3 sm:p-4 font-semibold text-sm sm:text-md "
+                className="flex border-doki-purple lg:border-4 lg:border-l-0 lg:border-b-0 lg:border-t-0  flex-col 
+			items-start font-lato p-3 lg:p-4 font-semibold text-sm lg:text-md "
               >
                 <div className="pb-4 items-center flex gap-2 flex-wrap">
                   {animeData?.genres.map((genre: any) => (
@@ -356,12 +356,12 @@ export const Anime = () => {
                 </div>
                 <div
                   className="relative mt-4 flex gap-6 text-center text-doki-white
-				 bg-doki-dark-grey px-4 py-1 rounded-full hover:bg-doki-white 
+				 bg-doki-dark-grey px-4 pr-1 py-1 rounded-full hover:bg-doki-white 
 				 hover:text-doki-purple"
                   ref={dropdownRef}
                 >
                   <button
-                    className="text-doki-purple text[13px] sm:text[21px] md:text-[34px] 
+                    className="text-doki-purple text[13px] lg:text[21px] xl:text-[34px] 
 				  flex items-center"
                     onClick={handleWatch}
                   >
@@ -409,8 +409,8 @@ export const Anime = () => {
                   </div>
                   {dropdownOpen && (
                     <div
-                      className="origin-top-right absolute ml-40 sm:ml-[295px] bottom-0 
-				  mb-2 w-36 sm:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
+                      className="origin-top-right absolute ml-40 lg:ml-[295px] bottom-0 
+				  mb-2 w-36 lg:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
 				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
 				  ring-opacity-5 focus:outline-none z-50"
                     >
@@ -460,7 +460,7 @@ export const Anime = () => {
 			font-lato p-4 text-md text-doki-purple text-[30px]"
               >
                 {relationData.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                     {relationData.map((relation) => (
                       <div
                         key={relation.id}
@@ -495,14 +495,14 @@ export const Anime = () => {
       </div>
       <div
         id="this-div-is-for-lower-section"
-        className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-5"
       >
         <div
           id="this-div-is-for-trailer"
-          className="bg-doki-light-grey p-3 sm:p-8 sm:pt-5 rounded-[22px] sm:col-span-2"
+          className="bg-doki-light-grey p-3 lg:p-8 lg:pt-5 rounded-[22px] lg:col-span-2"
         >
           <h1 className="text-doki-purple font-lato text-4xl">Watch Trailer</h1>
-          <hr className="bg-doki-purple rounded-md h-[3px] border-0 mb-3 mt-2 sm:mb-7" />
+          <hr className="bg-doki-purple rounded-md h-[3px] border-0 mb-3 mt-2 lg:mb-7" />
           {animeData?.trailer && animeData?.trailer.embed_url ? (
             <div className="relative flex justify-center items-center pb-2">
               <iframe
@@ -517,7 +517,7 @@ export const Anime = () => {
               ></iframe>
             </div>
           ) : (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center lg:h-full">
               <p className="text-4xl text-center font-lato text-doki-white">
                 No Trailer Available
               </p>
@@ -526,14 +526,14 @@ export const Anime = () => {
         </div>
         <div
           id="this-div-is-for-VA&staff"
-          className="bg-doki-light-grey pt-3 sm:pb-0 sm:pt-5 rounded-[22px]"
+          className="bg-doki-light-grey pt-3 lg:pb-0 lg:pt-5 rounded-[22px]"
         >
-          <h1 className="text-doki-purple font-lato text-4xl mx-3 sm:mx-8">
+          <h1 className="text-doki-purple font-lato text-4xl mx-3 lg:mx-8">
             Characters
           </h1>
           <hr
             className="bg-doki-purple rounded-md h-[3px] border-0 mb-3 mt-2
-           sm:mb-5 mx-3 sm:mx-8"
+           lg:mb-5 mx-3 lg:mx-8"
           />
           <div className="flex flex-col items-center">
             {/* Scrollable card list */}
