@@ -27,7 +27,7 @@ const CharacterCard: React.FC<CharacterProps> = ({
     >
       <div
         className="flex flex-row lg:flex-col xl:flex-row items-center justify-between
-      gap-7"
+      gap-7 md:gap-2"
       >
         <div className="flex flex-row items-center justify-items-start">
           {/* Character Image */}
