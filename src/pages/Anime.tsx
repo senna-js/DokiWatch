@@ -248,7 +248,7 @@ export const Anime = () => {
             src={animeData?.images.jpg.large_image_url}
             alt={animeData?.title}
             className="rounded-[22px] shadow-xl mx-auto lg:h-full lg:w-full 
-			object-cover border-doki-purple border-[4px] md:h-4/5"
+			object-cover border-doki-purple border-[4px] md:h-4/5 md:mt-10 lg:mt-0"
           />
           <div
             className="cursor-pointer rounded-lg absolute top-0 left-0 w-full h-full
