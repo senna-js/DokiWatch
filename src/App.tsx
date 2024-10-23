@@ -33,7 +33,7 @@ const App = () => {
     <AnimeProvider>
       <AnimeListProvider>
         <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
-          <div className="absolute z-0 w-full h-full bg-doki-purple text-doki-white"></div>
+          <div className="absolute w-full h-full bg-doki-purple"></div>
           {/* <video
           autoPlay
           muted
