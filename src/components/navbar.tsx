@@ -213,7 +213,7 @@ export const Navbar = () => {
     sm:p-4 bg-doki-purple text-white fixed z-50 sm:h-[109px] h-[67px] "
     >
       <Sidebar /> {/* Render the Sidebar component */}
-      <div className="cursor-pointer" onClick={handleClick}>
+      <div className="cursor-pointer" role="button" onClick={handleClick}>
         <img
           src="/Navbar_logo.png"
           alt="Doki Watch"
