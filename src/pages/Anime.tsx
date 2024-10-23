@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import Content from "../components/ReadMore";
 import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
+import CharacterCard from "../components/CharacterCard";
 interface CharacterData {
+  mal_id: number | null | undefined;
   characterName: string;
   role: string;
   characterImage: string;
@@ -18,7 +20,7 @@ export const Anime = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [animeData, setAnimeData] = useState<any>();
-  const [userRating, setUserRating] = useState(0);
+  // const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
   const { addToWatching, addToCompleted, addToPlanToWatch } = useAnimeList();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -61,11 +63,11 @@ export const Anime = () => {
     navigate(`/anime/${animeId}`);
   };
 
-  const handleRating = (ratingValue: number) => {
-    setUserRating(ratingValue);
-    // Here you can add a function to update the rating in your database or state management system
-  };
-
+  // const handleRating = (ratingValue: number) => {
+  //   setUserRating(ratingValue);
+  //   // Here you can add a function to update the rating in your database or state management system
+  // };
+  const listRef = useRef<HTMLDivElement | null>(null); // Reference to the scrollable div
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -74,12 +76,28 @@ export const Anime = () => {
       setDropdownOpen(false);
     }
   };
+  const handleScrollUp = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        top: -listRef.current.clientHeight / 2, // Scroll by the height of 1 card
+        behavior: "smooth",
+      });
+    }
+  };
 
+  const handleScrollDown = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        top: listRef.current.clientHeight / 2, // Scroll by the height of 1 card
+        behavior: "smooth",
+      });
+    }
+  };
   useEffect(() => {
     axios
       .get(`https://api.jikan.moe/v4/anime/${params.id}/full`)
       .then((res) => {
-        console.log(res.data.data.relations);
+        // console.log(res.data.data.relations);
         const relation = res.data.data.relations;
         const relationIdList: number[] = [];
 
@@ -106,11 +124,13 @@ export const Anime = () => {
               image: res.data.data.images.jpg.large_image_url,
               id: res.data.data.mal_id,
               title_english: res.data.data.title_english,
+              relation: res.data.data.relations,
             }))
           );
 
           const relationData = await Promise.all(relationDataPromises);
           setRelationData(relationData);
+          console.log(`RELATION DATA:${relationData}`);
         };
 
         fetchRelationData();
@@ -119,6 +139,7 @@ export const Anime = () => {
     axios
       .get(`https://api.jikan.moe/v4/anime/${params.id}/characters`)
       .then((res) => {
+        console.log(res.data.data);
         const charactersData = res.data.data.map(
           (characterData: {
             character: any;
@@ -126,10 +147,11 @@ export const Anime = () => {
             role: any;
           }) => {
             const character = characterData.character;
-            const voiceActor = characterData.voice_actors[0]; // Get the first voice actor
+            const voiceActor = characterData.voice_actors[0]; // Get the JP voice actor
 
             return {
               characterName: character.name,
+              mal_id: character.mal_id,
               role: characterData.role,
               characterImage: character.images.webp.image_url,
               characterUrl: character.url, // Added character URL
@@ -141,8 +163,8 @@ export const Anime = () => {
             };
           }
         );
-
-        console.log(JSON.stringify(charactersData, null, 2)); // Print the JSON structure
+        setCharAndStaffData(charactersData);
+        // console.log(JSON.stringify(charactersData, null, 2));
       })
       .catch((error) => {
         console.error("Error fetching characters:", error);
@@ -167,8 +189,6 @@ export const Anime = () => {
     const navString = `/search?genre=${genreName}`;
     navigate(navString);
   };
-
-  // console.log("animeData:", animeData);
 
   return (
     <div className="relative flex flex-col gap-4 sm:gap-6 mx-4 sm:mx-[150px] my-4 sm:my-6">
@@ -374,14 +394,14 @@ export const Anime = () => {
                           <path
                             d="M12 3V21"
                             stroke="#2F3672"
-                            stroke-width="6"
-                            stroke-linecap="round"
+                            strokeWidth="6"
+                            strokeLinecap="round"
                           />
                           <path
                             d="M3 12L21 12"
                             stroke="#2F3672"
-                            stroke-width="6"
-                            stroke-linecap="round"
+                            strokeWidth="6"
+                            strokeLinecap="round"
                           />
                         </svg>
                       </button>
@@ -473,24 +493,119 @@ export const Anime = () => {
           </div>
         </div>
       </div>
-      {animeData?.trailer && animeData?.trailer.embed_url ? (
-        <div className="relative flex justify-center items-center pb-2">
-          <iframe
-            src={`${animeData?.trailer.embed_url}?autoplay=0`}
-            className="rounded-[22px] border-doki-light-grey border-2"
-            style={{
-              width: "60%",
-              height: "60%",
-            }}
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+      <div
+        id="this-div-is-for-lower-section"
+        className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5"
+      >
+        <div
+          id="this-div-is-for-trailer"
+          className="bg-doki-light-grey p-3 sm:p-8 sm:pt-5 rounded-[22px] sm:col-span-2"
+        >
+          <h1 className="text-doki-purple font-lato text-4xl">Watch Trailer</h1>
+          <hr className="bg-doki-purple rounded-md h-[3px] border-0 mb-3 mt-2 sm:mb-7" />
+          {animeData?.trailer && animeData?.trailer.embed_url ? (
+            <div className="relative flex justify-center items-center pb-2">
+              <iframe
+                src={`${animeData?.trailer.embed_url}?autoplay=0`}
+                className="rounded-[22px] border-doki-light-grey border-2"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center text-doki-white font-lato">
+              <p className="text-4xl text-center font-lato">
+                No Trailer Available
+              </p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex justify-center items-center h-screen">
-          <p className="text-4xl text-center font-lato">No Trailer Available</p>
+        <div
+          id="this-div-is-for-VA&staff"
+          className="bg-doki-light-grey pt-3 sm:pb-0 sm:pt-5 rounded-[22px]"
+        >
+          <h1 className="text-doki-purple font-lato text-4xl mx-3 sm:mx-8">
+            Characters
+          </h1>
+          <hr
+            className="bg-doki-purple rounded-md h-[3px] border-0 mb-3 mt-2
+           sm:mb-5 mx-3 sm:mx-8"
+          />
+          <div className="flex flex-col items-center">
+            {/* Scrollable card list */}
+            <div
+              className="w-full max-h-[550px]
+              relative overflow-y-auto overflow-x-hidden p-8 pt-0
+              flex flex-col items-center"
+              ref={listRef}
+            >
+              {charAndStaffData.map((item) => (
+                <CharacterCard
+                  key={item.mal_id} // Unique key for each card
+                  characterName={item.characterName}
+                  role={item.role}
+                  characterImage={item.characterImage}
+                  characterUrl={item.characterUrl}
+                  staffName={item.staffName}
+                  staffImage={item.staffImage}
+                  staffUrl={item.staffUrl}
+                  mal_id={0}
+                />
+              ))}
+            </div>
+            {/* Navigation buttons */}
+            <div className="flex justify-between w-full mt-4 gap-1">
+              <button
+                className="bg-doki-dark-grey text-doki-purple flex justify-center
+                items-center
+                p-2 w-1/2 hover:bg-doki-white rounded-bl-[22px]"
+                onClick={handleScrollUp}
+              >
+                <svg
+                  width="47"
+                  height="27"
+                  viewBox="0 0 52 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M45 25L26 7L7 25"
+                    stroke="#2F3672"
+                    stroke-width="9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <button
+                className="bg-doki-dark-grey p-2 w-1/2 flex justify-center items-center
+                 text-doki-purple rounded-br-[22px] hover:bg-doki-white"
+                onClick={handleScrollDown}
+              >
+                <svg
+                  width="47"
+                  height="27"
+                  viewBox="0 0 52 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M45 7L26 25L7 7"
+                    stroke="#2F3672"
+                    stroke-width="9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

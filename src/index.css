@@ -14,5 +14,5 @@
   font-style: normal;
 }
 *:not(input) {
-  caret-color: transparent;
+  caret-color: #2f3672;
 }
