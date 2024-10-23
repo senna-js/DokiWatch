@@ -517,8 +517,8 @@ export const Anime = () => {
               ></iframe>
             </div>
           ) : (
-            <div className="flex justify-center items-center text-doki-white font-lato">
-              <p className="text-4xl text-center font-lato">
+            <div className="flex justify-center items-center h-full">
+              <p className="text-4xl text-center font-lato text-doki-white">
                 No Trailer Available
               </p>
             </div>
