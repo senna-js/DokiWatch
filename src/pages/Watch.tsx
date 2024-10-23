@@ -8,7 +8,6 @@ import { currEpisodeData } from "../interfaces/CurrEpisodeData";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { DiscussionEmbed } from "disqus-react";
 import { CommentCount } from 'disqus-react';
-import { Console } from "console";
 import { consumetZoro } from "../components/Hooks/LoadBalancer";
 interface AnimeData {
   id: string;
