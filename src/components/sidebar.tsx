@@ -262,12 +262,14 @@ const Sidebar = () => {
                 }
               }}
             >
-              <div className="modal-box bg-transparent backdrop-blur-lg">
-                <h3 className="font-bold text-lg">Anime Schedule</h3>
-                <hr className="mt-2" />
+              <div className="modal-box bg-doki-dark-grey backdrop-blur-lg rounded-[22px]">
+                <h3 className="font-lato text-lg text-doki-purple">
+                  Anime Schedule
+                </h3>
+                <hr className="bg-doki-purple rounded-md h-[2px] border-0 mt-2" />
                 <div className="py-4">
                   <div>
-                    <p className="py-2">
+                    <p className="py-2 text-doki-purple font-lato">
                       <strong>Current Date and Time:</strong>{" "}
                       {`${new Intl.DateTimeFormat("en-US", {
                         year: "numeric",
@@ -289,23 +291,32 @@ const Sidebar = () => {
                     <div
                       id={anime.mal_id}
                       key={anime.mal_id}
-                      className="relative text-white p-4 rounded-lg border border-blue-500 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-cover bg-center bg-no-repeat mb-4 hover:animate-scroll"
+                      className="relative text-doki-white p-4 rounded-[12px] 
+                      border-[3px] border-doki-purple shadow-lg hover:shadow-xl 
+                      transition-shadow duration-300 bg-cover bg-center 
+                      bg-no-repeat mb-4 hover:animate-scroll"
                       style={{
                         backgroundImage: `url(${anime.images.jpg.large_image_url})`,
                         backgroundColor: "rgba(255, 255, 255, 0.1)",
                       }}
                     >
-                      <div className="absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+                      <div className="absolute inset-0 bg-black opacity-75 rounded-lg"></div>
                       <p className="relative">
-                        <strong className="cursor-default">Title:</strong>{" "}
+                        <strong className="cursor-default font-lato">
+                          Title:
+                        </strong>{" "}
                         <span
                           onClick={() => handleTitleClick(anime.mal_id)}
-                          style={{ cursor: "pointer", color: "#04d9ff" }}
+                          // style={{ cursor: "pointer", color: "#04d9ff" }}
+                          className="cursor-pointer text-doki-light-grey font-lato"
                         >
                           {anime.title_english || anime.title}
                         </span>
                       </p>
-                      <p className="relative cursor-default">
+                      <p
+                        className="relative cursor-default font-lato
+                       text-doki-white opacity-80"
+                      >
                         <strong></strong>{" "}
                         {convertToUserTime(anime.broadcast.time)}
                       </p>
@@ -313,7 +324,13 @@ const Sidebar = () => {
                     </div>
                   ))}
                 </div>
-                <div className="modal-action bg-transparent bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime font-bold cursor-pointer shadow-md hover:bg-red-500 hover:scale-105 transform transition duration-150 ease-in-out">
+                <div
+                  className="modal-action bg-transparent 
+                bg-opacity-50 text-doki-purple border border-doki-purple 
+                rounded-[12px] p-2.5 font-anime font-bold cursor-pointer 
+                shadow-md hover:bg-doki-purple hover:scale-105 transform 
+                hover:text-doki-white transition duration-150 ease-in-out"
+                >
                   <form method="dialog" onClick={closeModal} className="w-full">
                     <button className="w-full rounded-lg">Close</button>
                   </form>

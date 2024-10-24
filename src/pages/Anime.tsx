@@ -242,13 +242,13 @@ export const Anime = () => {
         </div> */}
       </div>
       <hr className="bg-doki-light-grey rounded-md h-[4px] border-0" />
-      <div className="flex flex-col lg:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3 pb-0">
+      <div className="flex flex-col md:flex-row gap-4 bg-doki-light-grey rounded-[22px] p-3 pb-0">
         <div className="relative group h-auto mb-3">
           <img
             src={animeData?.images.jpg.large_image_url}
             alt={animeData?.title}
-            className="rounded-[22px] shadow-xl mx-auto h-full w-full 
-			object-cover border-doki-purple border-[4px]"
+            className="rounded-[22px] shadow-xl mx-auto lg:h-full lg:w-full 
+			object-cover border-doki-purple border-[4px] md:h-4/5 md:mt-10 lg:mt-0"
           />
           <div
             className="cursor-pointer rounded-lg absolute top-0 left-0 w-full h-full
@@ -259,7 +259,8 @@ export const Anime = () => {
           <div className="text-center">
             <button
               onClick={handleWatch}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 
+              -translate-y-1/2 opacity-0 group-hover:opacity-100"
               style={{ transition: "opacity 0.2s ease-in-out" }}
             >
               <svg
@@ -361,7 +362,7 @@ export const Anime = () => {
                   ref={dropdownRef}
                 >
                   <button
-                    className="text-doki-purple text[13px] lg:text[21px] xl:text-[34px] 
+                    className="text-doki-purple text[13px] lg:text[21px] xl:text-[30px] 2xl:text-34px
 				  flex items-center"
                     onClick={handleWatch}
                   >
@@ -539,7 +540,7 @@ export const Anime = () => {
             {/* Scrollable card list */}
             <div
               className="w-full max-h-[550px]
-              relative overflow-y-auto overflow-x-hidden p-8 pt-0
+              relative overflow-y-auto overflow-x-hidden p-4 pt-0
               flex flex-col items-center"
               ref={listRef}
             >

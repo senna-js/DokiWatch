@@ -25,7 +25,10 @@ const CharacterCard: React.FC<CharacterProps> = ({
       className="w-full bg-doki-dark-grey 
     rounded-[22px] m-2 p-2 gap-5"
     >
-      <div className="flex flex-row lg:flex-col 2xl:flex-row items-center justify-between ">
+      <div
+        className="flex flex-row lg:flex-col xl:flex-row items-center justify-between
+      gap-7 md:gap-2"
+      >
         <div className="flex flex-row items-center justify-items-start">
           {/* Character Image */}
           <div className="flex-shrink-0">
@@ -53,7 +56,7 @@ const CharacterCard: React.FC<CharacterProps> = ({
           {/* Staff Details */}
           <p className="text-[10px] lg:text-[14px] font-lato">{staffName}</p>
           {staffName && (
-            <div className="lg:hidden 2xl:block flex-shrink-0">
+            <div className="lg:hidden xl:block flex-shrink-0">
               <a
                 href={staffUrl || "#"}
                 target="_blank"
