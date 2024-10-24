@@ -57,7 +57,7 @@ export const TopAiringAnimeStack = () => {
         <hr className="border border-doki-purple my-4" />
         <div className="relative overflow-hidden">
           <div
-            className="flex gap-2 overflow-x-auto overflow-y-hidden"
+            className="flex gap-1 overflow-x-auto overflow-y-hidden"
             ref={carouselRef}
             // style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >

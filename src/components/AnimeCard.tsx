@@ -28,7 +28,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
         },
       }}
     >
-      <div className="text-white my-7 mx-4 w-[201px] h-[280px]">
+      <div className="text-white my-7 mx-4 w-[201px] h-[280px] sm:w-[150px] sm:h-[210px] md:w-[201px] md:h-[280px]">
         <Card>
           <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
             <CardMedia
