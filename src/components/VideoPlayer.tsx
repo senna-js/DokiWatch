@@ -1,4 +1,4 @@
-import { currEpisodeData } from "../interfaces/CurrEpisodeData";
+import { CurrEpisodeData } from "../interfaces/CurrEpisodeData";
 import { useState, useRef, useEffect } from "react";
 import "@vidstack/react/player/styles/default/theme.css";
 import "@vidstack/react/player/styles/default/layouts/video.css";
@@ -64,23 +64,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (currentTime) onProgress({ playedSeconds: currentTime });
   }, [currentTime]);
   useEffect(() => {
-    localStorage.setItem("streamType", JSON.stringify(streamType));
-    console.log("Changing stream type to ", ["Sub", "Dub"][streamType]);
+    if (JSON.parse(localStorage.getItem("streamType") || "{}") !== streamType)
+      localStorage.setItem("streamType", JSON.stringify(streamType));
     if (streamType === StreamType.dub && !currentEpisode.sources.dub)
       setTrueStreamType(StreamType.sub);
     else setTrueStreamType(streamType);
   }, [streamType]);
 
   useEffect(() => {
-    console.log(
-      "Changing true stream type to ",
-      ["Sub", "Dub"][trueStreamType]
-    );
-  }, [trueStreamType]);
-
-  useEffect(() => {
     if (trueStreamType === StreamType.sub) {
-      console.log("Adding subtitle tracks");
       currentEpisode.subtitles.forEach((subtitle) => {
         player.current?.textTracks.add(
           new TextTrack({
@@ -93,7 +85,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         );
       });
     } else {
-      console.log("Adding dub subtitle tracks");
       currentEpisode.dubSubtitles?.forEach((subtitle) => {
         player.current?.textTracks.add(
           new TextTrack({
@@ -107,44 +98,33 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       });
     }
     const textTrack = player.current?.textTracks.getById("English");
-    if (textTrack) {
-      console.log("English text track found", textTrack);
+    if (textTrack)
       textTrack.mode = "showing";
-    }
     return () => {
-      console.log("Clearing text tracks");
       player.current?.textTracks.clear();
     };
   }, [currentEpisode.subtitles, currentEpisode.dubSubtitles, trueStreamType]);
 
   useEffect(() => {
     const fetchThumbnails = async (src: string) => {
-      console.log("Source: ", src);
       const response = await axios.get(src);
       const thumbnailsVTT = response.data;
       const cleanSrc = src.replace(/thumbnails\.vtt$/, "");
 
       const thumbnails = VTTtoJSON(thumbnailsVTT, cleanSrc);
-      console.log("Thumbnails: ", thumbnails);
       setThumbnails(thumbnails);
     };
     if (trueStreamType === StreamType.sub) {
-      console.log("Changing to Sub thumbnails ");
-      if (!currentEpisode.thumbnailSrc) {
-        console.log("Sub Thumbnail not found");
+      if (!currentEpisode.thumbnailSrc)
         return;
-      }
+
       fetchThumbnails(currentEpisode.thumbnailSrc);
     } else {
-      console.log("Changing to Dub thumbnails ");
-      if (!currentEpisode.dubThumbnailSrc) {
-        console.log("Dub thumbnail not found");
+      if (!currentEpisode.dubThumbnailSrc)
         return;
-      }
       fetchThumbnails(currentEpisode.dubThumbnailSrc);
     }
     return () => {
-      console.log("Clearing thumbnails");
       setThumbnails([]);
     };
   }, [
@@ -161,12 +141,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const skipText: string =
     currentTime > currentEpisode.intro.start &&
-    currentTime < currentEpisode.intro.end
+      currentTime < currentEpisode.intro.end
       ? "Skip Intro"
       : "Skip Outro";
 
   const handleSkip = () => {
-    console.log("Skip button clicked");
     if (
       currentTime > currentEpisode.intro.start &&
       currentTime < currentEpisode.intro.end
@@ -187,15 +166,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           <MediaPlayer
             aspectRatio="16/9"
             className="mb-0 pb-0"
-            src={
-              [currentEpisode.sources.sub, currentEpisode.sources.dub][
-                trueStreamType
-              ]
-            }
+            src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]}
             ref={player}
             load="eager"
             posterLoad="eager"
-            storage="vidstack-storage"
+            // storage="vidstack-storage" //Implement self solution
             autoPlay
           >
             <MediaProvider>
@@ -242,7 +217,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 };
 
 interface VideoPlayerProps {
-  currentEpisode: currEpisodeData;
+  currentEpisode: CurrEpisodeData;
   hasPreviousEpisode: boolean;
   hasNextEpisode: boolean;
   handlePreviousEpisode: () => void;
