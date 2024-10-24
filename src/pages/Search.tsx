@@ -154,22 +154,24 @@ export const Search = () => {
     }, [searchParams])
 
     return (
-        <div className="flex flex-col items-center justify-center bg-pink-950 sm:bg-transparent">
+        <div className="flex flex-col items-center justify-center">
             <AdvancedSearch genres={genres} handleGenreSelection={handlegenreSelection} handleSearch={handleSearch} />
-            <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
-                {
-                    currentAnime.map((anime, index) => (
-                        <motion.div
-                            key={anime.mal_id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                            <AnimeCard anime={anime} />
-                        </motion.div>
-                    ))
-                }
-            </Stack>
+            <div className="">
+                <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
+                    {
+                        currentAnime.map((anime, index) => (
+                            <motion.div
+                                key={anime.mal_id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                            >
+                                <AnimeCard anime={anime} />
+                            </motion.div>
+                        ))
+                    }
+                </Stack>
+            </div>
             <div className="flex justify-center mx-4 py-4 gap-2">
                 {pageNumbers.map((number) => (
                     <button

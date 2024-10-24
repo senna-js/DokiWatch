@@ -51,12 +51,12 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
   }, [searchParams]);
 
   return (
-    <div className="backdrop-blur-lg border border-white rounded-md mt-4">
+    <div className="bg-doki-light-grey backdrop-blur-lg rounded-[16px] mt-4">
       <div className="container rounded-lg flex flex-col gap-4 px-12 py-6">
-        <h1 className="text-start text-bold font-poppins text-2xl ml-2">
-          Search
+        <h1 className="text-doki-purple text-start text-bold font-lato text-2xl sm:text-4xl ml-2">
+          Filter
         </h1>
-        <hr className="mb-2" />
+        <hr className="border border-doki-purple mb-2" />
         <TextField
           label="Search for anime"
           variant="outlined"
@@ -85,11 +85,11 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
           }}
         />
 
-        <h1 className="text-start text-bold font-poppins text-2xl ml-2">
+        <h1 className="text-doki-purple text-start text-bold font-lato text-2xl ml-2">
           Genres
         </h1>
-        <hr className="" />
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-x-4 mb-2">
+        {/* <hr className="" /> */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-x-4 mb-2 text-doki-purple font-lato">
           {props.genres.map((genre, index) => (
             <Bullet
               key={genre}
@@ -103,7 +103,7 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
           onClick={() => {
             props.handleSearch(searchTerm);
           }}
-          className="bg-transparent text-center bg-opacity-50 text-white border border-gray-700 rounded-lg p-2.5 font-anime cursor-pointer shadow-md hover:bg-info hover:scale-105 transform transition duration-150 ease-in-out"
+          className="bg-doki-dark-grey text-xl sm:text-2xl text-center font-bold text-doki-purple rounded-[16px] p-2.5 font-lato cursor-pointer shadow-md hover:bg-doki-purple hover:text-doki-white hover:scale-105 transform transition duration-150 ease-in-out"
         >
           <div>
             <div className="flex items-center justify-center space-x-2">
