@@ -15,7 +15,7 @@ const Home = () => {
         transition={{ duration: 0.5 }}
       >
         <motion.h1
-          className="font-bold font-hpSimplifiedbold caret-transparent"
+          className="font-bold font-hpSimplifiedbold caret-transparent ml-5 sm:ml-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -33,7 +33,7 @@ const Home = () => {
           </motion.p> */}
       </motion.div>
       <motion.div
-        className="mt-8 sm:mt-16 m-7"
+        className="mt-8 sm:mt-10 m-7"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
