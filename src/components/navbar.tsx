@@ -332,7 +332,7 @@ export const Navbar = () => {
       sm:flex sm:justify-evenly sm:gap-7 sm:items-center sm:bg-doki-dark-grey sm:rounded-full
        sm:pl-4 sm:pr-4 sm:pt-2 sm:pb-2 sm:mr-3"
       >
-        <button onClick={handleCoffeeClick}>
+        <button onClick={handleKoFiClick}>
           <img src={coffeeImage} alt="Buy Me a Coffee" className="w-6 ml-2" />
         </button>
         <button onClick={handleCoffeeClick}>
