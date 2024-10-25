@@ -410,10 +410,9 @@ export const Anime = () => {
                   </div>
                   {dropdownOpen && (
                     <div
-                      className="origin-top-right absolute ml-40 lg:ml-[295px] bottom-0 
-				  mb-2 w-36 lg:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
-				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
-				  ring-opacity-5 focus:outline-none z-50"
+                      className="z-10 origin-top-right absolute 
+                        ml-[165px] md:ml-[170px] xl:ml-[275px]
+                       bottom-0 mb-2 w-36 lg:w-56 bg-doki-dark-grey rounded-[12px]"
                     >
                       <div
                         className="py-1"
@@ -426,7 +425,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToWatching}
                           className="block px-4 py-2 font-lato text-sm text-doki-white 
-						hover:text-doki-purple hover:bg-doki-white w-full text-left 
+						hover:text-doki-dark-grey hover:bg-doki-white w-full text-left 
 						cursor-pointer"
                         >
                           Add to Watching
@@ -436,7 +435,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToCompleted}
                           className="block px-4 py-2 text-sm
-						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
 						 w-full text-left font-lato cursor-pointer"
                         >
                           Add to Completed
@@ -446,7 +445,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToPlanToWatch}
                           className="block px-4 py-2 text-sm
-						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
 						 w-full text-left cursor-pointer"
                         >
                           Add to Plan to Watch

@@ -190,13 +190,18 @@ export const AnimeAiringStack = () => {
           Watching
           <span className="flex items-center ml-2">
             <span className="w-2.5 h-2.5 bg-green-300 rounded-full mr-1"></span>
-            <p className="text-base text-doki-purple font-bold font-poppins text-opacity-50">Airing</p>
+            <p className="text-base text-doki-purple font-bold font-poppins text-opacity-50">
+              Airing
+            </p>
           </span>
         </h2>
         <hr className="border border-doki-purple my-4" />
         <div className="relative overflow-hidden">
           {animeData && animeData.length > 0 ? (
-            <div className="flex gap-1 overflow-x-auto overflow-y-hidden" ref={carouselRef}>
+            <div
+              className="flex gap-1 overflow-x-auto overflow-y-hidden"
+              ref={carouselRef}
+            >
               {animeData.map((anime) => (
                 <div key={anime?.mal_id}>
                   <AnimeCard anime={anime} />
@@ -213,7 +218,9 @@ export const AnimeAiringStack = () => {
       </div>
       {/* Left Navigation Button */}
       <button
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 sm:-translate-x-12 h-full w-10 sm:w-12 bg-doki-dark-grey text-doki-purple hidden sm:flex justify-center items-center hover:bg-doki-white rounded-l-[16px] transition-colors duration-300"
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 sm:-translate-x-12 h-full 
+       w-14 sm:w-12 bg-doki-dark-grey hidden sm:flex 
+        justify-center items-center hover:bg-doki-white rounded-l-[16px] transition-colors duration-300"
         onClick={scrollLeft}
       >
         <svg

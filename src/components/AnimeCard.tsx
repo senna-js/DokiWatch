@@ -20,36 +20,52 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       placement="top"
       arrow
       sx={{
-        "& .MuiTooltip-tooltip": {
-
-        },
+        "& .MuiTooltip-tooltip": {},
         "& .MuiTooltip-arrow": {
           color: "#f5f5f5",
         },
       }}
     >
-      <div className="text-white my-7 mx-4 w-[201px] h-[280px] sm:w-[150px] sm:h-[210px] md:w-[201px] md:h-[280px]">
-        <Card>
-          <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
+      <div
+        className="my-7 mx-4 w-[201px] h-[280px] 
+      sm:w-[150px] sm:h-[210px] md:w-[201px] md:h-[280px]"
+      >
+        <Card
+          sx={{
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            "& .MuiCardContent-root": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          <div
+            className="cursor-pointer relative group rounded-xl transition-transform 
+          duration-300 ease-in-out"
+          >
             <CardMedia
               component="img"
               image={anime?.image}
               alt={anime?.title_english}
-              className="rounded-sm shadow-xl mx-auto object-cover w-[150px] h-[268px]"
+              className="rounded-[22px] shadow-xl mx-auto object-cover w-[150px] h-[268px]
+              border-2 border-doki-purple"
             />
             <div
-              className="rounded-sm mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"
+              className="rounded-[22px] mx-auto absolute top-0 left-0 w-full h-full
+               bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity 
+               duration-300 ease-in-out"
               onClick={navigateToPage}
             ></div>
 
             <button
               onClick={navigateToPage}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+              opacity-0 group-hover:opacity-100"
               style={{ transition: "opacity 0.2s ease-in-out" }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-white"
+                className="h-12 w-12 text-doki-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

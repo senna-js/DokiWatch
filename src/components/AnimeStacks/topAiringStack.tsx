@@ -35,7 +35,6 @@ export const TopAiringAnimeStack = () => {
     fetchTopAiringAnime();
   }, []); // Empty dependency array means this effect runs once after the initial render
 
-
   const scrollLeft = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -50,12 +49,12 @@ export const TopAiringAnimeStack = () => {
 
   return (
     <div className="relative">
-      <div className="p-3 m-7 sm:m-0 rounded-[16px] sm:rounded-none bg-doki-light-grey backdrop-blur-lg">
+      <div className="p-3 m-7 sm:m-0 rounded-[16px] sm:rounded-none bg-doki-light-grey">
         <h2 className="text-2xl sm:text-4xl font-lato text-doki-purple pl-3">
           Top Airing
         </h2>
         <hr className="border border-doki-purple my-4" />
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden flex justify-center items-center">
           <div
             className="flex gap-1 overflow-x-auto overflow-y-hidden"
             ref={carouselRef}
