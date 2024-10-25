@@ -7,15 +7,15 @@ import { useUser } from "@clerk/clerk-react";
 const Home = () => {
   const { isSignedIn } = useUser();
   return (
-    <div className="md:mx-[150px]">
+    <div className="mr-[30px] sm:mx-[75px] md:mx-[150px]">
       <motion.div
-        className="p-2 sm:p-4 relative"
+        className="pl-10 sm:pl-0 relative"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <motion.h1
-          className="font-bold font-hpSimplifiedbold caret-transparent"
+          className="font-bold font-hpSimplifiedbold ml-5 sm:ml-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -33,7 +33,7 @@ const Home = () => {
           </motion.p> */}
       </motion.div>
       <motion.div
-        className="mt-8 sm:mt-16 m-7"
+        className="mt-8 m-7"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
@@ -41,15 +41,24 @@ const Home = () => {
         <TopAiringAnimeStack />
       </motion.div>
       {isSignedIn && (
-        <motion.div
-          className="m-7"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          <AnimeAiringStack />
-          <AnimeWatchingStack />
-        </motion.div>
+        <div className="mt-16">
+          <motion.div
+            className="m-7"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <AnimeAiringStack />
+          </motion.div>
+          <motion.div
+            className="m-7 mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <AnimeWatchingStack />
+          </motion.div>
+        </div>
       )}
     </div>
   );

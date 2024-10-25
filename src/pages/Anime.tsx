@@ -136,39 +136,148 @@ export const Anime = () => {
         fetchRelationData();
         setAnimeData(res.data.data);
       });
+    const query = `query($id:Int){
+        Media(idMal: $id,type:ANIME) {
+                        id
+    }}`;
+    const variables = { id: parseInt(params.id || "0") };
     axios
-      .get(`https://api.jikan.moe/v4/anime/${params.id}/characters`)
-      .then((res) => {
-        console.log(res.data.data);
-        const charactersData = res.data.data.map(
-          (characterData: {
-            character: any;
-            voice_actors: any[];
-            role: any;
-          }) => {
-            const character = characterData.character;
-            const voiceActor = characterData.voice_actors[0]; // Get the JP voice actor
-
-            return {
-              characterName: character.name,
-              mal_id: character.mal_id,
-              role: characterData.role,
-              characterImage: character.images.webp.image_url,
-              characterUrl: character.url, // Added character URL
-              staffName: voiceActor ? voiceActor.person.name : null,
-              staffImage: voiceActor
-                ? voiceActor.person.images.jpg.image_url
-                : null,
-              staffUrl: voiceActor ? voiceActor.person.url : null, // Added staff URL
-            };
+      .post(
+        `https://graphql.anilist.co`,
+        { query, variables },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const data = response.data.data.Media;
+        // data.alID = data.id;
+        var query = `
+    query($id: Int) {
+      Media(id: $id) {
+        id
+        characters(page: 1, sort: [ROLE, RELEVANCE, ID]) {
+          edges {
+            id
+            role
+            voiceActorRoles(sort: [RELEVANCE, ID], language: JAPANESE) {
+              voiceActor {
+                id
+                name {
+                  userPreferred
+                }
+                image {
+                  large
+                }
+                siteUrl
+              }
+            }
+            node {
+              id
+              name {
+                userPreferred
+              }
+              image {
+                large
+              }
+              siteUrl
+            }
           }
-        );
-        setCharAndStaffData(charactersData);
-        // console.log(JSON.stringify(charactersData, null, 2));
-      })
-      .catch((error) => {
-        console.error("Error fetching characters:", error);
+        }
+      }
+    }
+`;
+
+        // Define query variables
+        var variables = { id: parseInt(data.id) };
+
+        // Define the config for the API request
+        const url = "https://graphql.anilist.co";
+        const options = {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        };
+
+        // Make the API request using axios
+        axios
+          .post(url, { query: query, variables: variables }, options)
+          .then((response) => {
+            console.log(response.data);
+            // Assuming the response data is stored in `response.data`
+            const charactersData =
+              response.data.data.Media.characters.edges.map(
+                (characterData: {
+                  node: any;
+                  voiceActorRoles: string | any[];
+                  role: any;
+                }) => {
+                  const character = characterData.node;
+                  const voiceActor =
+                    characterData.voiceActorRoles.length > 0
+                      ? characterData.voiceActorRoles[0].voiceActor
+                      : null;
+
+                  return {
+                    characterName: character.name.userPreferred,
+                    mal_id: character.id,
+                    role: characterData.role,
+                    characterImage: character.image.large,
+                    characterUrl: character.siteUrl,
+                    staffName: voiceActor
+                      ? voiceActor.name.userPreferred
+                      : null,
+                    staffImage: voiceActor ? voiceActor.image.large : null,
+                    staffUrl: voiceActor ? voiceActor.siteUrl : null,
+                  };
+                }
+              );
+            console.log(charactersData);
+            // Set the formatted data (assuming setCharAndStaffData is a function that saves it)
+            setCharAndStaffData(charactersData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
       });
+
+    // axios
+    //   .get(`https://api.jikan.moe/v4/anime/${params.id}/characters`)
+    //   .then((res) => {
+    //     console.log(res.data.data);
+    //     const charactersData = res.data.data.map(
+    //       (characterData: {
+    //         character: any;
+    //         voice_actors: any[];
+    //         role: any;
+    //       }) => {
+    //         const character = characterData.character;
+    //         const voiceActor = characterData.voice_actors[0]; // Get the JP voice actor
+
+    //         return {
+    //           characterName: character.name,
+    //           mal_id: character.mal_id,
+    //           role: characterData.role,
+    //           characterImage: character.images.webp.image_url,
+    //           characterUrl: character.url, // Added character URL
+    //           staffName: voiceActor ? voiceActor.person.name : null,
+    //           staffImage: voiceActor
+    //             ? voiceActor.person.images.jpg.image_url
+    //             : null,
+    //           staffUrl: voiceActor ? voiceActor.person.url : null, // Added staff URL
+    //         };
+    //       }
+    //     );
+    //     setCharAndStaffData(charactersData);
+    //     // console.log(JSON.stringify(charactersData, null, 2));
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching characters:", error);
+    //   });
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -410,10 +519,9 @@ export const Anime = () => {
                   </div>
                   {dropdownOpen && (
                     <div
-                      className="origin-top-right absolute ml-40 lg:ml-[295px] bottom-0 
-				  mb-2 w-36 lg:w-56 rounded-md shadow-lg border-2 border-doki-purple bg-transparent 
-				  bg-opacity-85 backdrop-filter backdrop-blur-3xl ring-1 ring-black 
-				  ring-opacity-5 focus:outline-none z-50"
+                      className="z-10 origin-top-right absolute 
+                        ml-[165px] md:ml-[170px] xl:ml-[275px]
+                       bottom-0 mb-2 w-36 lg:w-56 bg-doki-dark-grey rounded-[12px]"
                     >
                       <div
                         className="py-1"
@@ -426,7 +534,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToWatching}
                           className="block px-4 py-2 font-lato text-sm text-doki-white 
-						hover:text-doki-purple hover:bg-doki-white w-full text-left 
+						hover:text-doki-dark-grey hover:bg-doki-white w-full text-left 
 						cursor-pointer"
                         >
                           Add to Watching
@@ -436,7 +544,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToCompleted}
                           className="block px-4 py-2 text-sm
-						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
 						 w-full text-left font-lato cursor-pointer"
                         >
                           Add to Completed
@@ -446,7 +554,7 @@ export const Anime = () => {
                           tabIndex={0}
                           onClick={handleAddToPlanToWatch}
                           className="block px-4 py-2 text-sm
-						 text-doki-white hover:text-doki-purple hover:bg-doki-white 
+						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
 						 w-full text-left cursor-pointer"
                         >
                           Add to Plan to Watch
