@@ -10,6 +10,7 @@ import {
   MediaProvider,
   TextTrack,
   Poster,
+  HLSErrorEvent,
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
@@ -38,6 +39,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   handleNextEpisode,
   onProgress,
   onDuration,
+  fetchEpisodes
 }) => {
   const player = useRef<MediaPlayerInstance>(null);
   const remote = useMediaRemote(player);
@@ -159,6 +161,16 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const handleError = (error: HLSErrorEvent) => {
+    //@ts-ignore
+    if (error.type === "networkError" && error.details == "manifestLoadError" && error.fatal){
+      console.log("ManifestLoadError", error)
+      fetchEpisodes(true)
+    }
+    else
+      console.log("Unregistered Error", error)
+  }
+
   return (
     <div className="relative border border-white">
       {currentEpisode && (
@@ -168,6 +180,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             className="mb-0 pb-0"
             src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]}
             ref={player}
+            onHlsError={handleError}
             load="eager"
             posterLoad="eager"
             // storage="vidstack-storage" //Implement self solution
@@ -224,6 +237,7 @@ interface VideoPlayerProps {
   handleNextEpisode: () => void;
   onProgress: (state: { playedSeconds: number }) => void;
   onDuration: (duration: number) => void;
+  fetchEpisodes:(forceRefetch:boolean)=>void;
 }
 // interface VideoPlayerProps {
 //   currentEpisode: currEpisodeData;

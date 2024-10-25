@@ -10,7 +10,7 @@ const initialiazeMongo = async () => {
   );
   return user.mongoClient("mongodb-atlas");
 };
-const mongo = await initialiazeMongo();
+const mongo = initialiazeMongo();
 
 // Helper functions for caching
 const getCachedData = (cacheKey: string) => {
@@ -33,7 +33,7 @@ export const getAnimeData = async (
 
   // Check if cached data exists and forceRefresh is false
   if (!forceRefresh && animeCache[malId]) {
-    console.log(`Returning cached anime data for malId: ${malId}`);
+    console.log("Returning cached anime data for malId:", malId);
     return animeCache[malId]; // Return cached data
   }
 
@@ -60,7 +60,7 @@ export const getCurrentEpisodeData = async (
 
   // Check if cached data exists and forceRefresh is false
   if (!forceRefresh && episodeCache[id]) {
-    console.log(`Returning cached episode data for id: ${id}`);
+    console.log("Returning cached episode data for id:", id);
     return episodeCache[id]; // Return cached data
   }
 
@@ -148,7 +148,7 @@ export const getCurrentEpisodeData = async (
 
 // Function to get Zoro ID from MongoDB or search for it
 const getZoroId = async (malId: number, name: string): Promise<string> => {
-  const anime = await mongo
+  const anime = await (await mongo)
     .db("Zoro")
     .collection("mappings")
     .findOne({ mal_id: malId });
@@ -175,14 +175,14 @@ const searchZoroId = async (malId: number, name: string): Promise<string> => {
         zoro_id: response.data.id,
       };
 
-      const databaseAnime = await mongo
+      const databaseAnime = await (await mongo)
         .db("Zoro")
         .collection("mappings")
         .findOne({ mal_id: response.data.malID });
 
       if (!databaseAnime) {
         console.log("Inserting new anime into database", newAnime);
-        await mongo.db("Zoro").collection("mappings").insertOne(newAnime);
+        await (await mongo).db("Zoro").collection("mappings").insertOne(newAnime);
       }
       return response.data.id;
     }

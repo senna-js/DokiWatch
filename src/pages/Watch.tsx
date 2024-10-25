@@ -51,6 +51,25 @@ export const Watch: React.FC = () => {
     setCurrentEpisodeNumber(epNumber);
   }, [searchParams]);
 
+  const prefetchNextEpisode = (forceRefetch: boolean = false) => {
+    console.log("Prefetching next episode", currentEpisodeNumber! + 1);
+    const epId = animeData?.episodes[currentEpisodeNumber!].id;
+    getCurrentEpisodeData(epId!, animeData!.hasDub, forceRefetch)
+  }
+
+  const fetchEpisodes = async (forceRefetch: boolean = false) => {
+    if (!animeData || !currentEpisodeNumber)
+      return;
+    if (forceRefetch)
+      console.log("Refetching current episode", currentEpisodeNumber);
+    const epId = animeData.episodes[currentEpisodeNumber - 1].id
+    const epData = await getCurrentEpisodeData(epId, animeData.hasDub, forceRefetch)
+    setCurrentEpisode(epData);
+
+    if (currentEpisodeNumber < animeData.episodes.length)
+      prefetchNextEpisode(forceRefetch);
+  }
+
   useEffect(() => {
     if (!animeData || !currentEpisodeNumber)
       return;
@@ -59,22 +78,13 @@ export const Watch: React.FC = () => {
       alert("Invalid episode number")
       return;
     }
-    const epId = animeData.episodes[currentEpisodeNumber - 1].id
-    getCurrentEpisodeData(epId,animeData.hasDub).then((data) => {setCurrentEpisode(data)});
+    fetchEpisodes();
   }, [animeData, currentEpisodeNumber]);
-
-  const prefetchNextEpisode = () => {
-    console.log("Prefetching next episode", currentEpisodeNumber!+1);
-    const epId = animeData?.episodes[currentEpisodeNumber!].id;
-    getCurrentEpisodeData(epId!,animeData!.hasDub)
-  }
 
   useEffect(() => {
     if (!currentEpisode || !animeData || !currentEpisodeNumber)
       return;
     console.log(currentEpisode);
-    if(currentEpisodeNumber < animeData.episodes.length)
-    prefetchNextEpisode();
   }, [currentEpisode]);
 
   const [isQueried, setIsQueried] = useState(false);
@@ -246,8 +256,6 @@ export const Watch: React.FC = () => {
 
   const handleNext = () => {
     if (!currentEpisodeNumber) return;
-    console.log("currentEpisodeNumber", currentEpisodeNumber);
-    console.log("episodesData.length", animeData?.episodes.length);
     if (currentEpisodeNumber === animeData?.episodes.length) {
       alert("You are watching the last episode");
     } else {
@@ -304,6 +312,7 @@ export const Watch: React.FC = () => {
               hasNextEpisode={(currentEpisodeNumber || 0) < (animeData?.episodes.length || 0)}
               onProgress={handleProgress}
               onDuration={handleDuration}
+              fetchEpisodes={fetchEpisodes}
             />
             <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-14 flex flex-row sm:flex-row items-center mb-1 mx-1 sm:mx-0 px-4 py-1 mt-1 sm:mt-0">
               <div className="flex-1 flex flex-col sm:flex-row justify-center items-center sm:mt-0">
