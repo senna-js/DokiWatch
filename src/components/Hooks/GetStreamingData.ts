@@ -90,6 +90,7 @@ export const getCurrentEpisodeData = async (
 
   if (subData) {
     const episodeData: CurrEpisodeData = {
+      zoroId:id,
       intro: subData.data.intro,
       outro: subData.data.outro,
       sources: {

@@ -389,6 +389,7 @@ export const Watch: React.FC = () => {
 };
 
 const dummyCurrEpisodeData: CurrEpisodeData = {
+  zoroId: "",
   intro: {
     start: 0,
     end: 0

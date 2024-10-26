@@ -10,7 +10,7 @@ import {
   MediaProvider,
   TextTrack,
   Poster,
-  HLSErrorEvent,
+  HLSErrorEvent
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
@@ -19,6 +19,8 @@ import {
 import { CustomMenu } from "./VideoPlayerComponents/CustomMenu";
 import { SkipButtons } from "./VideoPlayerComponents/SkipButtons";
 import { EpisodeControlButtons } from "./VideoPlayerComponents/EpisodeControlButtons";
+import { CustomLocalStorage } from "./VideoPlayerComponents/CustomLocalStorage";
+import "./VideoPlayerComponents/player.css";
 import {
   VTTtoJSON,
   type VTTJSON,
@@ -39,7 +41,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   handleNextEpisode,
   onProgress,
   onDuration,
-  fetchEpisodes
+  fetchEpisodes,
 }) => {
   const player = useRef<MediaPlayerInstance>(null);
   const remote = useMediaRemote(player);
@@ -49,6 +51,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   );
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
   const [thumbnails, setThumbnails] = useState<VTTJSON[]>();
+  const [storage, setStorage] = useState<CustomLocalStorage>();
 
   useEffect(() => {
     console.warn("changed player");
@@ -135,6 +138,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     trueStreamType,
   ]);
 
+  useEffect(()=>{
+    setStorage(new CustomLocalStorage("vidstack-storage",currentEpisode.zoroId))
+  },[currentEpisode.zoroId])
+
   const loadSkipButton: boolean =
     (currentTime > currentEpisode.intro.start &&
       currentTime < currentEpisode.intro.end) ||
@@ -163,7 +170,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleError = (error: HLSErrorEvent) => {
     //@ts-ignore
-    if (error.type === "networkError" && error.details == "manifestLoadError" && error.fatal){
+    if (error.type === "networkError" && (error.details == "manifestLoadError" || error.details == "fragLoadError") && error.fatal) {
       console.log("ManifestLoadError", error)
       fetchEpisodes(true)
     }
@@ -183,10 +190,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onHlsError={handleError}
             load="eager"
             posterLoad="eager"
-            // storage="vidstack-storage" //Implement self solution
+            logLevel="debug"
+            storage={storage}
             autoPlay
           >
-            <MediaProvider>
+            <MediaProvider role="button">
               <Poster
                 className="vds-poster"
                 src={loadingSpinner}
@@ -219,6 +227,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                     handleNextEpisode={handleNextEpisode}
                   />
                 ),
+                // captions: null,
               }}
               thumbnails={thumbnails}
             />
@@ -237,7 +246,7 @@ interface VideoPlayerProps {
   handleNextEpisode: () => void;
   onProgress: (state: { playedSeconds: number }) => void;
   onDuration: (duration: number) => void;
-  fetchEpisodes:(forceRefetch:boolean)=>void;
+  fetchEpisodes: (forceRefetch: boolean) => void;
 }
 // interface VideoPlayerProps {
 //   currentEpisode: currEpisodeData;

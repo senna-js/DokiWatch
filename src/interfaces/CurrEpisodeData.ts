@@ -1,4 +1,5 @@
 export interface CurrEpisodeData {
+  zoroId:string
   sources: {
     sub: string;
     dub?: string;
