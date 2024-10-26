@@ -37,21 +37,27 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
             "& .MuiCardContent-root": {
               backgroundColor: "transparent",
             },
+           "&:hover": {
+              transform: "scale(1.05)",
+              transition: "transform 0.3s ease-in-out",
+              borderRadius: "16px",
+              border: "2px solid #2F3672",
+            },
           }}
         >
           <div
-            className="cursor-pointer relative group rounded-xl transition-transform 
-          duration-300 ease-in-out"
+            className="cursor-pointer relative group rounded-[16px] transition-transform 
+          duration-300 ease-in-out hover:scale-110"
           >
             <CardMedia
               component="img"
               image={anime?.image}
               alt={anime?.title_english}
-              className="rounded-[22px] shadow-xl mx-auto object-cover w-[150px] h-[268px]
+              className="rounded-[16px] shadow-xl mx-auto object-cover w-[150px] h-[268px]
               border-2 border-doki-purple"
             />
             <div
-              className="rounded-[22px] mx-auto absolute top-0 left-0 w-full h-full
+              className="rounded-[16px] mx-auto absolute top-0 left-0 w-full h-full
                bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity 
                duration-300 ease-in-out"
               onClick={navigateToPage}
