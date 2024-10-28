@@ -1,4 +1,5 @@
 import daisyui from "daisyui";
+import vidstackTW from "@vidstack/react/tailwind.cjs"
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -62,5 +63,5 @@ export default {
       },
     },
   },
-  plugins: [daisyui, require("@vidstack/react/tailwind.cjs")],
+  plugins: [daisyui, vidstackTW],
 };
