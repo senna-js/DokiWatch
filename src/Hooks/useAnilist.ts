@@ -63,7 +63,7 @@ export const useAnilistAuth = (): AnilistAuth => {
     window.location.href = anilink;
   };
 
-  const getAuth = async () => {
+  const getAuth = () => {
     const fragment = window.location.hash.substring(1);
     const params = new URLSearchParams(fragment);
     const token = params.get("access_token");
@@ -71,8 +71,7 @@ export const useAnilistAuth = (): AnilistAuth => {
     localStorage.setItem("anilist_token", token);
     history.replaceState({},document.title,"");
 
-    const retrievedUserData = await getAnilistUser();
-    setUser(retrievedUserData);
+    getAnilistUser().then((retrievedUser)=>setUser(retrievedUser));
   };
 
   return { user, authState, authenticate, getAuth };
