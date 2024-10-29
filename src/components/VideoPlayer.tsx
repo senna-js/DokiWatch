@@ -115,7 +115,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       const response = await axios.get(src);
       const thumbnailsVTT = response.data;
       const cleanSrc = src.replace(/thumbnails\.vtt$/, "");
-
+      if (!thumbnailsVTT) return;
       const thumbnails = VTTtoJSON(thumbnailsVTT, cleanSrc);
       setThumbnails(thumbnails);
     };
@@ -138,9 +138,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     trueStreamType,
   ]);
 
-  useEffect(()=>{
-    setStorage(new CustomLocalStorage("vidstack-storage",currentEpisode.zoroId))
-  },[currentEpisode.zoroId])
+  useEffect(() => {
+    setStorage(new CustomLocalStorage("vidstack-storage", currentEpisode.zoroId))
+  }, [currentEpisode.zoroId])
 
   const loadSkipButton: boolean =
     (currentTime > currentEpisode.intro.start &&

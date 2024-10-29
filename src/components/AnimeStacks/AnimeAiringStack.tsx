@@ -1,79 +1,17 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useRef } from "react";
-// import { start } from "repl";
-import { useAnimeContext } from "../../AnimeContext";
+// import { useAnimeContext } from "../../AnimeContext";
 import { AnimeCard } from "../AnimeCard";
 import { AnimeData } from "../../interfaces/AnimeData";
+import { useAnilistAuth,anilistQuery } from "../../Hooks/useAnilist";
 
 export const AnimeAiringStack = () => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
-  const carouselRef = useRef<HTMLDivElement>(null);
-  let accessToken: unknown;
-
-  //token is now set inside the user object, prev it was set as a different variable in localstorage
-  const user = localStorage.getItem("user");
-  const token = localStorage.getItem("token") as string;
-
-  let userObject;
-
-  if (user) {
-    userObject = JSON.parse(user);
-  } else {
-    userObject = {};
-  }
-  console.log("user ache", user);
-  if (token) {
-    userObject["access_token"] = token;
-  }
-  //localStorage.setItem("user", JSON.stringify(userObject));
-
-  ///////////////////////////////
-  let username: string | undefined;
-  if (user) {
-    username = JSON.parse(localStorage.getItem("user") as string).username;
-    if (JSON.parse(localStorage.getItem("user") as string).access_token) {
-      accessToken = JSON.parse(
-        localStorage.getItem("user") as string
-      ).access_token;
-    } else {
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      accessToken = hashParams.get("access_token");
-      const user = JSON.parse(localStorage.getItem("user") as string);
-      user["access_token"] = accessToken;
-      localStorage.setItem("user", JSON.stringify(user));
-
-      if (!accessToken) {
-        console.log("No access token found or its over,connect to anilist");
-      }
-    }
-  } else {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    if (!hashParams.get("access_token")) {
-      return;
-    }
-    accessToken = hashParams.get("access_token");
-    const user = JSON.parse(localStorage.getItem("user") as string);
-    if (!user) return;
-    user["access_token"] = accessToken;
-    localStorage.setItem("user", JSON.stringify(user));
-
-    if (!accessToken) {
-      console.log("No access token found or its over,connect to anilist");
-    }
-  }
-
-  // accessToken = "hi";
-  // let username = "itzKirito";
-  let { triggerFetch, setTriggerFetch } = useAnimeContext();
-  if (accessToken) {
-    triggerFetch = true;
-  }
+  const carouselRef = useRef<HTMLDivElement>(null)
+  // let { triggerFetch, setTriggerFetch } = useAnimeContext();
   useEffect(() => {
     const fetchData = async () => {
-      //console.log("fetching anime list", accessToken, triggerFetch);
-      if (!triggerFetch) return;
-
       const query = `
           query ($username: String) {
             MediaListCollection(userName: $username, type: ANIME, status: CURRENT) {

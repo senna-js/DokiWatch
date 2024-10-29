@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { AnimeProvider } from "./AnimeContext";
+// import { AnimeProvider } from "./AnimeContext";
 import { AnimeListProvider } from "./AnimeListContext";
 import { Navbar } from "./components/navbar";
 import LandingPage from "./pages/landingPage";
@@ -13,11 +13,28 @@ import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AnimeList } from "./pages/AnimeList";
 import Home from "./pages/Home";
+import { useAnilistAuth } from "./Hooks/useAnilist";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
   const controls = useAnimation();
   const { ref, inView } = useInView();
+  const { getAuth } = useAnilistAuth();
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      getAuth();
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Call getAuth initially in case the hash is already present
+    getAuth();
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (inView) {
@@ -30,7 +47,6 @@ const App = () => {
   }, [controls, inView]);
 
   return (
-    <AnimeProvider>
       <AnimeListProvider>
         <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
           <div className="absolute w-full h-full bg-doki-purple"></div>
@@ -70,7 +86,6 @@ const App = () => {
           </Routes>
         </div>
       </AnimeListProvider>
-    </AnimeProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { CurrEpisodeData } from "../../interfaces/CurrEpisodeData";
+import { CurrEpisodeData } from "../interfaces/CurrEpisodeData";
 import { consumetZoro } from "./LoadBalancer";
 import * as Realm from "realm-web";
 
@@ -90,7 +90,7 @@ export const getCurrentEpisodeData = async (
 
   if (subData) {
     const episodeData: CurrEpisodeData = {
-      zoroId:id,
+      zoroId: id,
       intro: subData.data.intro,
       outro: subData.data.outro,
       sources: {
@@ -183,7 +183,10 @@ const searchZoroId = async (malId: number, name: string): Promise<string> => {
 
       if (!databaseAnime) {
         console.log("Inserting new anime into database", newAnime);
-        await (await mongo).db("Zoro").collection("mappings").insertOne(newAnime);
+        await (await mongo)
+          .db("Zoro")
+          .collection("mappings")
+          .insertOne(newAnime);
       }
       return response.data.id;
     }

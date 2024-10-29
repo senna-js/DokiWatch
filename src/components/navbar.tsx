@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "./sidebar";
 import {
   SignedIn,
@@ -6,16 +6,18 @@ import {
   SignInButton,
   SignOutButton,
 } from "@clerk/clerk-react";
-import { useAnimeContext } from "../AnimeContext"; // Import the context
 import { useNavigate } from "react-router-dom";
 import kofiImage from "../assests/kofi.png";
 import coffeeImage from "../assests/Coffee.png";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
+import { useAnilistAuth } from "../Hooks/useAnilist";
 
 export const Navbar = () => {
-  const [hoveredKoFi, setHoveredKoFi] = useState(false);
-  const [hoveredCoffee, setHoveredCoffee] = useState(false);
-  const [hoveredDiscord, setHoveredDiscord] = useState(false);
+  // const [hoveredKoFi, setHoveredKoFi] = useState(false);
+  // const [hoveredCoffee, setHoveredCoffee] = useState(false);
+  // const [hoveredDiscord, setHoveredDiscord] = useState(false);
+  const { user,authenticate,authState} = useAnilistAuth();
+
   const handleKoFiClick = () => {
     window.open("https://ko-fi.com/eshan27", "_blank", "noopener,noreferrer");
   };
@@ -37,102 +39,8 @@ export const Navbar = () => {
   };
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [profilePic, setProfilePic] = useState("");
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  const { setTriggerFetch } = useAnimeContext(); // Use the context
   const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(true);
-  const [username, setUsername] = useState("");
-  const [isAnilistConnect, setIsAnilistConnect] = useState(false);
-
-  const getAccessTokenFromHash = () => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    return hashParams.get("access_token");
-  };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      console.log("fetch user data is called");
-      var accessToken = getAccessTokenFromHash();
-      let username: string | undefined;
-
-      const user = localStorage.getItem("user");
-      if (user) {
-        const userobj = JSON.parse(user);
-        username = userobj.username;
-        if (!accessToken) {
-          accessToken = userobj.access_token;
-        }
-      } else {
-        const user = {
-          access_token: accessToken,
-        };
-        localStorage.setItem("user", JSON.stringify(user));
-      }
-      // else {
-      //   console.log("No user found in localstorage");
-      //   return;
-      // }
-
-      if (accessToken) {
-        // console.log("Access Token:", accessToken);
-        // if access token is present don't show popup
-        setIsChatBubbleOpen(false);
-        const query = `
-          query {
-            Viewer { 
-            id 
-            name 
-            avatar { 
-            large 
-            medium 
-            } 
-            }
-          }
-        `;
-
-        // const variables = {
-        //   name: username as string,
-        // };
-
-        try {
-          const response = await fetch("https://graphql.anilist.co", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
-            },
-            body: JSON.stringify({
-              query,
-            }),
-          });
-
-          const { data } = await response.json();
-          console.log(data);
-
-          if (data && data.Viewer && data.Viewer.avatar) {
-            const user = {
-              username: data.Viewer.name,
-              access_token: accessToken,
-              avatar: data.Viewer.avatar.large,
-            };
-            // console.log("navbar_User:", user);
-            //const user = JSON.parse(localStorage.getItem("user") || "{}");
-            //user["avatar"] = data.Viewer.avatar.large;
-            localStorage.setItem("user", JSON.stringify(user));
-            setProfilePic(data.Viewer.avatar.large);
-            setIsAnilistConnect(true);
-            // Update anime data in the context
-            setTriggerFetch(true);
-          }
-        } catch (error) {
-          console.error("Error fetching AniList profile:", error);
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []); // Run only once after the initial render
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -187,25 +95,11 @@ export const Navbar = () => {
     setIsGroupOpen((prev) => !prev);
   };
 
-  const handleUsernameChange = (event: any) => {
-    setUsername(event.target.value);
-    const user = { username: event.target.value };
-    localStorage.setItem("user", JSON.stringify(user));
-  };
-
-  const handleSubmit = () => {
-    console.log("Username submitted:", username);
-    let anilink = "";
-    if (import.meta.env.PROD) {
-      anilink =
-        "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token";
-    } else {
-      anilink =
-        "https://anilist.co/api/v2/oauth/authorize?client_id=19786&response_type=token";
-    }
-    window.location.href = anilink;
-    setIsChatBubbleOpen(false);
-  };
+  // const handleUsernameChange = (event: any) => {
+  //   setUsername(event.target.value);
+  //   const user = { username: event.target.value };
+  //   localStorage.setItem("user", JSON.stringify(user));
+  // };
 
   return (
     <div
@@ -360,12 +254,12 @@ export const Navbar = () => {
         <SignedIn>
           <div className="relative">
             <div
-              onClick={() => setIsChatBubbleOpen(!isChatBubbleOpen)}
+              onClick={() => setIsChatBubbleOpen((prev) => !prev)}
               className="cursor-pointer"
             >
-              {profilePic ? (
+              {user?.avatar ? (
                 <img
-                  src={profilePic || ""}
+                  src={user.avatar}
                   alt="Profile"
                   className="sm:h-10 sm:w-10 h-8 w-8 rounded-full cursor-pointer"
                 />
@@ -373,7 +267,7 @@ export const Navbar = () => {
                 <DefaultProfileIcon />
               )}
             </div>
-            {isChatBubbleOpen && !isAnilistConnect && (
+            {isChatBubbleOpen && (authState === 'unauthenticated') && (
               <div className="absolute mt-4 top-12 right-0 bg-doki-dark-grey text-doki-white border border-gray-700 p-4 shadow-lg w-64 font-lato rounded-[12px]">
                 <div className="absolute top-[-8px] right-4">
                   <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
@@ -382,7 +276,7 @@ export const Navbar = () => {
                   Connect to Anilist to sync your watchlist.
                 </p>
                 <button
-                  onClick={handleSubmit}
+                  onClick={authenticate}
                   className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
                 >
                   Connect to Anilist

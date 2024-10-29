@@ -7,7 +7,7 @@ import { CurrEpisodeData } from "../interfaces/CurrEpisodeData";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { DiscussionEmbed } from "disqus-react";
 import { CommentCount } from 'disqus-react';
-import { AnimeData, getAnimeData, getCurrentEpisodeData } from "../components/Hooks/GetStreamingData";
+import { AnimeData, getAnimeData, getCurrentEpisodeData } from "../Hooks/GetStreamingData";
 
 export const Watch: React.FC = () => {
   const [animeData, setAnimeData] = useState<AnimeData>();
