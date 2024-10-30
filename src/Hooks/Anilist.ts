@@ -112,3 +112,14 @@ export const anilistQuery = async (
   const response = await fetch(url, options);
   return response.json();
 };
+export const addToAnilist = async (mediaId: number, status: string) => {
+  const query = `
+    mutation AddMediaListEntry($mediaId: Int, $status: MediaListStatus) {
+      SaveMediaListEntry(mediaId: $mediaId, status: $status) {
+        id
+        status
+      }
+    }`;
+  const variables = { mediaId, status };
+  return anilistQuery(query, variables, true);
+};
