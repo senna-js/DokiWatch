@@ -110,8 +110,8 @@ const Home = () => {
           return anime;
         });
 
-        console.log("Releasing",watchingAiringAnimeData )
-        console.log("Released",watchingAiredAnimeData)
+      console.log("Releasing", watchingAiringAnimeData)
+      console.log("Released", watchingAiredAnimeData)
 
       setWatchingAiringAnime(watchingAiringAnimeData);
       setWatchingAiredAnime(watchingAiredAnimeData);
@@ -160,7 +160,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{text:"Airing",color:"bg-green-300"}}/>
+            <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
           </motion.div>
           <motion.div
             className="m-7 mt-16"
@@ -168,7 +168,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{text:"Aired",color:"bg-blue-500"}}/>
+            <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
           </motion.div>
         </div>
       )}

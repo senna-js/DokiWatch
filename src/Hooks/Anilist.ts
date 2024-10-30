@@ -22,13 +22,14 @@ export const useAnilistAuth = (): AnilistAuth => {
   const setAnilistUser = async (): Promise<void> => {
     setAuthState("loading");
 
-    if (localStorage.getItem("anilist_user")) {
+    if (localStorage.getItem("anilist_user") && localStorage.getItem("anilist_token")) {
       setUser(JSON.parse(localStorage.getItem("anilist_user")!))
       setAuthState("authenticated");
       return;
     }
 
     if (!localStorage.getItem("anilist_token")) {
+      localStorage.removeItem("anilist_user");
       setUser(null);
       setAuthState("unauthenticated");
       return;
@@ -72,6 +73,7 @@ export const useAnilistAuth = (): AnilistAuth => {
     const params = new URLSearchParams(fragment);
     const token = params.get("access_token");
     if (!token) return;
+    console.log(params)
     localStorage.setItem("anilist_token", token);
     window.history.replaceState(null, "", window.location.pathname);
 
