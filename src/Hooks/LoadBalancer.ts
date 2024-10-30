@@ -21,6 +21,7 @@ export const LoadBalance = async (
       const response = await axios.get(url);
       return response;
     } catch (error) {
+      console.error(`Endpoint ${randomEndpoint} failed: ${error}`);
       if (i === endpointsCopy.length - 1) {
         throw new Error("All endpoints failed");
       }
