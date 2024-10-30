@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 import kofiImage from "../assests/kofi.png";
 import coffeeImage from "../assests/Coffee.png";
 // import { motion } from "framer-motion";
-import { useAnilistAuth } from "../Hooks/useAnilist";
+import { useAnilistAuth } from "../Hooks/Anilist";
 
 export const Navbar = () => {
   // const [hoveredKoFi, setHoveredKoFi] = useState(false);
   // const [hoveredCoffee, setHoveredCoffee] = useState(false);
   // const [hoveredDiscord, setHoveredDiscord] = useState(false);
-  const { user,authenticate,authState} = useAnilistAuth();
+  const { user, authenticate, authState } = useAnilistAuth();
 
   const handleKoFiClick = () => {
     window.open("https://ko-fi.com/eshan27", "_blank", "noopener,noreferrer");

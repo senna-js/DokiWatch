@@ -1,112 +1,76 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useRef } from "react";
-// import { useAnimeContext } from "../../AnimeContext";
 import { AnimeCard } from "../AnimeCard";
 import { AnimeData } from "../../interfaces/AnimeData";
-import { useAnilistAuth,anilistQuery } from "../../Hooks/useAnilist";
+import { useAnilistAuth, anilistQuery } from "../../Hooks/Anilist";
 
-export const AnimeAiringStack = () => {
+export const AnilistStack: React.FC<StackType> = ({ status }) => {
   const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
+  const { user, authState } = useAnilistAuth();
   const carouselRef = useRef<HTMLDivElement>(null)
-  // let { triggerFetch, setTriggerFetch } = useAnimeContext();
+
   useEffect(() => {
     const fetchData = async () => {
+      if (authState !== "authenticated")
+        return;
+      if (!user) {
+        console.log("Invalid authState", authState, user);
+        return;
+      }
       const query = `
-          query ($username: String) {
-            MediaListCollection(userName: $username, type: ANIME, status: CURRENT) {
-              lists {
-                name
-                entries {
-                  mediaId
-                  status
-                  score
-                  progress
-                  media {
-                    title {
-                      romaji
-                      english
-                    }
-                    idMal
-                    coverImage {
-                      extraLarge
-                    }
-                    bannerImage
-                    status(version: 1)
-                    season
-                    episodes
-                  }
-                }
+      query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
+        Page(page: $page, perPage: $perPage) {
+          mediaList(userId: $userId, type: $type, status: $status) {
+            media {
+              id
+              idMal
+              title {
+                romaji
+                english
+              }
+              description
+              coverImage {
+                extraLarge
+                color
               }
             }
+          id
           }
-        `;
+        }
+      }`;
 
       const variables = {
-        username: username,
+        page: 1,
+        perPage: 50,
+        userId: user.id,
+        type: "ANIME",
+        status: status
       };
 
-      try {
-        // console.log("fetching anime list", accessToken);
-        const response = await fetch("https://graphql.anilist.co", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${accessToken}`,
+      const response = await anilistQuery(query, variables, false);
+
+      const mediaList = response.data.Page.mediaList;
+
+      const fetchedAnimeData: AnimeData[] = mediaList.map((media: any) => {
+        const anime: AnimeData = {
+          id: media.media.id,
+          idMal: media.media.idMal,
+          title: {
+            romaji: media.media.title.romaji,
+            english: media.media.title.english,
           },
-          body: JSON.stringify({
-            query,
-            variables,
-          }),
-        });
+          image: media.media.coverImage.extraLarge,
+          color: media.media.coverImage.color,
+          entryId: media.id,
+        };
+        return anime;
+      });
 
-        const { data } = await response.json();
-
-        if (
-          data &&
-          data.MediaListCollection &&
-          data.MediaListCollection.lists
-        ) {
-          const lists = data.MediaListCollection.lists;
-          console.log(lists);
-          const animeList: AnimeData[] = lists.flatMap((list: any) =>
-            list.entries
-              .filter((entry: any) => entry.media.status === "RELEASING")
-              .map((entry: any) => ({
-                mal_id: entry.media.idMal,
-                title: entry.media.title.romaji,
-                title_english: entry.media.title.english,
-                image: entry.media.coverImage.extraLarge,
-                mediaId: entry.mediaId,
-              }))
-          );
-          // console.log(animeList);
-          var mediaIdList = {};
-          if (lists[0].entries.length === 0) {
-            console.log("No anime found in the list");
-          } else {
-            mediaIdList = lists[0].entries.map((entry: any) => ({
-              mal_id: entry.media.idMal,
-              mediaId: entry.mediaId,
-              progress: entry.progress,
-            }));
-          }
-
-          //console.log(mediaIdList);
-          sessionStorage.setItem("mediaIdList", JSON.stringify(mediaIdList));
-          setAnimeData(animeList); // Set the fetched data
-          setTriggerFetch(false); // Reset the trigger fetch flag
-        } else {
-          console.log("No data found");
-        }
-      } catch (error) {
-        console.error("Error fetching anime list:", error);
-      }
+      setAnimeData(fetchedAnimeData);
     };
-
     fetchData();
-  }, [triggerFetch]); // Trigger fetch when the context value changes
+  }, [authState]);
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -141,7 +105,7 @@ export const AnimeAiringStack = () => {
               ref={carouselRef}
             >
               {animeData.map((anime) => (
-                <div key={anime?.mal_id}>
+                <div key={anime.idMal}>
                   <AnimeCard anime={anime} />
                   {/* More anime details */}
                 </div>
@@ -204,3 +168,8 @@ export const AnimeAiringStack = () => {
     </div>
   );
 };
+
+
+interface StackType {
+  status: "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
+}

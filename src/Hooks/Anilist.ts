@@ -19,15 +19,19 @@ export const useAnilistAuth = (): AnilistAuth => {
     "loading" | "authenticated" | "unauthenticated"
   >("loading");
 
-  const getAnilistUser = async (): Promise<AnilistUser | null> => {
+  const setAnilistUser = async (): Promise<void> => {
     setAuthState("loading");
+
     if (localStorage.getItem("anilist_user")) {
+      setUser(JSON.parse(localStorage.getItem("anilist_user")!))
       setAuthState("authenticated");
-      return JSON.parse(localStorage.getItem("anilist_user")!);
+      return;
     }
+
     if (!localStorage.getItem("anilist_token")) {
+      setUser(null);
       setAuthState("unauthenticated");
-      return null;
+      return;
     }
 
     const query = `
@@ -49,12 +53,12 @@ export const useAnilistAuth = (): AnilistAuth => {
       avatar: response.data.Viewer.avatar.large,
     };
     localStorage.setItem("anilist_user", JSON.stringify(user));
+    setUser(user);
     setAuthState("authenticated");
-    return user;
   };
 
   useEffect(() => {
-    getAnilistUser().then((user) => setUser(user));
+    setAnilistUser();
   }, []);
 
   const authenticate = () => {
@@ -69,9 +73,9 @@ export const useAnilistAuth = (): AnilistAuth => {
     const token = params.get("access_token");
     if (!token) return;
     localStorage.setItem("anilist_token", token);
-    history.replaceState({},document.title,"");
+    window.history.replaceState(null, "", window.location.pathname);
 
-    getAnilistUser().then((retrievedUser)=>setUser(retrievedUser));
+    setAnilistUser();
   };
 
   return { user, authState, authenticate, getAuth };
@@ -89,9 +93,7 @@ export const anilistQuery = async (
   if (authenticated) {
     const token = localStorage.getItem("anilist_token");
     if (!token)
-      throw new Error(
-        "No access token found for authenticated anilist request"
-      );
+      throw new Error("No access token found for authenticated anilist request");
 
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -106,6 +108,7 @@ export const anilistQuery = async (
       }),
     };
 
+  // console.log(query, variables);
   const response = await fetch(url, options);
   return response.json();
 };

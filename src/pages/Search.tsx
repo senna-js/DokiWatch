@@ -141,10 +141,10 @@ export const Search = () => {
                     return null;
                 }
                 return {
-                    mal_id: item.idMal,
-                    title: item.title.romaji,
-                    title_english: item.title.english,
-                    image: item.coverImage.extraLarge
+                    idMal: item.idMal,
+                    title:item.title,
+                    image: item.coverImage.extraLarge,
+                    color: item.coverImage.color
                 };
             });
             setAnime(animeData.filter((item: AnimeData) => item !== null));
@@ -163,7 +163,7 @@ export const Search = () => {
                     {
                         currentAnime.map((anime, index) => (
                             <motion.div
-                                key={anime.mal_id}
+                                key={anime.idMal}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}

@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-// import { AnimeProvider } from "./AnimeContext";
 import { AnimeListProvider } from "./AnimeListContext";
 import { Navbar } from "./components/navbar";
 import LandingPage from "./pages/landingPage";
@@ -13,7 +12,7 @@ import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AnimeList } from "./pages/AnimeList";
 import Home from "./pages/Home";
-import { useAnilistAuth } from "./Hooks/useAnilist";
+import { useAnilistAuth } from "./Hooks/Anilist";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
@@ -47,10 +46,10 @@ const App = () => {
   }, [controls, inView]);
 
   return (
-      <AnimeListProvider>
-        <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
-          <div className="absolute w-full h-full bg-doki-purple"></div>
-          {/* <video
+    <AnimeListProvider>
+      <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
+        <div className="absolute w-full h-full bg-doki-purple"></div>
+        {/* <video
           autoPlay
           muted
           loop
@@ -60,32 +59,32 @@ const App = () => {
           <source src={scene} type="video/mp4" />
           Your browser does not support the video tag.
         </video> */}
-          <Navbar />
-          <div className="sm:h-[109px] h-[67px]"></div>
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/anime/:id" element={<Anime />} />
-            <Route
-              path="/watching"
-              element={<AnimeList title="Watching" list="watching" />}
-            />
-            <Route
-              path="/completed"
-              element={<AnimeList title="Completed" list="completed" />}
-            />
-            <Route
-              path="/plan-to-watch"
-              element={<AnimeList title="Plan to Watch" list="planToWatch" />}
-            />
-            <Route path="/search" element={<Search />} />
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/watch/:id" element={<Watch />} />
-            <Route path="/manga" element={<Manga />} />
-            <Route path="/read/:mangaName" element={<Read />} />
-            {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
-          </Routes>
-        </div>
-      </AnimeListProvider>
+        <Navbar />
+        <div className="sm:h-[109px] h-[67px]"></div>
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/anime/:id" element={<Anime />} />
+          <Route
+            path="/watching"
+            element={<AnimeList title="Watching" list="watching" />}
+          />
+          <Route
+            path="/completed"
+            element={<AnimeList title="Completed" list="completed" />}
+          />
+          <Route
+            path="/plan-to-watch"
+            element={<AnimeList title="Plan to Watch" list="planToWatch" />}
+          />
+          <Route path="/search" element={<Search />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/watch/:id" element={<Watch />} />
+          <Route path="/manga" element={<Manga />} />
+          <Route path="/read/:mangaName" element={<Read />} />
+          {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
+        </Routes>
+      </div>
+    </AnimeListProvider>
   );
 };
 

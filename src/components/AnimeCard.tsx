@@ -6,7 +6,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   const navigate = useNavigate();
 
   const navigateToPage = () => {
-    navigate(`/anime/${anime?.mal_id}`);
+    navigate(`/anime/${anime.idMal}`);
   };
 
   return (
@@ -14,7 +14,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       TransitionComponent={Zoom}
       title={
         <>
-          <h3>{anime?.title_english || anime?.title}</h3>
+          <h3>{anime.title.english}</h3>
         </>
       }
       placement="top"
@@ -37,7 +37,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
             "& .MuiCardContent-root": {
               backgroundColor: "transparent",
             },
-           "&:hover": {
+            "&:hover": {
               transform: "scale(1.05)",
               transition: "transform 0.3s ease-in-out",
               borderRadius: "16px",
@@ -51,8 +51,8 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           >
             <CardMedia
               component="img"
-              image={anime?.image}
-              alt={anime?.title_english}
+              image={anime.image}
+              alt={anime.title.english}
               className="rounded-[16px] shadow-xl mx-auto object-cover w-[150px] h-[268px]
               border-2 border-doki-purple"
             />
@@ -93,15 +93,9 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           </div>
         </Card>
         <div>
-          {anime?.title_english ? (
-            <div className="text-md relative text-doki-purple font-semibold text-center truncate mx-2 pt-2 font-poppins">
-              {anime?.title_english}
-            </div>
-          ) : (
-            <div className="text-md relative text-doki-purple font-semibold text-center truncate mx-2 pt-2 font-poppins">
-              {anime?.title}
-            </div>
-          )}
+          <div className="text-md relative text-doki-purple font-semibold text-center truncate mx-2 pt-2 font-poppins">
+            {anime.title.english}
+          </div>
         </div>
       </div>
     </Tooltip>

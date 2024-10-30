@@ -1,11 +1,37 @@
-import { AnimeWatchingStack } from "../components/AnimeStacks/AnimeWatchingStack";
-import { AnimeAiringStack } from "../components/AnimeStacks/AnimeAiringStack";
-import { TopAiringAnimeStack } from "../components/AnimeStacks/topAiringStack";
+// import { AnimeWatchingStack } from "../components/AnimeStacks/temp-[AnimeWatchingStack]";
+import { AnilistStack } from "../components/AnimeStacks/AnilistStack";
+import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack";
+import { useEffect, useState } from "react";
+// import { TopAiringAnimeStack } from "../components/AnimeStacks/topAiringStack";
 import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
+import { AnimeData } from "../interfaces/AnimeData";
+import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
 
 const Home = () => {
   const { isSignedIn } = useUser();
+  const [topAiringAnime, setTopAiringAnime] = useState<AnimeData[]>([]);
+
+  useEffect(() => {
+    const getTopAiringAnime = async () => {
+      const params: ConsumetAnilistSearchParams = {
+        status: "RELEASING"
+      };
+      const response = await consumetAnilistSearch(params);
+      // console.log(response.data.results)
+      setTopAiringAnime(response.data.results.map((anime:any)=>{
+        const topAnime:AnimeData = {
+          id:anime.id,
+          idMal:anime.malId,
+          title:anime.title,
+          color:anime.color,
+          image:anime.image
+        }
+        return topAnime;
+      }));
+    }
+    getTopAiringAnime();
+  }, []);
   return (
     <div className="mr-[30px] sm:mx-[75px] md:mx-[150px]">
       <motion.div
@@ -38,7 +64,7 @@ const Home = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <TopAiringAnimeStack />
+        <AnimeDataStack animeData={topAiringAnime} />
       </motion.div>
       {isSignedIn && (
         <div className="mt-16">
@@ -48,7 +74,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeAiringStack />
+            <AnilistStack status="CURRENT" />
           </motion.div>
           <motion.div
             className="m-7 mt-16"
@@ -56,7 +82,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeWatchingStack />
+            {/* <AnimeWatchingStack /> */}
           </motion.div>
         </div>
       )}
