@@ -179,12 +179,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }
 
   return (
-    <div className="relative border border-white">
+    <div className="relative border border-doki-light-grey">
       {currentEpisode && (
         <>
           <MediaPlayer
             aspectRatio="16/9"
-            className="mb-0 pb-0 rounded-lg overflow-hidden"
+            className="mb-0 pb-0"
             src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]}
             ref={player}
             onHlsError={handleError}
