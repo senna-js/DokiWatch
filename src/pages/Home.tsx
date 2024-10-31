@@ -121,7 +121,7 @@ const Home = () => {
     getWatchingAnime();
   }, [authState]);
   return (
-    <div className="mr-[30px] sm:mx-[75px] md:mx-[150px]">
+    <div className="sm:mx-[75px] md:mx-[150px]">
       <motion.div
         className="pl-10 sm:pl-0 relative"
         initial={{ opacity: 0, y: -20 }}

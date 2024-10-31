@@ -180,7 +180,7 @@ export const Navbar = () => {
                 <img
                   src={coffeeImage}
                   alt="Buy Me a Coffee"
-                  className="w-7 h-7 rounded-full"
+                  className="w-7 h-7"
                 />
               </button>
             </li>
@@ -192,7 +192,7 @@ export const Navbar = () => {
                 <img
                   src={kofiImage}
                   alt="Support Us on Ko-fi"
-                  className="w-7 rounded-full"
+                  className="w-7"
                 />
               </button>
             </li>
@@ -209,7 +209,7 @@ export const Navbar = () => {
                   fillRule="evenodd"
                   clipRule="evenodd"
                   viewBox="0 0 512 365.467"
-                  className="w-7 rounded-full"
+                  className="w-7"
                 >
                   <path
                     fill="#2F3672"

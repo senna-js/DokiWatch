@@ -263,35 +263,42 @@ export const Watch: React.FC = () => {
     }
   };
   return (
-    <div className="sm:ml-16 sm:mt-5 ">
-      <div className="flex flex-col-reverse sm:flex-row h-fit">
-        <div className="flex flex-col py-2 bg-gray-800 h-fit max-h-[560px] sm:max-h-[624px] sm:h-[624px] sm:w-72 mx-1 sm:mx-0 border border-white sm:border-r-slate-500 backdrop-blur-lg text-center rounded-l-md rounded-r-md sm:rounded-r-none">
-          <div className="text-center font-poppins font-semibold pb-2">
+    <div className="mx-4 2xl:mr-36">
+     <div id="episodes" className="flex w-full
+     flex-col-reverse lg:flex-row gap-3 lg:gap-1 justify-center h-fit items-stretch">
+        <div className="flex flex-col py-2 bg-doki-light-grey text-doki-purple h-fit 
+        max-h-[560px] sm:max-h-[624px] sm:h-[624px] w-full lg:w-72 mx-1 sm:mx-0 font-lato sm:border-r-slate-500 backdrop-blur-lg text-center 
+        rounded-l-[22px] rounded-r-[22px] lg:rounded-r-none">
+          <div className="text-center font-lato font-[30px] pb-1">
             EPISODES
           </div>
-          <hr className="" />
-          <div className="overflow-y-auto cursor-pointer scrollHide">
+          <hr className="border-doki-purple rounded-md h-[4px] border-2 bg-doki-purple mx-3 mb-2" />
+          <div className="overflow-y-auto cursor-pointer scrollHide rounded-bl-[12px] rounded-br-[12px]">
             {animeData?.episodes.map((episode, index) => (
               <div role="button"
                 key={index}
-                className={`relative flex justify-start items-center h-14 ${episode.number == currentEpisodeNumber
-                  ? "bg-gray-700"
-                  : "bg-gray-800 hover:bg-gray-700"
+                className={`relative flex justify-start items-center h-14 
+                  ${episode.number == currentEpisodeNumber
+                  ? "bg-doki-light-grey"
+                  : "bg-doki-light-grey hover:bg-doki-white"
                   } transition-colors duration-150 ease-in-out`}
                 onClick={() => {
                   handleWatchEpisode(episode.number);
                 }}
               >
                 {episode.number == currentEpisodeNumber && (
-                  <div className="absolute inset-0 bg-gray-600 animate-slideIn z-0"></div>
+                  <div className="absolute inset-0 bg-doki-dark-grey animate-slideIn z-0"></div>
                 )}
                 <div
-                  className={`w-1 relative bg-blue-500 h-full transition-opacity duration-500 ease-in-out ${episode.number == currentEpisodeNumber
+                  className={`w-1 relative 
+                    bg-transparent h-full transition-opacity 
+                    duration-500 ease-in-out ${episode.number == currentEpisodeNumber
                     ? "opacity-100"
                     : "opacity-0"
                     }`}
                 ></div>
-                <div className="relative z-10 hover:text-pink-200 ml-2 text-border-white font-poppins cursor-pointer truncate">
+                <div className="relative z-10  ml-2 
+                font-lato cursor-pointer truncate">
                   {episode.number}. {episode.title}
                 </div>
                 {/* <div className="sm:hidden text-white mx-auto font-poppins">
@@ -303,7 +310,7 @@ export const Watch: React.FC = () => {
         </div>
         <div className="w-full max-w-4xl relative">
 
-          <div className="sm:w-[1000px]">
+          <div className="2xl:w-[1000px]">
             <VideoPlayer
               currentEpisode={currentEpisode || dummyCurrEpisodeData}
               handlePreviousEpisode={handlePrev}
@@ -314,32 +321,35 @@ export const Watch: React.FC = () => {
               onDuration={handleDuration}
               fetchEpisodes={fetchEpisodes}
             />
-            <div className="bg-gray-800 border border-white backdrop-blur-lg rounded-ee-md h-auto sm:h-14 flex flex-row sm:flex-row items-center mb-1 mx-1 sm:mx-0 px-4 py-1 mt-1 sm:mt-0">
-              <div className="flex-1 flex flex-col sm:flex-row justify-center items-center sm:mt-0">
-                {/* Find the current episode and display its title */}
-                <p className="whitespace-nowrap text-xs sm:text-sm font-poppins font-semibold text-white px-1 pl-2 p-1 truncate">
-                  CURRENT EPISODE:{" "}
-                </p>
-                <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs sm:text-sm mr-2 flex items-center font-poppins bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-1 p-1 rounded-md font-semibold">
-                  {currentEpisodeNumber} -{" "}
-                  {
-                    animeData?.episodes.find(
-                      (episode) => episode.number === currentEpisodeNumber
-                    )?.title
-                  }
-                </p>
-              </div>
+            <div className="bg-doki-light-grey rounded-br-[22px] rounded-bl-[22px] 
+            lg:rounded-bl-none h-auto sm:h-16 lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row 
+            items-center justify-center mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
+              <div className="flex flex-col sm:flex-row justify-center items-center bg-transparent
+                    sm:mt-0 sm:bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
+                      {/* Find the current episode and display its title */}
+                      <p className="whitespace-nowrap text-xs sm:text-sm font-lato 
+                      font-semibold text-doki-purple p-3 sm:p-2 truncate">
+                        CURRENT EPISODE:{" "}
+                      </p>
+                      <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs 
+                      sm:text-sm mr-2 flex items-center font-lato
+                      sm:px-1 p-2 rounded-full font-semibold">
+                        {currentEpisodeNumber} -{" "}
+                        {
+                          animeData?.episodes.find(
+                            (episode) => episode.number === currentEpisodeNumber
+                          )?.title
+                        }
+                      </p>
+                    </div>
             </div>
           </div>
-
         </div>
       </div>
-      <div
+      {/* <div
         id="jjk"
         className="mt-2 bg-transparent backdrop-blur-lg border border-white text-center rounded-md py-2"
       >
-        {/* {`${params.id} - ${currentEpisodeNumber}`} */}
-        {/* Toggle Button */}
         <div className="toggle-container justify-center items-center mb-4">
           <input
             type="checkbox"
@@ -355,8 +365,6 @@ export const Watch: React.FC = () => {
             {isCommentsVisible ? "Hide Comments" : "Show Comments"}
           </span>
         </div>
-
-        {/* Conditional rendering based on isCommentsVisible */}
         {isCommentsVisible && (
           <>
             <div className="disqus-container">
@@ -377,13 +385,12 @@ export const Watch: React.FC = () => {
                   title: `Episode ${currentEpisodeNumber}`,
                 }}
               >
-                {/* Placeholder Text */}
                 Comments
               </CommentCount>
             </div>
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
