@@ -17,7 +17,7 @@ import { AnilistAuthProvider } from "./Anilist";
 
 const App = () => {
   const controls = useAnimation();
-  const { ref, inView } = useInView();
+  const { inView } = useInView();
 
   useEffect(() => {
     if (inView) {

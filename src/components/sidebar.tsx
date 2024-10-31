@@ -24,6 +24,7 @@ import {
 import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import TraceAnimeModal from "./TraceAnimeModal";
+import { useAnilistAuth } from "../Anilist";
 
 // const AnimeDialog = styled(Dialog)({
 //   "& .MuiDialog-paper": {
@@ -80,16 +81,14 @@ import TraceAnimeModal from "./TraceAnimeModal";
 // });
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [schedule, setSchedule] = useState([]);
   const modalRef = useRef(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalDisplayed, setIsModalDisplayed] = useState(false);
   const traceRef = useRef<HTMLDialogElement>(null);
+  const { authenticate } = useAnilistAuth();
 
   const handleModalDisplay = () => {
     setIsModalDisplayed(true);
@@ -109,14 +108,6 @@ const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const navigate = useNavigate();
 
   const handleTitleClick = (animeId: any) => {
@@ -124,29 +115,13 @@ const Sidebar = () => {
     navigate(`/anime/${animeId}`);
   };
 
-  const handleUsernameChange = (event: any) => {
-    setUsername(event.target.value);
-    const user = { username: event.target.value };
-    localStorage.setItem("user", JSON.stringify(user));
-  };
-
   const handleSubmit = () => {
-    console.log("Username submitted:", username);
-    window.open(
-      "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token",
-      "_blank"
-    );
-    setOpen(false);
+    authenticate();
   };
 
   const handleHomeClick = () => {
     console.log("Home IconButton clicked");
     navigate("/home");
-  };
-
-  const handleMangaClick = () => {
-    console.log("Manga IconButton clicked");
-    navigate("/manga");
   };
 
   const handleSearchClick = () => {
@@ -155,7 +130,6 @@ const Sidebar = () => {
   };
 
   const openModal = () => {
-    setIsModalOpen(true);
     if (modalRef.current) {
       (modalRef.current as HTMLDialogElement).showModal();
     }
@@ -163,7 +137,6 @@ const Sidebar = () => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
     if (modalRef.current) {
       (modalRef.current as HTMLDialogElement).close();
     }
