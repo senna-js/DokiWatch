@@ -183,7 +183,7 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
                                     onClick={() => handleCardClick(animeData[result.anilist]?.idMal)}
                                 >
                                     <div className="card-body inset-0 backdrop-blur-lg bg-black opacity-70 rounded-lg p-4">
-                                        <div className="absolute text-doki-white top-2 right-2">
+                                        <div className="absolute text-doki-white bottom-2 right-2">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 className="h-6 w-6 text-doki-white transform -rotate-45"
