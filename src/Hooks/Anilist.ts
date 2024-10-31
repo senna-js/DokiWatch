@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface AnilistUser {
   id: number;
@@ -21,14 +22,27 @@ export const useAnilistAuth = (): AnilistAuth => {
 
   const setAnilistUser = async (): Promise<void> => {
     setAuthState("loading");
+    const retrievedUser = localStorage.getItem("anilist_user");
+    const retrievedToken = localStorage.getItem("anilist_token");
 
-    if (localStorage.getItem("anilist_user") && localStorage.getItem("anilist_token")) {
-      setUser(JSON.parse(localStorage.getItem("anilist_user")!))
+    if (retrievedUser && retrievedToken) {
+      const decodedToken = jwtDecode(retrievedToken);
+
+      if (decodedToken && decodedToken.exp && decodedToken.exp < Date.now() / 1000) {
+        localStorage.removeItem("anilist_user");
+        localStorage.removeItem("anilist_token");
+        setUser(null);
+        setAuthState("unauthenticated");
+        return;
+      }
+
+      console.log(decodedToken);
+      setUser(JSON.parse(retrievedUser));
       setAuthState("authenticated");
       return;
     }
 
-    if (!localStorage.getItem("anilist_token")) {
+    if (!retrievedToken) {
       localStorage.removeItem("anilist_user");
       setUser(null);
       setAuthState("unauthenticated");
@@ -73,7 +87,7 @@ export const useAnilistAuth = (): AnilistAuth => {
     const params = new URLSearchParams(fragment);
     const token = params.get("access_token");
     if (!token) return;
-    console.log(params)
+    console.log(params);
     localStorage.setItem("anilist_token", token);
     window.history.replaceState(null, "", window.location.pathname);
 
@@ -95,7 +109,9 @@ export const anilistQuery = async (
   if (authenticated) {
     const token = localStorage.getItem("anilist_token");
     if (!token)
-      throw new Error("No access token found for authenticated anilist request");
+      throw new Error(
+        "No access token found for authenticated anilist request"
+      );
 
     headers["Authorization"] = `Bearer ${token}`;
   }

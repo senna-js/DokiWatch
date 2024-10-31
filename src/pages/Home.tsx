@@ -60,8 +60,12 @@ const Home = () => {
                 color
               }
               status
+              episodes
+              nextAiringEpisode {
+                episode
+                timeUntilAiring
+              }
             }
-          id
           }
         }
       }`;

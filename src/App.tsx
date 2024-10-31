@@ -26,10 +26,7 @@ const App = () => {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-
-    // Call getAuth initially in case the hash is already present
     getAuth();
-
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };

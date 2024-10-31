@@ -33,8 +33,13 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
                 extraLarge
                 color
               }
+              status
+              episodes
+              nextAiringEpisode {
+                episode
+                timeUntilAiring
+              }
             }
-          id
           }
         }
       }`;
