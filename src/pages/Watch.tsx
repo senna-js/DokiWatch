@@ -269,7 +269,7 @@ export const Watch: React.FC = () => {
         <div className="flex flex-col py-2 bg-doki-light-grey text-doki-purple h-fit 
         max-h-[560px] sm:max-h-[624px] sm:h-[624px] w-full lg:w-72 mx-1 sm:mx-0 font-lato sm:border-r-slate-500 backdrop-blur-lg text-center 
         rounded-l-[22px] rounded-r-[22px] lg:rounded-r-none">
-          <div className="text-center font-lato font-[30px] pb-2">
+          <div className="text-center font-lato font-[30px] pb-1">
             EPISODES
           </div>
           <hr className="border-doki-purple rounded-md h-[4px] border-2 mx-3" />
