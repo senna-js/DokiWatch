@@ -1,12 +1,12 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { AnimeData } from "../../interfaces/AnimeData";
+import { AnimeCardData } from "../AnimeCard";
 import { useAnilistAuth, anilistQuery } from "../../Hooks/Anilist";
 import { AnimeDataStack } from "./AnimeDataStack";
 
 export const AnilistStack: React.FC<StackType> = ({ status }) => {
-  const [animeData, setAnimeData] = useState<AnimeData[]>([]); // State to hold the data
+  const [animeData, setAnimeData] = useState<AnimeCardData[]>([]); // State to hold the data
   const { user, authState } = useAnilistAuth();
 
   useEffect(() => {
@@ -51,8 +51,8 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
 
       const mediaList = response.data.Page.mediaList;
 
-      const fetchedAnimeData: AnimeData[] = mediaList.map((media: any) => {
-        const anime: AnimeData = {
+      const fetchedAnimeData: AnimeCardData[] = mediaList.map((media: any) => {
+        const anime: AnimeCardData = {
           id: media.media.id,
           idMal: media.media.idMal,
           title: {
@@ -61,7 +61,6 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
           },
           image: media.media.coverImage.extraLarge,
           color: media.media.coverImage.color,
-          entryId: media.id,
         };
         return anime;
       });

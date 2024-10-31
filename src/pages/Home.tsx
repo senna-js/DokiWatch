@@ -2,15 +2,15 @@ import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
-import { AnimeData } from "../interfaces/AnimeData";
+import { AnimeCardData } from "../components/AnimeCard";
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
 import { useAnilistAuth, anilistQuery } from "../Hooks/Anilist";
 
 const Home = () => {
   const { isSignedIn } = useUser();
-  const [topAiringAnime, setTopAiringAnime] = useState<AnimeData[]>([]);
-  const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeData[]>([]);
-  const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeData[]>([]);
+  const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([]);
+  const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([]);
+  const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([]);
   const { user, authState } = useAnilistAuth();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const Home = () => {
       const response = await consumetAnilistSearch(params);
       // console.log(response.data.results)
       setTopAiringAnime(response.data.results.map((anime: any) => {
-        const topAnime: AnimeData = {
+        const topAnime: AnimeCardData = {
           id: anime.id,
           idMal: anime.malId,
           title: anime.title,
@@ -78,9 +78,9 @@ const Home = () => {
 
       const mediaList: [any] = response.data.Page.mediaList;
 
-      const watchingAiringAnimeData: AnimeData[] = mediaList.filter((media: any) => media.media.status === "RELEASING")
+      const watchingAiringAnimeData: AnimeCardData[] = mediaList.filter((media: any) => media.media.status === "RELEASING")
         .map((media: any) => {
-          const anime: AnimeData = {
+          const anime: AnimeCardData = {
             id: media.media.id,
             idMal: media.media.idMal,
             title: {
@@ -89,14 +89,13 @@ const Home = () => {
             },
             image: media.media.coverImage.extraLarge,
             color: media.media.coverImage.color,
-            entryId: media.id,
           };
           return anime;
         });
 
-      const watchingAiredAnimeData: AnimeData[] = mediaList.filter((media: any) => media.media.status === "FINISHED")
+      const watchingAiredAnimeData: AnimeCardData[] = mediaList.filter((media: any) => media.media.status === "FINISHED")
         .map((media: any) => {
-          const anime: AnimeData = {
+          const anime: AnimeCardData = {
             id: media.media.id,
             idMal: media.media.idMal,
             title: {
@@ -105,7 +104,6 @@ const Home = () => {
             },
             image: media.media.coverImage.extraLarge,
             color: media.media.coverImage.color,
-            entryId: media.id,
           };
           return anime;
         });

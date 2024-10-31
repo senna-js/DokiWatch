@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from "react";
 import { AnimeCard } from "../AnimeCard";
-import { AnimeData } from "../../interfaces/AnimeData";
+import { AnimeCardData } from "../AnimeCard";
 
 interface AnimeDataStackProps {
-  animeData: AnimeData[];
+  animeData: AnimeCardData[];
   heading: string;
   subheading?: {
     text: string;
@@ -50,7 +50,7 @@ export const AnimeDataStack: React.FC<AnimeDataStackProps> = ({ animeData, headi
           // style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {animeData.map((anime) => (
-              <div key={anime.idMal} className="flex-shrink-0">
+              <div key={anime.id} className="flex-shrink-0">
                 <AnimeCard anime={anime} />
               </div>
             ))}

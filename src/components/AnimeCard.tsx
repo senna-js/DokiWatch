@@ -1,6 +1,17 @@
 import { Card, CardMedia, Tooltip, Zoom } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
-import { AnimeData } from "../interfaces/AnimeData";
+
+export interface AnimeCardData {
+  id: number;
+  idMal: number;
+  title: {
+    romaji: string;
+    english: string;
+  };
+  image: string;
+  color: string;
+}
+
 
 export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   const navigate = useNavigate();
@@ -103,5 +114,5 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
 };
 
 interface AnimeCardProps {
-  anime: AnimeData;
+  anime: AnimeCardData;
 }
