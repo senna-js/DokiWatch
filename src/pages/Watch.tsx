@@ -322,11 +322,10 @@ export const Watch: React.FC = () => {
               fetchEpisodes={fetchEpisodes}
             />
             <div className="bg-doki-light-grey rounded-br-[22px] rounded-bl-[22px] 
-            lg:rounded-bl-none
-             h-20 sm:h-16 lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row items-center justify-center 
-             mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
-              <div className="flex flex-col sm:flex-row justify-center items-center
-                    sm:mt-0 bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
+            lg:rounded-bl-none h-auto sm:h-16 lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row 
+            items-center justify-center mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
+              <div className="flex flex-col sm:flex-row justify-center items-center bg-transparent
+                    sm:mt-0 sm:bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
                       {/* Find the current episode and display its title */}
                       <p className="whitespace-nowrap text-xs sm:text-sm font-lato 
                       font-semibold text-doki-purple p-3 sm:p-2 truncate">
