@@ -263,7 +263,7 @@ export const Watch: React.FC = () => {
     }
   };
   return (
-    <div className="mx-4">
+    <div className="mx-4 2xl:mr-36">
      <div id="episodes" className="flex w-full
      flex-col-reverse lg:flex-row gap-3 lg:gap-1 justify-center h-fit items-stretch">
         <div className="flex flex-col py-2 bg-doki-light-grey text-doki-purple h-fit 
