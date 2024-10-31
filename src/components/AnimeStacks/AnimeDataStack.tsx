@@ -34,7 +34,7 @@ export const AnimeDataStack: React.FC<AnimeDataStackProps> = ({ animeData, headi
         <h2 className="text-2xl sm:text-4xl font-lato text-doki-purple pl-3 flex items-center">
           {heading}
           {subheading &&
-            <span className="flex items-center ml-2">
+            <span className="flex items-center ml-2 mt-2">
               <span className={`w-2.5 h-2.5 ${subheading.color} rounded-full mr-1`}></span>
               <p className="text-base text-doki-purple font-bold font-poppins text-opacity-50">
                 {subheading.text}
@@ -43,7 +43,7 @@ export const AnimeDataStack: React.FC<AnimeDataStackProps> = ({ animeData, headi
           }
         </h2>
         <hr className="border border-doki-purple my-4" />
-        <div className="relative overflow-hidden flex justify-center items-center">
+        <div className="relative overflow-hidden">
           <div
             className="flex gap-1 overflow-x-auto overflow-y-hidden"
             ref={carouselRef}
