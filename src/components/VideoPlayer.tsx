@@ -115,7 +115,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       const response = await axios.get(src);
       const thumbnailsVTT = response.data;
       const cleanSrc = src.replace(/thumbnails\.vtt$/, "");
-      // if (!thumbnailsVTT) return;
+      //if (!thumbnailsVTT) return;
       const thumbnails = VTTtoJSON(thumbnailsVTT, cleanSrc);
       setThumbnails(thumbnails);
     };

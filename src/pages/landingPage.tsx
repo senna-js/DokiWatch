@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import dokiGirl from "../assests/doki-girl.png";
 import dokiGirlPhone from "../assests/doki-girl-phone.png";
-
+import { MediaPlayer, MediaProvider } from "@vidstack/react";
+import { DefaultVideoLayout, defaultLayoutIcons } from "@vidstack/react/player/layouts/default";
 // Mock authentication check (replace with your actual auth logic)
 const isAuthenticated = () => {
   const user = localStorage.getItem("user");
@@ -24,13 +25,16 @@ const LandingPage = () => {
       navigate("/");
     }
   }, [navigate]);
-
   const handleExploreClick = () => {
     navigate("/home");
   };
-
+  const src = "https://www111.anicdnstream.info/videos/hls/EwphirYlPUMVMJRultqMSw/1730155307/184141/0789fd4f049c3ca2a49b860ea5d1f456/ep.1.1709225406.m3u8"
   return (
     <div className="relative w-full h-screen overflow-x-hidden overflow-y-hidden ">
+      <MediaPlayer src={src} autoPlay className="w-3/4">
+        <MediaProvider/>
+        <DefaultVideoLayout icons={defaultLayoutIcons} />
+      </MediaPlayer>
       <div className="sm:h-[109px] h-[67px]"></div>
       <div className="hidden sm:block">
         <img

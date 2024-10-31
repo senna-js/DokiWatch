@@ -1,4 +1,4 @@
-import { CurrEpisodeData } from "../../interfaces/CurrEpisodeData";
+import { CurrEpisodeData } from "../interfaces/CurrEpisodeData";
 import { consumetZoro } from "./LoadBalancer";
 import * as Realm from "realm-web";
 
@@ -27,7 +27,7 @@ export const getAnimeData = async (
   malId: number,
   name: string,
   forceRefresh = false // Add forceRefresh flag
-): Promise<AnimeData> => {
+): Promise<AnimeWatchData> => {
   const cacheKey = `animeCache`;
   const animeCache = getCachedData(cacheKey); // Retrieve anime cache object
 
@@ -40,7 +40,7 @@ export const getAnimeData = async (
   const zoroId = await getZoroId(malId, name);
 
   const response = await consumetZoro(`info?id=${zoroId}`);
-  const animeResponse: AnimeData = response.data;
+  const animeResponse: AnimeWatchData = response.data;
 
   // Update the cache with new data
   animeCache[malId] = animeResponse;
@@ -90,7 +90,7 @@ export const getCurrentEpisodeData = async (
 
   if (subData) {
     const episodeData: CurrEpisodeData = {
-      zoroId:id,
+      zoroId: id,
       intro: subData.data.intro,
       outro: subData.data.outro,
       sources: {
@@ -183,7 +183,10 @@ const searchZoroId = async (malId: number, name: string): Promise<string> => {
 
       if (!databaseAnime) {
         console.log("Inserting new anime into database", newAnime);
-        await (await mongo).db("Zoro").collection("mappings").insertOne(newAnime);
+        await (await mongo)
+          .db("Zoro")
+          .collection("mappings")
+          .insertOne(newAnime);
       }
       return response.data.id;
     }
@@ -191,7 +194,7 @@ const searchZoroId = async (malId: number, name: string): Promise<string> => {
   throw new Error("Anime not found in Zoro");
 };
 
-export interface AnimeData {
+export interface AnimeWatchData {
   id: string;
   title: string;
   malID: number;

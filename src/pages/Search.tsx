@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
-import { AnimeData } from "../interfaces/AnimeData"
+import { AnimeCardData } from "../components/AnimeCard"
 import { AdvancedSearch } from "../components/AdvancedSearch"
 import { motion } from "framer-motion";
 
@@ -12,7 +12,7 @@ const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "H
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     var genreTerm, genreNotTerm, term;
-    const [anime, setAnime] = useState<AnimeData[]>([])
+    const [anime, setAnime] = useState<AnimeCardData[]>([])
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
 
@@ -136,18 +136,18 @@ export const Search = () => {
         }).then(response => {
             // Log the data to the console
             console.log(response.data);
-            const animeData: AnimeData[] = response.data.data.Page.media.map((item: any) => {
+            const animeData: AnimeCardData[] = response.data.data.Page.media.map((item: any) => {
                 if (!item.idMal) {
                     return null;
                 }
                 return {
-                    mal_id: item.idMal,
-                    title: item.title.romaji,
-                    title_english: item.title.english,
-                    image: item.coverImage.extraLarge
+                    idMal: item.idMal,
+                    title:item.title,
+                    image: item.coverImage.extraLarge,
+                    color: item.coverImage.color
                 };
             });
-            setAnime(animeData.filter((item: AnimeData) => item !== null));
+            setAnime(animeData.filter((item: AnimeCardData) => item !== null));
         }).catch(error => {
             console.error(error);
         });
@@ -163,7 +163,7 @@ export const Search = () => {
                     {
                         currentAnime.map((anime, index) => (
                             <motion.div
-                                key={anime.mal_id}
+                                key={anime.idMal}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
