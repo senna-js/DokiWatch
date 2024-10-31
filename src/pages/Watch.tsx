@@ -272,7 +272,7 @@ export const Watch: React.FC = () => {
           <div className="text-center font-lato font-[30px] pb-1">
             EPISODES
           </div>
-          <hr className="border-doki-purple rounded-md h-[4px] border-2 mx-3" />
+          <hr className="border-doki-purple rounded-md h-[4px] border-2 mx-3 mb-2" />
           <div className="overflow-y-auto cursor-pointer scrollHide rounded-bl-[12px]">
             {animeData?.episodes.map((episode, index) => (
               <div role="button"
