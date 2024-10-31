@@ -18,10 +18,12 @@ import {
   CollectionsBookmark as MangaIcon,
   Schedule as ScheduleIcon,
   Search as SearchIcon,
+  ContentPasteSearch as TraceIcon,
 } from "@mui/icons-material";
 // import styled from "@mui/material/styles/styled";
 import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
+import TraceAnimeModal from "./TraceAnimeModal";
 
 // const AnimeDialog = styled(Dialog)({
 //   "& .MuiDialog-paper": {
@@ -86,6 +88,22 @@ const Sidebar = () => {
   const [schedule, setSchedule] = useState([]);
   const modalRef = useRef(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isModalDisplayed, setIsModalDisplayed] = useState(false);
+  const traceRef = useRef<HTMLDialogElement>(null);
+
+  const handleModalDisplay = () => {
+    setIsModalDisplayed(true);
+    if (traceRef.current) {
+      (traceRef.current as HTMLDialogElement).showModal();
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalDisplayed(false);
+    if (traceRef.current) {
+      (traceRef.current as HTMLDialogElement).close();
+    }
+  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -235,14 +253,14 @@ const Sidebar = () => {
                 />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Manga Coming Soon" placement="right">
+            {/* <Tooltip title="Manga Coming Soon" placement="right">
               <IconButton>
                 <MangaIcon
                   className="text-doki-light-grey cursor-not-allowed"
                   sx={{ fontSize: 32 }}
                 />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Anime Schedule" placement="right">
               <IconButton onClick={openModal}>
                 <ScheduleIcon
@@ -337,6 +355,16 @@ const Sidebar = () => {
                 </div>
               </div>
             </dialog>
+            <Tooltip title="Anime Scene Trace" placement="right">
+              <IconButton onClick={handleModalDisplay}>
+                <TraceIcon
+                  id="trace"
+                  className="text-doki-purple rounded-full"
+                  sx={{ fontSize: 32 }}
+                />
+              </IconButton>
+            </Tooltip>
+            <TraceAnimeModal traceRef={traceRef} isModalDisplayed={isModalDisplayed} closeModal={handleModalClose} />
           </Stack>
         </motion.div>
       )}
