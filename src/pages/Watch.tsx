@@ -263,18 +263,17 @@ export const Watch: React.FC = () => {
     }
   };
   return (
-    <div className="mx-4 :mx-0">
-     <div id="episodes" className="flex w-full
-     flex-col-reverse lg:flex-row gap-3 lg:gap-1 justify-center h-fit items-center">
+    <div className="mx-4 sm:mx-0">
+     <div id="episodes" className="items-stretch flex w-full
+     flex-col-reverse lg:flex-row gap-3 lg:gap-1 justify-center h-fit">
         <div className="flex flex-col py-2 bg-doki-light-grey text-doki-purple h-fit 
-        max-h-[560px] sm:max-h-[624px] sm:h-[624px] w-full lg:w-72 mx-1 sm:mx-0 font-lato
-        border border-white sm:border-r-slate-500 backdrop-blur-lg text-center 
+        max-h-[560px] sm:max-h-[624px] sm:h-[624px] w-full lg:w-72 mx-1 sm:mx-0 font-lato sm:border-r-slate-500 backdrop-blur-lg text-center 
         rounded-l-[22px] rounded-r-[22px] lg:rounded-r-none">
-          <div className="text-center font-lato font-[30px] font-semibold pb-2">
+          <div className="text-center font-lato font-[30px] pb-2">
             EPISODES
           </div>
-          <hr className="bg-doki-purple rounded-md h-[4px] border-0 mx-3" />
-          <div className="overflow-y-auto cursor-pointer scrollHide">
+          <hr className="border-doki-purple rounded-md h-[4px] border-2 mx-3" />
+          <div className="overflow-y-auto cursor-pointer scrollHide rounded-bl-[12px]">
             {animeData?.episodes.map((episode, index) => (
               <div role="button"
                 key={index}
@@ -324,18 +323,18 @@ export const Watch: React.FC = () => {
             />
             <div className="bg-doki-light-grey rounded-br-[22px] rounded-bl-[22px] 
             lg:rounded-bl-none
-             h-auto sm:h-14 flex flex-row sm:flex-row items-end justify-center 
-             mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0">
+             h-auto lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row items-center justify-center 
+             mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
               <div className="flex flex-col sm:flex-row justify-center items-center
-                    sm:mt-0 bg-doki-dark-grey rounded-t-[22px] sm:py-1.5">
+                    sm:mt-0 bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
                       {/* Find the current episode and display its title */}
                       <p className="whitespace-nowrap text-xs sm:text-sm font-lato 
-                      font-semibold text-doki-white p-3 sm:p-1 truncate">
+                      font-semibold text-doki-purple p-3 sm:p-2 truncate">
                         CURRENT EPISODE:{" "}
                       </p>
                       <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs 
-                      sm:text-sm mr-2 flex items-center font-lato bg-doki-purple
-                      sm:px-4 p-2 rounded-full font-semibold">
+                      sm:text-sm mr-2 flex items-center font-lato
+                      sm:px-1 p-2 rounded-full font-semibold">
                         {currentEpisodeNumber} -{" "}
                         {
                           animeData?.episodes.find(
