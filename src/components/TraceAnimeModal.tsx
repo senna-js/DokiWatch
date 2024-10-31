@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 interface TraceAnimeModalProps {
@@ -24,6 +25,7 @@ interface AniListAnime {
     coverImage: {
         extraLarge: string;
     };
+    idMal: number;
 }
 
 const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisplayed, closeModal }) => {
@@ -31,6 +33,7 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
     const [results, setResults] = useState<TraceResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [animeData, setAnimeData] = useState<{ [key: number]: AniListAnime }>({});
+    const navigate = useNavigate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -78,6 +81,7 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
                     coverImage {
                         extraLarge
                     }
+                        idMal
                 }
             }
         `;
@@ -108,8 +112,14 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
                 coverImage: {
                     extraLarge: '',
                 },
+                idMal: 0,
             };
         }
+    };
+
+    const handleCardClick = (malId: number) => {
+        closeModal();
+        navigate(`/anime/${malId}`);
     };
 
 
@@ -150,6 +160,7 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
                 <h3 className="font-lato text-lg text-doki-purple">Trace Anime Scene</h3>
                 <hr className="bg-doki-purple rounded-md h-[2px] border-0 mt-2" />
                 <div className="py-4">
+                    <p className='font-lato text-sm text-doki-light-grey mb-2'>Please upload a screenshot of any anime scene:</p>
                     <input type="file" className="file-input bg-doki-purple w-full max-w-xs" onChange={handleFileChange} />
                     <button className="btn w-full font-semibold font-anime text-doki-white hover:text-doki-purple border border-doki-light-grey hover:border-none rounded-[16px] bg-doki-purple hover:bg-doki-light-grey mt-4" onClick={handleTrace} disabled={loading}>
                         {loading ? 'Tracing...' : 'Trace'}
@@ -163,14 +174,31 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
                                     className="card relative text-doki-white rounded-[12px] 
                                         border-[3px] border-doki-purple shadow-lg hover:shadow-xl 
                                         transition-shadow duration-300 bg-cover bg-center 
-                                        bg-no-repeat mb-4 hover:animate-scroll"
+                                        bg-no-repeat mb-4 hover:animate-scroll cursor-pointer"
                                     style={{
                                         backgroundImage: `url(${animeData[result.anilist]?.coverImage.extraLarge})`,
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'center',
                                     }}
+                                    onClick={() => handleCardClick(animeData[result.anilist]?.idMal)}
                                 >
                                     <div className="card-body inset-0 backdrop-blur-lg bg-black opacity-70 rounded-lg p-4">
+                                        <div className="absolute text-doki-white top-2 right-2">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-6 w-6 text-doki-white transform -rotate-45"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                                />
+                                            </svg>
+                                        </div>
                                         <h2 className="card-title text-doki-light-grey font-lato">{animeData[result.anilist]?.title.english || animeData[result.anilist]?.title.romaji}</h2>
                                         <p className='font-lato text-doki-white'>Episode: {result.episode}</p>
                                         <p className='font-lato text-doki-white'>Similarity: {(result.similarity * 100).toFixed(2)}%</p>
