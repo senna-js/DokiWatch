@@ -272,7 +272,7 @@ export const Watch: React.FC = () => {
           <div className="text-center font-lato font-[30px] pb-1">
             EPISODES
           </div>
-          <hr className="border-doki-purple rounded-md h-[4px] border-2 mx-3 mb-2" />
+          <hr className="border-doki-purple rounded-md h-[4px] border-2 bg-doki-purple mx-3 mb-2" />
           <div className="overflow-y-auto cursor-pointer scrollHide rounded-bl-[12px] rounded-br-[12px]">
             {animeData?.episodes.map((episode, index) => (
               <div role="button"
@@ -323,7 +323,7 @@ export const Watch: React.FC = () => {
             />
             <div className="bg-doki-light-grey rounded-br-[22px] rounded-bl-[22px] 
             lg:rounded-bl-none
-             h-auto lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row items-center justify-center 
+             h-20 sm:h-16 lg:h-[114px] 2xl:h-14 flex flex-row sm:flex-row items-center justify-center 
              mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
               <div className="flex flex-col sm:flex-row justify-center items-center
                     sm:mt-0 bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
