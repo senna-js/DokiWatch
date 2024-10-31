@@ -179,7 +179,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }
 
   return (
-    <div className="relative border border-doki-light-grey">
+    <div className="relative border border-doki-light-grey rounded-lg">
       {currentEpisode && (
         <>
           <MediaPlayer
