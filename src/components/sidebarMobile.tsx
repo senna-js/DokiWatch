@@ -136,12 +136,14 @@
 //             "https://anilist.co/api/v2/oauth/authorize?client_id=21555&response_type=token",
 //             "_blank"
 //         );
+
 //         setOpen(false);
 //     };
 
 //     const handleHomeClick = () => {
 //         console.log("Home IconButton clicked");
 //         navigate("/home");
+//         setIsOpen(false);
 //     };
 
 //     const handleMangaClick = () => {
@@ -152,6 +154,7 @@
 //     const handleSearchClick = () => {
 //         console.log("Search IconButton clicked");
 //         navigate("/search");
+//         setIsOpen(false);
 //     };
 
 //     const openModal = () => {
@@ -160,6 +163,7 @@
 //             (modalRef.current as HTMLDialogElement).showModal();
 //         }
 //         fetchAnimeSchedule();
+
 //     };
 
 //     const closeModal = () => {
@@ -175,7 +179,9 @@
 //             .toLowerCase();
 //         fetch(`https://api.jikan.moe/v4/schedules?kids=false&filter=${currentDay}`)
 //             .then((response) => response.json())
-//             .then((result) => setSchedule(result.data))
+//             .then((result) => {
+//                 setSchedule(result.data);
+//             })
 //             .catch((error) => console.error(error));
 //     };
 
@@ -249,10 +255,10 @@
 //                                 </div>
 
 //                                 <div className="flex items-center space-x-2">
-//                                     <IconButton onClick={() => setIsModalOpen(true)}>
+//                                     <IconButton onClick={openModal}>
 //                                         <ScheduleIcon className="text-doki-purple" sx={{ fontSize: 32 }} id="schedule" />
 //                                     </IconButton>
-//                                     <span className="text-doki-white font-lato text-md mt-1" onClick={() => setIsModalOpen(true)}>Schedule</span>
+//                                     <span className="text-doki-white font-lato text-md mt-1" onClick={openModal}>Schedule</span>
 //                                 </div>
 //                                 <dialog
 //                                     id="my_modal_5"
