@@ -56,7 +56,7 @@ const Home = () => {
               }
               description
               coverImage {
-                medium
+                large
                 color
               }
               status
@@ -91,7 +91,7 @@ const Home = () => {
               romaji: media.media.title.romaji,
               english: media.media.title.english,
             },
-            image: media.media.coverImage.medium,
+            image: media.media.coverImage.large,
             color: media.media.coverImage.color,
           };
           return anime;
@@ -106,7 +106,7 @@ const Home = () => {
               romaji: media.media.title.romaji,
               english: media.media.title.english,
             },
-            image: media.media.coverImage.medium,
+            image: media.media.coverImage.large,
             color: media.media.coverImage.color,
           };
           return anime;

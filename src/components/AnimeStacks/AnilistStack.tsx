@@ -30,7 +30,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
               }
               description
               coverImage {
-                medium
+                large
                 color
               }
               status
@@ -64,7 +64,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
             romaji: media.media.title.romaji,
             english: media.media.title.english,
           },
-          image: media.media.coverImage.medium,
+          image: media.media.coverImage.large,
           color: media.media.coverImage.color,
         };
         return anime;
