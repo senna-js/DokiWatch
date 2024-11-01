@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import dokiGirl from "../assests/doki-girl.png";
+import dokiGirl from "../assests/doki-girl.webp";
 import dokiGirlPhone from "../assests/doki-girl-phone.png";
 // Mock authentication check (replace with your actual auth logic)
 const isAuthenticated = () => {

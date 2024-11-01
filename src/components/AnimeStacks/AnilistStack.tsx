@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { AnimeCardData } from "../AnimeCard";
-import { useAnilistAuth, anilistQuery } from "../../Hooks/Anilist";
+import { useAnilistAuth, anilistQuery } from "../../Anilist";
 import { AnimeDataStack } from "./AnimeDataStack";
 
 export const AnilistStack: React.FC<StackType> = ({ status }) => {
@@ -52,7 +52,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
         status: status
       };
 
-      const response = await anilistQuery(query, variables, false);
+      const response = await anilistQuery(query, variables);
 
       const mediaList = response.data.Page.mediaList;
 
@@ -76,7 +76,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
   }, [authState]);
 
   return (
-    <AnimeDataStack animeData={animeData} heading="Watching" subheading={{color:"bg-green-300",text:"Airing"}}/>
+    <AnimeDataStack animeData={animeData} heading="Watching" subheading={{ color: "bg-green-300", text: "Airing" }} />
   );
 };
 

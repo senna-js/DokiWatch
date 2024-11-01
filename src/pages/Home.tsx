@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
 import { AnimeCardData } from "../components/AnimeCard";
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
-import { useAnilistAuth, anilistQuery } from "../Hooks/Anilist";
+import { useAnilistAuth, anilistQuery } from "../Anilist";
 
 const Home = () => {
   const { isSignedIn } = useUser();
@@ -78,7 +78,7 @@ const Home = () => {
         status: "CURRENT"
       };
 
-      const response = await anilistQuery(query, variables, false);
+      const response = await anilistQuery(query, variables);
 
       const mediaList: [any] = response.data.Page.mediaList;
 
