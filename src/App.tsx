@@ -12,7 +12,6 @@ import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { AnimeList } from "./pages/AnimeList";
 import Home from "./pages/Home";
-import { AnilistAuthProvider } from "./Anilist";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
@@ -30,7 +29,6 @@ const App = () => {
   }, [controls, inView]);
 
   return (
-    <AnilistAuthProvider>
       <AnimeListProvider>
         <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
           <div className="absolute w-full h-full bg-doki-purple"></div>
@@ -60,7 +58,6 @@ const App = () => {
           </Routes>
         </div>
       </AnimeListProvider>
-    </AnilistAuthProvider>
   );
 };
 

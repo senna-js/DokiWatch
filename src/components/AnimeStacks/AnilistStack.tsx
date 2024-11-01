@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { AnimeCardData } from "../AnimeCard";
-import { useAnilistAuth, anilistQuery } from "../../Anilist";
+import { useAnilistAuth, anilistQuery } from "../../AnilistContext";
 import { AnimeDataStack } from "./AnimeDataStack";
 
 export const AnilistStack: React.FC<StackType> = ({ status }) => {
@@ -30,7 +30,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
               }
               description
               coverImage {
-                extraLarge
+                large
                 color
               }
               status
@@ -52,7 +52,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
         status: status
       };
 
-      const response = await anilistQuery(query, variables);
+      const response = await anilistQuery(query, variables, undefined, true);
 
       const mediaList = response.data.Page.mediaList;
 
@@ -64,7 +64,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
             romaji: media.media.title.romaji,
             english: media.media.title.english,
           },
-          image: media.media.coverImage.extraLarge,
+          image: media.media.coverImage.large,
           color: media.media.coverImage.color,
         };
         return anime;
