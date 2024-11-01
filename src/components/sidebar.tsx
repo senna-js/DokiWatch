@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import {
   AddLink as LinkIcon,
-  Link as ConnectIcon,
+  // Link as ConnectIcon,
   Home as HomeIcon,
-  CollectionsBookmark as MangaIcon,
+  // CollectionsBookmark as MangaIcon,
   Schedule as ScheduleIcon,
   Search as SearchIcon,
   ContentPasteSearch as TraceIcon,
@@ -24,7 +24,7 @@ import {
 import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import TraceAnimeModal from "./TraceAnimeModal";
-import { useAnilistAuth } from "../Anilist";
+import { useAnilistAuth } from "../AnilistContext";
 
 // const AnimeDialog = styled(Dialog)({
 //   "& .MuiDialog-paper": {

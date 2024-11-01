@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import kofiImage from "../assests/kofi.png";
 import coffeeImage from "../assests/Coffee.png";
 // import { motion } from "framer-motion";
-import { useAnilistAuth } from "../Anilist";
+import { useAnilistAuth } from "../AnilistContext";
 
 export const Navbar = () => {
   // const [hoveredKoFi, setHoveredKoFi] = useState(false);

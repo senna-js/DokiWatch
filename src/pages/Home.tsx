@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
 import { AnimeCardData } from "../components/AnimeCard";
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
-import { useAnilistAuth, anilistQuery } from "../Anilist";
+import { useAnilistAuth, anilistQuery } from "../AnilistContext";
 
 const Home = () => {
   const { isSignedIn } = useUser();
@@ -26,7 +26,7 @@ const Home = () => {
           idMal: anime.malId,
           title: anime.title,
           color: anime.color,
-          image: anime.image
+          image: anime.image.replace("/large/","/medium/")
         }
         return topAnime;
       }));
@@ -56,7 +56,7 @@ const Home = () => {
               }
               description
               coverImage {
-                extraLarge
+                medium
                 color
               }
               status
@@ -78,7 +78,7 @@ const Home = () => {
         status: "CURRENT"
       };
 
-      const response = await anilistQuery(query, variables);
+      const response = await anilistQuery(query, variables, undefined, true);
 
       const mediaList: [any] = response.data.Page.mediaList;
 
@@ -91,7 +91,7 @@ const Home = () => {
               romaji: media.media.title.romaji,
               english: media.media.title.english,
             },
-            image: media.media.coverImage.extraLarge,
+            image: media.media.coverImage.medium,
             color: media.media.coverImage.color,
           };
           return anime;
@@ -106,7 +106,7 @@ const Home = () => {
               romaji: media.media.title.romaji,
               english: media.media.title.english,
             },
-            image: media.media.coverImage.extraLarge,
+            image: media.media.coverImage.medium,
             color: media.media.coverImage.color,
           };
           return anime;

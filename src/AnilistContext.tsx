@@ -1,5 +1,5 @@
-import React, { createContext,useContext, useState, useEffect } from "react";
-import {jwtDecode} from "jwt-decode";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface AnilistUser {
   id: number;
@@ -18,22 +18,6 @@ interface AnilistAuth {
 // Create the context
 const AnilistAuthContext = createContext<AnilistAuth | undefined>(undefined);
 
-export const anilistQuery = async (query: string, variables: any, token?: string) => {
-  const headers:any = {
-    "Content-Type": "application/json",
-  };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  const response = await fetch("https://graphql.anilist.co", {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ query, variables }),
-  });
-  return response.json();
-};
-
 export const useAnilistAuth = (): AnilistAuth => {
   const context = useContext(AnilistAuthContext);
   if (!context) {
@@ -42,25 +26,24 @@ export const useAnilistAuth = (): AnilistAuth => {
   return context;
 };
 
-
 // Provider component for Anilist Authentication
-export const AnilistAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AnilistAuthProvider: React.FC<{ children: React.ReactNode,storageKey:string }> = ({ children,storageKey }) => {
   const [user, setUser] = useState<AnilistUser | null>(null);
   const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
   const setAnilistUser = async (token?: string): Promise<Boolean> => {
-    if (user){
+    if (user) {
       console.log("User already set");
       return true;
     }
     const unAuthenticate = () => {
-      localStorage.removeItem("anilist_user");
+      localStorage.removeItem(storageKey);
       setAuthState("unauthenticated");
       setUser(null);
     };
     setAuthState("loading");
 
-    const retrievedUser = localStorage.getItem("anilist_user");
+    const retrievedUser = localStorage.getItem(storageKey);
 
     if (!retrievedUser) {
       if (!token) {
@@ -88,7 +71,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
         token: token,
       };
       console.log("Fetched user", fetchedUser);
-      localStorage.setItem("anilist_user", JSON.stringify(fetchedUser));
+      localStorage.setItem(storageKey, JSON.stringify(fetchedUser));
       setUser(fetchedUser);
       setAuthState("authenticated");
       return true;
@@ -121,8 +104,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
     window.location.href = anilink;
   };
 
-  const getAuth = async() => {
-    if(await setAnilistUser()){
+  const getAuth = async () => {
+    if (await setAnilistUser()) {
       console.log("found in local storage or already set")
       return;
     }
@@ -144,4 +127,44 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode }> = ({ c
       {children}
     </AnilistAuthContext.Provider>
   );
+};
+
+export const anilistQuery = async (query: string, variables: any, token?: string, forceFetch?: boolean) => {
+  const setStorage = (key: string, value: any) => {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  }
+
+  const getStorage = (key: string) => {
+    const value = sessionStorage.getItem(key);
+    if (value) {
+      return JSON.parse(value);
+    }
+    return null;
+  }
+
+  const storedData = getStorage(query);
+
+  if (!forceFetch && storedData) {
+    console.log("Using Cached data");
+    return storedData;
+  }
+
+  const headers: any = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const response = await fetch("https://graphql.anilist.co", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ query, variables }),
+  });
+
+  const json = response.json();
+  if (response.ok) {
+    setStorage(query, json);
+  }
+  return json;
 };
