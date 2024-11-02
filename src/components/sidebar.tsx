@@ -26,59 +26,6 @@ import { motion } from "framer-motion";
 import TraceAnimeModal from "./TraceAnimeModal";
 import { useAnilistAuth } from "../AnilistContext";
 
-// const AnimeDialog = styled(Dialog)({
-//   "& .MuiDialog-paper": {
-//     backgroundColor: "transparent", // Making background semi-transparent
-//     backdropFilter: "blur(50px)", // Applying backdrop blur
-//     borderRadius: "10px",
-//     border: "2px solid white",
-//   },
-// });
-
-// const AnimeDialogTitle = styled(DialogTitle)({
-//   fontFamily: "Poppins, sans-serif",
-//   backgroundColor: "rgba(238, 130, 238, 0)", // Making background fully transparent
-//   backdropFilter: "blur(10px)", // Applying backdrop blur
-//   color: "#FFFFFF", // Setting text color to white
-// });
-
-// const AnimeDialogContent = styled(DialogContent)({
-//   backgroundColor: "#9FADBD",
-//   color: "white",
-// });
-
-// const AnimeButton = styled(Button)({
-//   color: "white",
-//   cursor: "pointer",
-//   marginLeft: "auto",
-//   border: "1px solid #4B5563", // border-gray-700
-//   borderRadius: "0.5rem", // rounded-lg
-//   padding: "0.5rem 1rem", // px-2 py-2
-//   transition: "transform 150ms ease-in-out, background-color 150ms ease-in-out", // transition duration-150 ease-in-out
-//   "&:hover": {
-//     backgroundColor: "#374151", // hover:bg-slate-700
-//     transform: "scale(1.05)", // hover:scale-105
-//   },
-//   display: "flex",
-//   justifyContent: "space-between",
-// });
-
-// const AnimeTextField = styled(TextField)({
-//   "& label.Mui-focused": {
-//     color: "#3A0CA3",
-//   },
-//   "& .MuiOutlinedInput-root": {
-//     "& fieldset": {
-//       borderColor: "lightgrey",
-//     },
-//     "&:hover fieldset": {
-//       borderColor: "#4CC9F0",
-//     },
-//     "&.Mui-focused fieldset": {
-//       borderColor: "#4CC9F0",
-//     },
-//   },
-// });
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
