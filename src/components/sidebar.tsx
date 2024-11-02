@@ -284,7 +284,7 @@ const Sidebar = () => {
                 />
               </IconButton>
             </Tooltip>
-            <TraceAnimeModal traceRef={traceRef} isModalDisplayed={isModalDisplayed} closeModal={handleModalClose} />
+            <TraceAnimeModal traceRef={traceRef} isModalDisplayed={isModalDisplayed} closeModal={handleModalClose} toggleSidebar={toggleSidebar} />
           </Stack>
         </motion.div>
       )}

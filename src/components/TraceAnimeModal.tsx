@@ -6,6 +6,7 @@ interface TraceAnimeModalProps {
     traceRef: React.RefObject<HTMLDialogElement>;
     isModalDisplayed: boolean;
     closeModal: () => void;
+    toggleSidebar: () => void;
 }
 
 interface TraceResult {
@@ -28,7 +29,7 @@ interface AniListAnime {
     idMal: number;
 }
 
-const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisplayed, closeModal }) => {
+const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisplayed, closeModal, toggleSidebar }) => {
     const [screenshot, setScreenshot] = useState<File | null>(null);
     const [results, setResults] = useState<TraceResult[]>([]);
     const [loading, setLoading] = useState(false);
@@ -119,6 +120,7 @@ const TraceAnimeModal: React.FC<TraceAnimeModalProps> = ({ traceRef, isModalDisp
 
     const handleCardClick = (malId: number) => {
         closeModal();
+        toggleSidebar();
         navigate(`/anime/${malId}`);
     };
 
