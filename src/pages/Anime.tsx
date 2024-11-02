@@ -3,10 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Content from "../components/ReadMore";
-import { useAnimeList } from "../AnimeListContext";
+// import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
 import CharacterCard from "../components/CharacterCard";
 import { useAnilistAuth } from "../AnilistContext";
+import { MediaListStatus } from '../AnilistContext';
 interface CharacterData {
   mal_id: number | null | undefined;
   characterName: string;
@@ -23,43 +24,19 @@ export const Anime = () => {
   const [animeData, setAnimeData] = useState<any>();
   // const [userRating, setUserRating] = useState(0);
   const [relationData, setRelationData] = useState<any[]>([]);
-  const { addToWatching, addToCompleted, addToPlanToWatch } = useAnimeList();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [charAndStaffData, setCharAndStaffData] = useState<CharacterData[]>([]);
-  const { addToList } = useAnilistAuth();
+  const { addToList, authState, authenticate } = useAnilistAuth();
+  const [anilistId, setAnilistId] = useState<number | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleAddToWatching = () => {
-    addToWatching({
-      id: animeData.mal_id,
-      title: animeData.title,
-      image: animeData.images.jpg.large_image_url,
-      rating: 0,
-    });
-    console.log(animeData);
-    setDropdownOpen(false);
-  };
-
-  const handleAddToCompleted = () => {
-    addToCompleted({
-      id: animeData.mal_id,
-      title: animeData.title,
-      image: animeData.images.jpg.large_image_url,
-      rating: 0,
-    });
-    console.log(animeData);
-    setDropdownOpen(false);
-  };
-
-  const handleAddToPlanToWatch = () => {
-    addToPlanToWatch({
-      id: animeData.mal_id,
-      title: animeData.title,
-      image: animeData.images.jpg.large_image_url,
-      rating: 0,
-    });
-    console.log(animeData);
-    setDropdownOpen(false);
+  const handleAddToList = (status: MediaListStatus) => {
+    if (anilistId) {
+      addToList(anilistId, status);
+      setDialogOpen(false);
+      console.log("Added to list", anilistId, status);
+    }
   };
 
   const handleTitleClick = (animeId: number) => {
@@ -157,6 +134,7 @@ export const Anime = () => {
       )
       .then((response) => {
         const data = response.data.data.Media;
+        setAnilistId(data.id);
         // data.alID = data.id;
         var query = `
     query($id: Int) {
@@ -468,7 +446,7 @@ export const Anime = () => {
                   </span>
                 </div>
                 <div
-                  className="relative mt-4 flex gap-6 text-center text-doki-white
+                  className="relative mt-4 flex gap-4 text-center text-doki-white
 				 bg-doki-dark-grey px-4 pr-1 py-1 rounded-full hover:bg-doki-white 
 				 hover:text-doki-purple"
                   ref={dropdownRef}
@@ -483,7 +461,7 @@ export const Anime = () => {
                   <div>
                     <Tooltip
                       TransitionComponent={Zoom}
-                      placement="right"
+                      placement="bottom"
                       arrow
                       title={
                         <>
@@ -492,7 +470,7 @@ export const Anime = () => {
                       }
                     >
                       <button
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        onClick={() => setDialogOpen(!dialogOpen)}
                         className="inline-flex justify-center w-full rounded-full
 					  bg-doki-light-grey 
 					  shadow-sm px-2 py-2"
@@ -520,51 +498,71 @@ export const Anime = () => {
                       </button>
                     </Tooltip>
                   </div>
-                  {dropdownOpen && (
-                    <div
-                      className="z-10 origin-top-right absolute 
-                        ml-[165px] md:ml-[170px] xl:ml-[275px]
-                       bottom-0 mb-2 w-36 lg:w-56 bg-doki-dark-grey rounded-[12px]"
-                    >
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="options-menu"
-                      >
+
+                  {dialogOpen && (
+                    <div className="z-10 origin-top-right absolute 
+                        ml-[50px] md:ml-[170px] xl:ml-[275px]
+                       bottom-0 mb-14 md:mb-2 xl:mb-2 w-38 lg:w-56 bg-doki-dark-grey rounded-[12px]">
+                      {authState === 'loading' && (
+                        <p className="px-2 py-2 font-lato text-sm cursor-pointer">Loading...</p>
+                      )}
+                      {authState === 'unauthenticated' && (
+                        <button className="block px-2 py-2 font-lato text-sm text-doki-white 
+                        hover:text-doki-dark-grey hover:bg-doki-white hover:rounded-[12px] w-full text-center 
+                        cursor-pointer" onClick={authenticate}>Connect to AniList</button>
+                      )}
+                      {authState === 'authenticated' && (
                         <div
-                          role="menuitem"
-                          tabIndex={0}
-                          onClick={handleAddToWatching}
-                          className="block px-4 py-2 font-lato text-sm text-doki-white 
-						hover:text-doki-dark-grey hover:bg-doki-white w-full text-left 
-						cursor-pointer"
+                          className="py-1"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="options-menu"
                         >
-                          Add to Watching
-                        </div>
-                        <div
-                          role="menuitem"
-                          tabIndex={0}
-                          onClick={handleAddToCompleted}
-                          className="block px-4 py-2 text-sm
+                          <div
+                            role="menuitem"
+                            tabIndex={0}
+                            onClick={() => handleAddToList('CURRENT')}
+                            className="block px-4 py-2 font-lato text-sm text-doki-white 
+						hover:text-doki-dark-grey hover:bg-doki-white w-full text-left 
+						cursor-pointer hover:rounded-t-[12px]"
+                          >
+                            Add to Watching
+                          </div>
+                          <div
+                            role="menuitem"
+                            tabIndex={0}
+                            onClick={() => handleAddToList('COMPLETED')}
+                            className="block px-4 py-2 text-sm
 						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
 						 w-full text-left font-lato cursor-pointer"
-                        >
-                          Add to Completed
-                        </div>
-                        <div
-                          role="menuitem"
-                          tabIndex={0}
-                          onClick={handleAddToPlanToWatch}
-                          className="block px-4 py-2 text-sm
+                          >
+                            Add to Completed
+                          </div>
+                          <div
+                            role="menuitem"
+                            tabIndex={0}
+                            onClick={() => handleAddToList('PLANNING')}
+                            className="block px-4 py-2 text-sm
 						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
-						 w-full text-left cursor-pointer"
-                        >
-                          Add to Plan to Watch
+						 w-full text-left cursor-pointer whitespace-nowrap font-lato"
+                          >
+                            Add to Plan to Watch
+                          </div>
+                          <div
+                            role="menuitem"
+                            tabIndex={0}
+                            onClick={() => handleAddToList('DROPPED')}
+                            className="block px-4 py-2 text-sm
+						 text-doki-white hover:text-doki-dark-grey hover:bg-doki-white 
+						 w-full text-left font-lato cursor-pointer hover:rounded-b-[12px]"
+                          >
+                            Add to Dropped
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
+
                 </div>
               </div>
               <div

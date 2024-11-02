@@ -10,7 +10,7 @@ import { Search } from "./pages/Search";
 // import Read from "./pages/Read";
 import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { AnimeList } from "./pages/AnimeList";
+// import { AnimeList } from "./pages/AnimeList";
 import Home from "./pages/Home";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
@@ -37,7 +37,7 @@ const App = () => {
           <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/anime/:id" element={<Anime />} />
-            <Route
+            {/* <Route
               path="/watching"
               element={<AnimeList title="Watching" list="watching" />}
             />
@@ -48,7 +48,7 @@ const App = () => {
             <Route
               path="/plan-to-watch"
               element={<AnimeList title="Plan to Watch" list="planToWatch" />}
-            />
+            /> */}
             <Route path="/search" element={<Search />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/watch/:id" element={<Watch />} />

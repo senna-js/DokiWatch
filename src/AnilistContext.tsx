@@ -18,7 +18,7 @@ interface AnilistAuth {
   getList: (status: MediaListStatus) => Promise<AnimeCardData[]>;
 }
 
-type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
+export type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
 
 // Create the context
 const AnilistAuthContext = createContext<AnilistAuth | undefined>(undefined);
