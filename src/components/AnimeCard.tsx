@@ -1,6 +1,7 @@
 import { Card, CardMedia, Tooltip, Zoom } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
 
+type MediaStatus = "RELEASING" | "FINISHED" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS";
 export interface AnimeCardData {
   id: number;
   idMal: number;
@@ -10,6 +11,15 @@ export interface AnimeCardData {
   };
   image: string;
   color: string;
+  description: string;
+  status: MediaStatus;
+  totalEpisodes: number | null;
+  currentEpisode: number | null;
+  nextAiringEpisode?: {
+    episode: number;
+    timeUntilAiring: number;
+    airingAt: number;
+  };
 }
 
 

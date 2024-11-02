@@ -6,6 +6,7 @@ import Content from "../components/ReadMore";
 import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
 import CharacterCard from "../components/CharacterCard";
+import { useAnilistAuth } from "../AnilistContext";
 interface CharacterData {
   mal_id: number | null | undefined;
   characterName: string;
@@ -26,6 +27,8 @@ export const Anime = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [charAndStaffData, setCharAndStaffData] = useState<CharacterData[]>([]);
+  const { addToList } = useAnilistAuth();
+
   const handleAddToWatching = () => {
     addToWatching({
       id: animeData.mal_id,

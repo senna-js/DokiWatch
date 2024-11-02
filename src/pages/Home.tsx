@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
 import { AnimeCardData } from "../components/AnimeCard";
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
-import { useAnilistAuth, anilistQuery } from "../AnilistContext";
+import { useAnilistAuth} from "../AnilistContext";
 
 const Home = () => {
   const { isSignedIn } = useUser();
   const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([]);
   const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([]);
   const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([]);
-  const { user, authState } = useAnilistAuth();
+  const { authState,getList } = useAnilistAuth();
 
   useEffect(() => {
     const getTopAiringAnime = async () => {
@@ -26,7 +26,11 @@ const Home = () => {
           idMal: anime.malId,
           title: anime.title,
           color: anime.color,
-          image: anime.image.replace("/large/","/medium/")
+          image: anime.image.replace("/large/","/medium/"),
+          description: anime.description,
+          status: "RELEASING",
+          totalEpisodes: anime.totalEpisodes,
+          currentEpisode: anime.currentEpisode
         }
         return topAnime;
       }));
@@ -36,81 +40,11 @@ const Home = () => {
 
   useEffect(() => {
     const getWatchingAnime = async () => {
-      if (authState !== "authenticated")
-        return;
-      if (!user) {
-        console.log("Invalid authState", authState, user);
-        return;
-      }
-      console.log("Fetching Watching Anime");
-      const query = `
-      query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
-        Page(page: $page, perPage: $perPage) {
-          mediaList(userId: $userId, type: $type, status: $status) {
-            media {
-              id
-              idMal
-              title {
-                romaji
-                english
-              }
-              description
-              coverImage {
-                large
-                color
-              }
-              status
-              episodes
-              nextAiringEpisode {
-                episode
-                timeUntilAiring
-              }
-            }
-          }
-        }
-      }`;
+      
+      const watchingAnimeData = await getList("CURRENT");
 
-      const variables = {
-        page: 1,
-        perPage: 50,
-        userId: user.id,
-        type: "ANIME",
-        status: "CURRENT"
-      };
-
-      const response = await anilistQuery(query, variables, undefined, true);
-
-      const mediaList: [any] = response.data.Page.mediaList;
-
-      const watchingAiringAnimeData: AnimeCardData[] = mediaList.filter((media: any) => media.media.status === "RELEASING")
-        .map((media: any) => {
-          const anime: AnimeCardData = {
-            id: media.media.id,
-            idMal: media.media.idMal,
-            title: {
-              romaji: media.media.title.romaji,
-              english: media.media.title.english,
-            },
-            image: media.media.coverImage.large,
-            color: media.media.coverImage.color,
-          };
-          return anime;
-        });
-
-      const watchingAiredAnimeData: AnimeCardData[] = mediaList.filter((media: any) => media.media.status === "FINISHED")
-        .map((media: any) => {
-          const anime: AnimeCardData = {
-            id: media.media.id,
-            idMal: media.media.idMal,
-            title: {
-              romaji: media.media.title.romaji,
-              english: media.media.title.english,
-            },
-            image: media.media.coverImage.large,
-            color: media.media.coverImage.color,
-          };
-          return anime;
-        });
+      const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.status==="RELEASING");
+      const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.status==="FINISHED");
 
       console.log("Releasing", watchingAiringAnimeData)
       console.log("Released", watchingAiredAnimeData)

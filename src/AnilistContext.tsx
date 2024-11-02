@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { AnimeCardData } from "./components/AnimeCard";
 
 interface AnilistUser {
   id: number;
@@ -13,7 +14,11 @@ interface AnilistAuth {
   authState: "loading" | "authenticated" | "unauthenticated";
   authenticate: () => void;
   getAuth: () => void;
+  addToList: (mediaId: number, status: MediaListStatus) => Promise<Boolean>;
+  getList: (status: MediaListStatus) => Promise<AnimeCardData[]>;
 }
+
+type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
 
 // Create the context
 const AnilistAuthContext = createContext<AnilistAuth | undefined>(undefined);
@@ -27,7 +32,7 @@ export const useAnilistAuth = (): AnilistAuth => {
 };
 
 // Provider component for Anilist Authentication
-export const AnilistAuthProvider: React.FC<{ children: React.ReactNode,storageKey:string }> = ({ children,storageKey }) => {
+export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageKey: string }> = ({ children, storageKey }) => {
   const [user, setUser] = useState<AnilistUser | null>(null);
   const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
@@ -118,12 +123,108 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode,storageKe
     window.history.replaceState(null, "", window.location.pathname)
   };
 
+  const addToList = async (mediaId: number, status: MediaListStatus): Promise<Boolean> => {
+    if (authState !== "authenticated") {
+      console.log("Not authenticated");
+      return false;
+    }
+    if (!user) {
+      console.log("Invalid authState");
+      return false;
+    }
+    const query = `
+    mutation Mutation($mediaId: Int, $status: MediaListStatus) {
+      SaveMediaListEntry(mediaId: $mediaId, status: $status) {
+        status
+      }
+    }`;
+    const variables = {
+      mediaId: mediaId,
+      status: status,
+    };
+    const response = await anilistQuery(query, variables, user.token, true);
+
+    if (response.errors) {
+      console.error("Error adding to list", response.errors);
+      return false;
+    }
+    return true;
+  }
+
+  const getList = async (status: MediaListStatus): Promise<AnimeCardData[]> => {
+    if(authState !== "authenticated") {
+      console.log("Not authenticated");
+      return [];
+    }
+    if(!user) {
+      console.log("Invalid authState");
+      return [];
+    }
+
+    const query = `
+    query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
+      Page(page: $page, perPage: $perPage) {
+        mediaList(userId: $userId, type: $type, status: $status) {
+          media {
+            id
+            idMal
+            title {
+              romaji
+              english
+            }
+            description
+            coverImage {
+              large
+              color
+            }
+            status
+            episodes
+            nextAiringEpisode {
+              episode
+              timeUntilAiring
+              airingAt
+            }
+          }
+        }
+      }
+    }`;
+    const variables = {
+      page: 1,
+      perPage: 50,
+      userId: user.id,
+      type: "ANIME",
+      status: status,
+    }
+
+    const response = await anilistQuery(query, variables, user.token, true);
+
+    const mediaList = response.data.Page.mediaList;
+
+    const fetchedAnimeData: AnimeCardData[] = mediaList.map((media: any) => {
+      const anime: AnimeCardData = {
+        id: media.media.id,
+        idMal: media.media.idMal,
+        title: media.media.title,
+        image: media.media.coverImage.large,
+        color: media.media.coverImage.color,
+        description: media.media.description,
+        status: media.media.status,
+        totalEpisodes: media.media.episodes || null,
+        currentEpisode: (media.media.nextAiringEpisode?.episode - 1) || media.media.episodes,
+        nextAiringEpisode: media.media.nextAiringEpisode,
+      };
+      return anime;
+    });
+
+    return fetchedAnimeData;
+  }
+
   useEffect(() => {
     getAuth();
   }, []);
 
   return (
-    <AnilistAuthContext.Provider value={{ user, authState, authenticate, getAuth }}>
+    <AnilistAuthContext.Provider value={{ user, authState, authenticate, getAuth, addToList, getList }}>
       {children}
     </AnilistAuthContext.Provider>
   );
