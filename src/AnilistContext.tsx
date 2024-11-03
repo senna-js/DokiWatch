@@ -67,7 +67,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
           }
         }`;
 
-      const response = await anilistQuery(query, {}, token);
+      const response = await anilistQuery(query, {}, token, true);
 
       const fetchedUser: AnilistUser = {
         id: response.data.Viewer.id,
@@ -152,11 +152,11 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   }
 
   const getList = async (status: MediaListStatus): Promise<AnimeCardData[]> => {
-    if(authState !== "authenticated") {
+    if (authState !== "authenticated") {
       console.log("Not authenticated");
       return [];
     }
-    if(!user) {
+    if (!user) {
       console.log("Invalid authState");
       return [];
     }
@@ -230,8 +230,11 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   );
 };
 
+//fix the cache and make it more robust
 export const anilistQuery = async (query: string, variables: any, token?: string, forceFetch?: boolean) => {
   const setStorage = (key: string, value: any) => {
+    console.log("Setting cache");
+    console.log(key, value);
     sessionStorage.setItem(key, JSON.stringify(value));
   }
 
