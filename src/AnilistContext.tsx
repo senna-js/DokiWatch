@@ -142,7 +142,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       mediaId: mediaId,
       status: status,
     };
-    const response = await anilistQuery(query, variables, user.token, true);
+    const response = await anilistQuery(query, variables, user.token);
 
     if (response.errors) {
       console.error("Error adding to list", response.errors);
@@ -152,11 +152,11 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   }
 
   const getList = async (status: MediaListStatus): Promise<AnimeCardData[]> => {
-    if(authState !== "authenticated") {
+    if (authState !== "authenticated") {
       console.log("Not authenticated");
       return [];
     }
-    if(!user) {
+    if (!user) {
       console.log("Invalid authState");
       return [];
     }
@@ -196,7 +196,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       status: status,
     }
 
-    const response = await anilistQuery(query, variables, user.token, true);
+    const response = await anilistQuery(query, variables, user.token);
 
     const mediaList = response.data.Page.mediaList;
 
@@ -230,32 +230,45 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   );
 };
 
-export const anilistQuery = async (query: string, variables: any, token?: string, forceFetch?: boolean) => {
+//fix the cache and make it more robust
+/**
+ * @param deps dependencies for the cache, if any of the dependencies change, the cache will be invalidated,
+ * empty array to always use cache, dont define to never use cache. 
+ */
+export const anilistQuery = async (query: string, variables: any, accessToken?: string, deps?: any[]): Promise<any> => {
   const setStorage = (key: string, value: any) => {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    if(!deps) return;
+    const obj = { value, deps };
+    sessionStorage.setItem(key, JSON.stringify(obj));
   }
 
-  const getStorage = (key: string) => {
-    const value = sessionStorage.getItem(key);
-    if (value) {
-      return JSON.parse(value);
+  const getStorage = (key: string): {value:any,deps:any[]} | null => {
+    if(!deps) return null;
+    const retrievedObject = sessionStorage.getItem(key);
+    if (retrievedObject) {
+      return JSON.parse(retrievedObject);
     }
     return null;
   }
 
   const storedData = getStorage(query);
 
-  if (!forceFetch && storedData) {
-    console.log("Using Cached data");
-    return storedData;
+  if (storedData && deps) {
+    console.log("Found in cache", storedData);
+    
+    if (deps.some((dep, i) => dep !== storedData.deps[i])) {
+      console.log("Cache mismatch", deps, storedData.deps);
+    }
+
+    return storedData.value;
   }
 
   const headers: any = {
     "Content-Type": "application/json",
   };
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
   }
   const response = await fetch("https://graphql.anilist.co", {
     method: "POST",
@@ -265,7 +278,7 @@ export const anilistQuery = async (query: string, variables: any, token?: string
 
   const json = response.json();
   if (response.ok) {
-    setStorage(query, json);
+    json.then(data => setStorage(query, data));
   }
   return json;
 };
