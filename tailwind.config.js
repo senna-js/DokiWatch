@@ -1,19 +1,30 @@
 import daisyui from "daisyui";
+import vidstackTW from "@vidstack/react/tailwind.cjs"
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "doki-girl": "url('./src/assets/doki-firl.png')",
+        "red-anime-girl": "url('./src/assets/reddragon.png')",
+      },
       colors: {
         "anime-red": "#FF0000", // Example color, replace with your choice
         "anime-blue": "#0000FF", // Example color, replace with your choice
+        "doki-light-grey": "#989ED3",
+        "doki-dark-grey": "#6E78CB",
+        "doki-purple": "#2F3672",
+        "doki-white": "#DADAE8",
         // Add more colors as needed
       },
       fontFamily: {
         anime: ['"Roboto Condensed"', "sans-serif"],
         comicSans: ['"Comic Sans MS"', "cursive", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        lato: ["Lato-extra-bold"],
+        hpSimplifiedbold: ["Hp-Simplified-Bold"],
       },
       keyframes: {
         wiggle: {
@@ -52,5 +63,5 @@ export default {
       },
     },
   },
-  plugins: [daisyui, require("@vidstack/react/tailwind.cjs")],
+  plugins: [daisyui, vidstackTW],
 };

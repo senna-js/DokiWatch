@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect } from 'react';
+import { type ComponentType } from 'react';
 import { Menu, useVideoQualityOptions } from '@vidstack/react';
 // See "Icons" component page for setup before importing the following:
 import {
@@ -16,11 +16,12 @@ export const QualitySubmenu = () => {
                 ? `${currentQuality}p`
                 : `Auto${currentQuality ? ` (${currentQuality}p)` : ''}`;
 
-    useEffect(() => {
-        if (!options[1])
-            return;
-        options[1].select()
-    }, [options])
+    //to select highest quality by default
+    // useEffect(() => {
+    //     if (!options[1])
+    //         return;
+    //     options[1].select()
+    // }, [options])
 
     return (
         <Menu.Root>
@@ -28,7 +29,6 @@ export const QualitySubmenu = () => {
                 label="Quality"
                 hint={hint}
                 disabled={options.disabled}
-                //@ts-ignore
                 icon={SettingsMenuIcon}
             />
             <Menu.Content className="vds-menu-items">
@@ -50,14 +50,13 @@ interface SubmenuButtonProps {
     label: string;
     hint: string;
     disabled?: boolean;
-    icon: ReactElement;
+    icon: ComponentType<React.SVGProps<any>>; // Ensures className can be passed
 }
 
 function SubmenuButton({ label, hint, icon: Icon, disabled }: SubmenuButtonProps) {
     return (
         <Menu.Button className="vds-menu-item" disabled={disabled}>
             <ChevronLeftIcon className="vds-menu-close-icon" />
-            {/* @ts-ignore */}
             <Icon className="vds-icon" />
             <span className="vds-menu-item-label">{label}</span>
             <span className="vds-menu-item-hint">{hint}</span>

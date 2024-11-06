@@ -1,12 +1,33 @@
 import { Card, CardMedia, Tooltip, Zoom } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
-import { AnimeData } from "../interfaces/AnimeData";
+
+type MediaStatus = "RELEASING" | "FINISHED" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS";
+export interface AnimeCardData {
+  id: number;
+  idMal: number;
+  title: {
+    romaji: string;
+    english: string;
+  };
+  image: string;
+  color: string;
+  description: string;
+  status: MediaStatus;
+  totalEpisodes: number | null;
+  currentEpisode: number | null;
+  nextAiringEpisode?: {
+    episode: number;
+    timeUntilAiring: number;
+    airingAt: number;
+  };
+}
+
 
 export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   const navigate = useNavigate();
 
   const navigateToPage = () => {
-    navigate(`/anime/${anime?.mal_id}`);
+    navigate(`/anime/${anime.idMal}`);
   };
 
   return (
@@ -14,42 +35,64 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       TransitionComponent={Zoom}
       title={
         <>
-          <h3>{anime?.title_english || anime?.title}</h3>
+          <h3>{anime.title.english}</h3>
         </>
       }
       placement="top"
       arrow
       sx={{
-        "& .MuiTooltip-tooltip": {
-
-        },
+        "& .MuiTooltip-tooltip": {},
         "& .MuiTooltip-arrow": {
           color: "#f5f5f5",
         },
       }}
     >
-      <div className="text-white my-7 mx-4 w-[201px] h-[280px]">
-        <Card>
-          <div className="cursor-pointer relative group rounded-sm transition-transform duration-300 ease-in-out hover:scale-110">
+      <div
+        className="my-7 mx-4 w-[201px] h-[280px] 
+      sm:w-[150px] sm:h-[210px] md:w-[201px] md:h-[280px]"
+      >
+        <Card
+          sx={{
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            "& .MuiCardContent-root": {
+              backgroundColor: "transparent",
+            },
+            "&:hover": {
+              transform: "scale(1.05)",
+              transition: "transform 0.3s ease-in-out",
+              borderRadius: "16px",
+              border: "2px solid #2F3672",
+            },
+          }}
+        >
+          <div
+            className="cursor-pointer relative group rounded-[16px] transition-transform 
+          duration-300 ease-in-out hover:scale-110"
+          >
             <CardMedia
               component="img"
-              image={anime?.image}
-              alt={anime?.title_english}
-              className="rounded-sm shadow-xl mx-auto object-cover w-[150px] h-[268px]"
+              image={anime.image}
+              alt={anime.title.english}
+              className="rounded-[16px] shadow-xl mx-auto object-cover w-[150px] h-[268px]
+              border-2 border-doki-purple"
             />
             <div
-              className="rounded-sm mx-auto absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 ease-in-out"
+              className="rounded-[16px] mx-auto absolute top-0 left-0 w-full h-full
+               bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity 
+               duration-300 ease-in-out"
               onClick={navigateToPage}
             ></div>
 
             <button
               onClick={navigateToPage}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+              opacity-0 group-hover:opacity-100"
               style={{ transition: "opacity 0.2s ease-in-out" }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-white"
+                className="h-12 w-12 text-doki-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -71,15 +114,9 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           </div>
         </Card>
         <div>
-          {anime?.title_english ? (
-            <div className="text-md  text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
-              {anime?.title_english}
-            </div>
-          ) : (
-            <div className="text-md text-[#f5f5f5] font-semibold text-center truncate mx-2 pt-2 font-poppins">
-              {anime?.title}
-            </div>
-          )}
+          <div className="text-md relative text-doki-purple font-semibold text-center truncate mx-2 pt-2 font-poppins">
+            {anime.title.english}
+          </div>
         </div>
       </div>
     </Tooltip>
@@ -87,5 +124,5 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
 };
 
 interface AnimeCardProps {
-  anime: AnimeData;
+  anime: AnimeCardData;
 }
