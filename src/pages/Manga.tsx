@@ -82,7 +82,7 @@ const Manga = () => {
     // }
 
     return (
-        <div className="max-w-4xl z-50 mx-auto p-4">
+        <div className="max-w-4xl z-50 mx-auto p-4 relative">
             {mangaList.length === 0 ? (
                 <div className="bg-yellow-50 text-yellow-600 p-4 rounded-lg">
                     No manga data found
