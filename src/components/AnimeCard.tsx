@@ -35,7 +35,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       TransitionComponent={Zoom}
       title={
         <>
-          <h3>{anime.title.english}</h3>
+          <h3>{anime.title.english || anime.title.romaji}</h3>
         </>
       }
       placement="top"
@@ -115,7 +115,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
         </Card>
         <div>
           <div className="text-md relative text-doki-purple font-semibold text-center truncate mx-2 pt-2 font-poppins">
-            {anime.title.english}
+            {anime.title.english || anime.title.romaji}
           </div>
         </div>
       </div>
