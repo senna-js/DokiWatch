@@ -46,7 +46,7 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
   useEffect(() => {
     const search = searchParams.get("search");
     if (search) {
-      setSearchTerm(search);
+      setSearchTerm("");
     }
   }, [searchParams]);
 
@@ -80,7 +80,9 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
           inputProps={{
             autoFocus: true,
             onKeyDown: (e) => {
-              if (e.key === "Enter") props.handleSearch(searchTerm);
+              if (e.key === "Enter") {props.handleSearch(searchTerm);
+                setSearchTerm("");
+              }
             },
           }}
         />
@@ -102,6 +104,7 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
         <div
           onClick={() => {
             props.handleSearch(searchTerm);
+            setSearchTerm("");
           }}
           className="bg-doki-dark-grey text-xl sm:text-2xl text-center font-bold text-doki-purple rounded-[16px] p-2.5 font-lato cursor-pointer shadow-md hover:bg-doki-purple hover:text-doki-white hover:scale-105 transform transition duration-150 ease-in-out"
         >
