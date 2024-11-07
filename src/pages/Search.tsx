@@ -156,7 +156,7 @@ export const Search = () => {
     return (
         <div className="flex flex-col items-center justify-center">
             <AdvancedSearch genres={genres} handleGenreSelection={handlegenreSelection} handleSearch={handleSearch} />
-            <div className="relative bg-doki-light-grey rounded-[16px] m-10 flex flex-col">
+            <div className="relative container   bg-doki-light-grey rounded-[16px] m-10 flex flex-col">
                 <span className="text-start font-lato text-2xl sm:text-4xl ml-8 mt-4">
                     {searchTerm ? (
                         <>
