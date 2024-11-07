@@ -16,7 +16,8 @@ const Home = () => {
   useEffect(() => {
     const getTopAiringAnime = async () => {
       const params: ConsumetAnilistSearchParams = {
-        status: "RELEASING"
+        sort: ["TRENDING_DESC"],
+        status: "RELEASING",
       };
       const response = await consumetAnilistSearch(params);
       // console.log(response.data.results)
