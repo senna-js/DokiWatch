@@ -4,14 +4,19 @@ import { motion } from "framer-motion";
 import { useUser } from "@clerk/clerk-react";
 import { AnimeCardData } from "../components/AnimeCard";
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer";
-import { useAnilistAuth} from "../AnilistContext";
+import { useAnilistAuth } from "../AnilistContext";
 
 const Home = () => {
   const { isSignedIn } = useUser();
   const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([]);
   const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([]);
   const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([]);
-  const { authState,getList } = useAnilistAuth();
+  const { authState, getList } = useAnilistAuth();
+
+  // Loading states
+  const [loadingTopAiring, setLoadingTopAiring] = useState<boolean>(true);
+  const [loadingWatchingAiring, setLoadingWatchingAiring] = useState<boolean>(true);
+  const [loadingWatchingAired, setLoadingWatchingAired] = useState<boolean>(true);
 
   useEffect(() => {
     const getTopAiringAnime = async () => {
@@ -27,7 +32,7 @@ const Home = () => {
           idMal: anime.malId,
           title: anime.title,
           color: anime.color,
-          image: anime.image.replace("/large/","/medium/"),
+          image: anime.image.replace("/large/", "/medium/"),
           description: anime.description,
           status: "RELEASING",
           totalEpisodes: anime.totalEpisodes,
@@ -35,23 +40,28 @@ const Home = () => {
         }
         return topAnime;
       }));
+      setLoadingTopAiring(false);
     }
     getTopAiringAnime();
   }, []);
 
   useEffect(() => {
     const getWatchingAnime = async () => {
-      
+      setLoadingWatchingAiring(true);
+      setLoadingWatchingAired(true);
+
       const watchingAnimeData = await getList("CURRENT");
 
-      const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.status==="RELEASING");
-      const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.status==="FINISHED");
+      const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.status === "RELEASING");
+      const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.status === "FINISHED");
 
       console.log("Releasing", watchingAiringAnimeData)
       console.log("Released", watchingAiredAnimeData)
 
       setWatchingAiringAnime(watchingAiringAnimeData);
       setWatchingAiredAnime(watchingAiredAnimeData);
+      setLoadingWatchingAiring(false);
+      setLoadingWatchingAired(false);
     };
     getWatchingAnime();
   }, [authState]);
@@ -87,7 +97,22 @@ const Home = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <AnimeDataStack animeData={topAiringAnime} heading="Top Airing" />
+        {loadingTopAiring ? (
+          // Skeleton for Top Airing
+          <div className="animate-pulse">
+            <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index}>
+                  <div className="h-48 bg-doki-dark-grey rounded"></div>
+                  <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <AnimeDataStack animeData={topAiringAnime} heading="Top Airing" />
+        )}
       </motion.div>
       {isSignedIn && (
         <div className="mt-16">
@@ -97,7 +122,22 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
+            {loadingWatchingAiring ? (
+              // Skeleton for Watching Airing
+              <div className="animate-pulse">
+                <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index}>
+                      <div className="h-48 bg-doki-dark-grey rounded"></div>
+                      <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
+            )}
           </motion.div>
           <motion.div
             className="m-7 mt-16"
@@ -105,7 +145,22 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
+            {loadingWatchingAired ? (
+              // Skeleton for Watching Aired
+              <div className="animate-pulse">
+                <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index}>
+                      <div className="h-48 bg-doki-dark-grey rounded"></div>
+                      <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
+            )}
           </motion.div>
         </div>
       )}
