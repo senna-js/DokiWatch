@@ -100,12 +100,12 @@ const Home = () => {
         {loadingTopAiring ? (
           // Skeleton for Top Airing
           <div className="animate-pulse">
-            <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+            <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index}>
-                  <div className="h-48 bg-doki-dark-grey rounded"></div>
-                  <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                  <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                  <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                 </div>
               ))}
             </div>
@@ -125,12 +125,12 @@ const Home = () => {
             {loadingWatchingAiring ? (
               // Skeleton for Watching Airing
               <div className="animate-pulse">
-                <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
-                      <div className="h-48 bg-doki-dark-grey rounded"></div>
-                      <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                      <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                     </div>
                   ))}
                 </div>
@@ -148,12 +148,12 @@ const Home = () => {
             {loadingWatchingAired ? (
               // Skeleton for Watching Aired
               <div className="animate-pulse">
-                <div className="h-6 bg-doki-light-grey rounded w-1/3 mb-4"></div>
+                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
-                      <div className="h-48 bg-doki-dark-grey rounded"></div>
-                      <div className="h-4 bg-doki-dark-grey rounded mt-2"></div>
+                      <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                     </div>
                   ))}
                 </div>
