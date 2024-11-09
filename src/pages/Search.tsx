@@ -5,6 +5,7 @@ import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
 import { AnimeCardData } from "../components/AnimeCard"
 import { AdvancedSearch } from "../components/AdvancedSearch"
+import Pagination from "../components/Pagination"
 import { motion } from "framer-motion";
 
 const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "Horror", "Mahou Shoujo", "Mecha", "Music", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]
@@ -15,8 +16,21 @@ export const Search = () => {
     const [anime, setAnime] = useState<AnimeCardData[]>([])
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
+    const [loading, setLoading] = useState(true);
+
+    // Pagination states
+    const [totalPagesApi, setTotalPagesApi] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageInput, setPageInput] = useState(currentPage.toString());
+    const itemsPerPage = 18;
+
+    // Reset current page when search parameters change
+    useEffect(() => {
+        setPageInput(currentPage.toString());
+    }, [currentPage]);
 
     useEffect(() => {
+        setCurrentPage(1); // Reset to first page when search term changes
         const search = searchParams.get('search')
         if (search) {
             setSearchTerm(search)
@@ -60,25 +74,57 @@ export const Search = () => {
         setSearchParams(params);
     }
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 18;
+
+
+    // const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setPageInput(e.target.value);
+    // };
+
+    // const handlePageInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.key === 'Enter') {
+    //         const pageNumber = Number(pageInput);
+    //         if (pageNumber >= 1 && pageNumber <= totalPagesApi) {
+    //             setCurrentPage(pageNumber);
+    //         } else {
+    //             // Reset to the current page if the input is invalid
+    //             setPageInput(currentPage.toString());
+    //         }
+    //     }
+    // };
 
     // Calculate the indices for the current page
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentAnime = anime.slice(indexOfFirstItem, indexOfLastItem);
+    // const indexOfLastItem = currentPage * itemsPerPage;
+    // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    // const currentAnime = anime.slice(indexOfFirstItem, indexOfLastItem);
+
+    // const pageNumbers = Array.from({ length: totalPagesApi }, (_, i) => i + 1);
 
     // Calculate total pages
-    const totalPages = Math.ceil(anime.length / itemsPerPage);
+    // const totalPages = Math.ceil(anime.length / itemsPerPage);
 
     // Generate page numbers
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    // const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const handlePageClick = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
+        // Ensure the page number is within valid range
+        if (pageNumber >= 1 && pageNumber <= totalPagesApi) {
+            setCurrentPage(pageNumber);
+        }
     };
 
+    // const handlePageInputBlur = () => {
+    //     const pageNumber = Number(pageInput);
+    //     if (pageNumber >= 1 && pageNumber <= totalPagesApi) {
+    //         setCurrentPage(pageNumber);
+    //     } else {
+    //         setPageInput(currentPage.toString());
+    //     }
+    // };
+
+
     useEffect(() => {
+        setLoading(true);
+        // setCurrentPage(1);
         // if(searchParams.get("search"))
         //     setSearchTerm(searchParams.get("search"))
         console.log("Search Term: " + searchTerm)
@@ -87,38 +133,45 @@ export const Search = () => {
 
         term = ""
         if (searchTerm) {
-            term = `search: "${searchTerm}",`
+            term += `search: "${searchTerm}",`
         }
         if (genreTerm) {
-            genreTerm = genreTerm.split(',').map(genre => `"${genre.trim()}"`);
-            genreTerm = `[${genreTerm.join(',')}]`;
-            term = term + `genre_in: ${genreTerm},`
+            const genresIn = genreTerm.split(',').map((genre) => `"${genre.trim()}"`);
+            term += `genre_in: [${genresIn.join(',')}], `;
         }
         if (genreNotTerm) {
-            genreNotTerm = genreNotTerm.split(',').map(genre => `"${genre.trim()}"`);
-            genreNotTerm = `[${genreNotTerm.join(',')}]`;
-            term = term + `genre_not_in: ${genreNotTerm},`
+            const genresNotIn = genreNotTerm.split(',').map((genre) => `"${genre.trim()}"`);
+            term += `genre_not_in: [${genresNotIn.join(',')}], `;
         }
-        if (term == "")
-            term = ","
+        // Remove trailing comma and space if present
+        if (term.endsWith(', ')) {
+            term = term.slice(0, -2);
+        }
 
         console.log("Searched term : " + term.toString())
 
         var query = `{
-                        Page(page: 1, perPage: 54) {
-                            media(${term} sort: POPULARITY_DESC,type: ANIME) {
-                                idMal
-                                title {
-                                    romaji
-                                    english
-                                }
-                                coverImage {
-                                    extraLarge
-                                    color
-                                }
-                            }
-                        }
-                    }`;
+            Page(page: ${currentPage}, perPage: ${itemsPerPage}) {
+              pageInfo {
+                total
+                currentPage
+                lastPage
+                hasNextPage
+                perPage
+              }
+              media(${term}${term ? ',' : ''} sort: POPULARITY_DESC, type: ANIME) {
+                idMal
+                title {
+                  romaji
+                  english
+                }
+                coverImage {
+                  extraLarge
+                  color
+                }
+              }
+            }
+          }`;
 
         // Define our query variables and values that will be used in the query request
         var variables = {};
@@ -148,10 +201,17 @@ export const Search = () => {
                 };
             });
             setAnime(animeData.filter((item: AnimeCardData) => item !== null));
+
+            // Update total pages from API response
+            const pageInfo = response.data.data.Page.pageInfo;
+            setTotalPagesApi(pageInfo.lastPage);
+
+            setLoading(false);
         }).catch(error => {
             console.error(error);
+            setLoading(false);
         });
-    }, [searchParams])
+    }, [searchParams, currentPage]);
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -168,32 +228,76 @@ export const Search = () => {
                     )}
                 </span>
                 <hr className="border border-doki-purple mb-4 mt-6 m-6" />
-                <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
-                    {
-                        currentAnime.map((anime, index) => (
-                            <motion.div
-                                key={anime.idMal}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                            >
-                                <AnimeCard anime={anime} />
-                            </motion.div>
-                        ))
-                    }
-                </Stack>
+                {loading ? (
+                    // Render skeletons when loading
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 m-6">
+                        {Array.from({ length: itemsPerPage }).map((_, index) => (
+                            <div key={index} className="animate-pulse">
+                                <div className="h-64 bg-doki-dark-grey rounded-[22px] m-2"></div>
+                                <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-4 m-2"></div>
+                            </div>
+                        ))}
+                    </div>
+                ) : anime.length === 0 ? (
+                    // Display 'No Results Found' when there are no search results
+                    <div className="flex justify-center items-center h-64">
+                        <span className="text-doki-white font-lato text-2xl sm:text-4xl">No Results Found</span>
+                    </div>
+                ) : (
+                    <Stack className="grid grid-cols-6 justify-center gap-4" direction="row" flexWrap="wrap">
+                        {
+                            anime.map((animeItem, index) => (
+                                <motion.div
+                                    key={animeItem.idMal}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                                >
+                                    <AnimeCard anime={animeItem} />
+                                </motion.div>
+                            ))
+                        }
+                    </Stack>
+                )}
             </div>
-            <div className="flex justify-center mx-4 py-4 gap-2">
-                {pageNumbers.map((number) => (
-                    <button
-                        key={number}
-                        onClick={() => handlePageClick(number)}
-                        className={`text-center bg-opacity-50 text-white border border-gray-700 rounded-md px-2.5 py-1.5 font-anime cursor-pointer shadow-md hover:bg-info hover:scale-105 transform transition duration-150 ease-in-out ${currentPage === number ? 'bg-info text-white' : ''}`}
-                    >
-                        {number}
-                    </button>
-                ))}
-            </div>
+            {!loading && totalPagesApi > 1 && (
+                // <div className="flex justify-center items-center mx-4 py-4 gap-4">
+                //     <button
+                //         onClick={() => handlePageClick(currentPage - 1)}
+                //         disabled={currentPage === 1}
+                //         className="text-center bg-opacity-50 text-white border border-gray-700 rounded-[12px] px-3 py-2 font-lato cursor-pointer shadow-md hover:bg-doki-light-grey hover:scale-105 transform transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                //     >
+                //         Prev
+                //     </button>
+                //     <div className="flex items-center gap-2">
+                //         <input
+                //             type="number"
+                //             value={pageInput}
+                //             onChange={handlePageInputChange}
+                //             onKeyDown={handlePageInputKeyDown}
+                //             onBlur={handlePageInputBlur}
+                //             className="w-12 relative text-center bg-doki-dark-grey text-white rounded-md px-1 py-1 outline-none"
+                //             min={1}
+                //             max={totalPagesApi}
+                //         />
+                //         <span className="text-white relative font-hpSimplifiedbold">
+                //             / {totalPagesApi}
+                //         </span>
+                //     </div>
+                //     <button
+                //         onClick={() => handlePageClick(currentPage + 1)}
+                //         disabled={currentPage === totalPagesApi}
+                //         className="rounded-[12px] text-center bg-opacity-50 text-white border border-gray-700 px-3 py-2 font-lato cursor-pointer shadow-md hover:bg-doki-light-grey hover:scale-105 transform transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+                //     >
+                //         Next
+                //     </button>
+                // </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPagesApi}
+                    onPageChange={handlePageClick}
+                />
+            )}
         </div>
     )
 }
