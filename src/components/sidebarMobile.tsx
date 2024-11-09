@@ -123,7 +123,7 @@ const Sidebar = () => {
         if (modalRef.current) {
             (modalRef.current as HTMLDialogElement).close();
         }
-        
+
     };
 
     const closeModalPhone = () => {
@@ -178,6 +178,13 @@ const Sidebar = () => {
                     }}
                 >
                     <div className="modal-box bg-doki-dark-grey backdrop-blur-lg rounded-[22px]">
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-3 right-5 text-doki-purple hover:text-doki-white text-2xl font-bold"
+                            onClick={closeModalPhone}
+                        >
+                            &times;
+                        </button>
                         <h3 className="font-lato text-lg text-doki-purple">
                             Anime Schedule
                         </h3>
@@ -380,6 +387,13 @@ const Sidebar = () => {
                     }}
                 >
                     <div className="modal-box bg-doki-dark-grey backdrop-blur-lg rounded-[22px]">
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-3 right-3 text-doki-purple hover:text-doki-white text-2xl font-bold"
+                            onClick={closeModal}
+                        >
+                            &times;
+                        </button>
                         <h3 className="font-lato text-lg text-doki-purple">
                             Anime Schedule
                         </h3>
