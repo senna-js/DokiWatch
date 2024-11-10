@@ -104,7 +104,7 @@ const Home = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index}>
-                  <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                  <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
                   <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                 </div>
               ))}
@@ -129,7 +129,7 @@ const Home = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
-                      <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
                       <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                     </div>
                   ))}
@@ -152,7 +152,7 @@ const Home = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
-                      <div className="h-48 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
                       <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
                     </div>
                   ))}
