@@ -21,6 +21,7 @@ export interface AnimeCardData {
     airingAt: number;
   };
   bannerImage: string;
+  genres: string[];
 }
 
 

@@ -178,6 +178,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
               color
             }
             bannerImage
+            genres
             status
             episodes
             nextAiringEpisode {
@@ -214,6 +215,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
         currentEpisode: (media.media.nextAiringEpisode?.episode - 1) || media.media.episodes,
         nextAiringEpisode: media.media.nextAiringEpisode,
         bannerImage: media.media.bannerImage,
+        genres: media.media.genres,
       };
       return anime;
     });

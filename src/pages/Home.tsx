@@ -22,7 +22,7 @@ const Home = () => {
   useEffect(() => {
     const getTopAiringAnime = async () => {
       const params: ConsumetAnilistSearchParams = {
-        sort: ["TRENDING_DESC"],
+        sort: ["POPULARITY_DESC"],
         status: "RELEASING",
       }
       const response = await consumetAnilistSearch(params)
@@ -38,6 +38,7 @@ const Home = () => {
           totalEpisodes: anime.totalEpisodes,
           currentEpisode: anime.currentEpisode,
           bannerImage: anime.cover,
+          genres: anime.genres,
         }
         console.log("bannerImage", topAnime.bannerImage)
         return topAnime
@@ -70,8 +71,9 @@ const Home = () => {
 
   return (
     <div className="sm:mx-[75px] md:mx-[150px]">
+      <div className="relative">
       <motion.div
-        className="pl-10 sm:pl-0 relative"
+        className="absolute hidden sm:block top-4 left-4 z-10 sm:left-0 sm:-mx-28"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -83,20 +85,23 @@ const Home = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           style={{ fontSize: "clamp(1.5rem, 4vw + 1rem, 4.375rem)" }}
         >
-          Welcome to Doki Watch
+          Welcome to Doki Watch !
         </motion.h1>
       </motion.div>
+      <div className="mx-auto md:-mx-40">
+      {loadingTopAiring ? (
+          <BannerCarouselSkeleton />
+        ) : (
+          <BannerCarousel animeData={topAiringAnime.slice(0, 10)} />
+        )}
+        </div>
+        </div>
       <motion.div
         className="mt-8 m-7"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        {loadingTopAiring ? (
-          <BannerCarouselSkeleton />
-        ) : (
-          <BannerCarousel animeData={topAiringAnime.slice(0, 10)} />
-        )}
         {loadingTopAiring ? (
           // Skeleton for Top Airing
           <div className="animate-pulse mt-8">
@@ -170,6 +175,16 @@ const Home = () => {
 
 const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 768)
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768)
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % animeData.length)
@@ -191,8 +206,12 @@ const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
     return tmp.textContent || tmp.innerText || ""
   }
 
+  const backgroundImage = isMobile
+    ? animeData[currentIndex].image
+    : animeData[currentIndex].bannerImage
+
   return (
-    <div className="relative w-full h-[600px] overflow-hidden rounded-lg mb-8">
+    <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden rounded-none md:rounded-lg mb-8">
       <AnimatePresence initial={false}>
         <motion.div
           key={currentIndex}
@@ -204,41 +223,59 @@ const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
         >
           <div
             className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${animeData[currentIndex].bannerImage})` }}
+            style={{ backgroundImage: `url(${backgroundImage})` }}
           >
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end p-8">
-              <div className="text-white">
-                <h2 className="text-4xl font-bold font-lato mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
-                <p className="text-sm line-clamp-8 font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
+             <div className="absolute inset-0 flex">
+              <div className="sm:w-1/2 w-3/2 bg-gradient-to-r from-black to-transparent flex flex-col justify-end p-8">
+                <div className="text-white">
+                  <h2 className="text-2xl md:text-4xl font-bold font-lato text-white mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
+                  <div className="hidden md:flex flex-wrap gap-2 mb-4">
+                    {animeData[currentIndex].genres.map((genre, index) => (
+                      <span key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                        {genre}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="hidden md:line-clamp-4 text-lg font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
+                </div>
               </div>
+              <div className="w-1/2"></div>
             </div>
           </div>
         </motion.div>
       </AnimatePresence>
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      {/* Navigation dots - Vertical on mobile, horizontal on desktop */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 md:flex-row md:gap-3 md:bottom-4 md:left-1/2 md:translate-x-1/2 md:top-auto">
         {animeData.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full ${index === currentIndex ? "bg-white" : "bg-white bg-opacity-50"
+            className={`w-3 h-3 rounded-full transition-all
+              ${index === currentIndex 
+                ? "bg-primary scale-125" 
+                : "bg-white/50 hover:bg-white/75"
               }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
+      </div>
+
+      {/* Navigation arrows - Hidden on mobile */}
+      <div className="hidden md:block">
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/75 transition-colors"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/75 transition-colors"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
       </div>
     </div>
   )
