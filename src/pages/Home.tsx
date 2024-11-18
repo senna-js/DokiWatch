@@ -37,9 +37,9 @@ const Home = () => {
           status: "RELEASING",
           totalEpisodes: anime.totalEpisodes,
           currentEpisode: anime.currentEpisode,
-          bannerImage: anime.bannerImage,
+          bannerImage: anime.cover,
         }
-        console.log("bannerImage", anime.bannerImage)
+        console.log("bannerImage", topAnime.bannerImage)
         return topAnime
       }))
       setLoadingTopAiring(false)
