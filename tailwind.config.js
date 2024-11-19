@@ -6,6 +6,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens:{
+        'custom': '510px',
+      },
       backgroundImage: {
         "doki-girl": "url('./src/assets/doki-firl.png')",
         "red-anime-girl": "url('./src/assets/reddragon.png')",
