@@ -177,6 +177,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
               large
               color
             }
+            bannerImage
+            genres
             status
             episodes
             nextAiringEpisode {
@@ -212,6 +214,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
         totalEpisodes: media.media.episodes || null,
         currentEpisode: (media.media.nextAiringEpisode?.episode - 1) || media.media.episodes,
         nextAiringEpisode: media.media.nextAiringEpisode,
+        bannerImage: media.media.bannerImage,
+        genres: media.media.genres,
       };
       return anime;
     });
@@ -237,13 +241,13 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
  */
 export const anilistQuery = async (query: string, variables: any, accessToken?: string, deps?: any[]): Promise<any> => {
   const setStorage = (key: string, value: any) => {
-    if(!deps) return;
+    if (!deps) return;
     const obj = { value, deps };
     sessionStorage.setItem(key, JSON.stringify(obj));
   }
 
-  const getStorage = (key: string): {value:any,deps:any[]} | null => {
-    if(!deps) return null;
+  const getStorage = (key: string): { value: any, deps: any[] } | null => {
+    if (!deps) return null;
     const retrievedObject = sessionStorage.getItem(key);
     if (retrievedObject) {
       return JSON.parse(retrievedObject);
@@ -255,7 +259,7 @@ export const anilistQuery = async (query: string, variables: any, accessToken?: 
 
   if (storedData && deps) {
     console.log("Found in cache", storedData);
-    
+
     if (deps.some((dep, i) => dep !== storedData.deps[i])) {
       console.log("Cache mismatch", deps, storedData.deps);
     }

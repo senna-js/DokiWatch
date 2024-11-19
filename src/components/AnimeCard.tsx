@@ -20,6 +20,8 @@ export interface AnimeCardData {
     timeUntilAiring: number;
     airingAt: number;
   };
+  bannerImage: string;
+  genres: string[];
 }
 
 
