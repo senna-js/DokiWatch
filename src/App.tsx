@@ -12,6 +12,7 @@ import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 // import { AnimeList } from "./pages/AnimeList";
 import Home from "./pages/Home";
+import AnimeNewsSection from "./pages/AnimeNews";
 // import { Watchgogo } from "./pages/Watch-gogo";
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="/search" element={<Search />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/watch/:id" element={<Watch />} />
+            <Route path="/news" element={<AnimeNewsSection/>}/>
             {/* <Route path="/manga" element={<Manga />} /> */}
             {/* <Route path="/read/:mangaName" element={<Read />} /> */}
             {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}

@@ -81,7 +81,7 @@ const Home = () => {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="font-bold font-hpSimplifiedbold hidden sm:hidden md:block ml-5 sm:ml-0"
+            className="font-bold font-hpSimplifiedbold text-white hidden sm:hidden md:block ml-5 sm:ml-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -351,7 +351,7 @@ const BannerCarouselSkeleton = () => (
         <div className="h-12 bg-doki-light-grey rounded-[12px] w-3/4 mb-4"></div>
         <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/2"></div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple/80 to-transparent"></div>
+      {/* <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple/80 to-transparent"></div> */}
     </div>
   </div>
 )
