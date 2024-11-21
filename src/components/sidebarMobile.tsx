@@ -319,7 +319,7 @@ const Sidebar = () => {
                                     <IconButton onClick={handleNewsClick}>
                                         <FeedIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
                                     </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleNewsClick}>News</span>
+                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleNewsClick}>Anime News</span>
                                 </div>
                                 <div className="cursor-pointer">
                                     <img
