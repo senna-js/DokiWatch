@@ -12,6 +12,7 @@ import {
     Schedule as ScheduleIcon,
     Search as SearchIcon,
     ContentPasteSearch as TraceIcon,
+    Feed as FeedIcon,
 } from "@mui/icons-material";
 // import styled from "@mui/material/styles/styled";
 import { useUser } from "@clerk/clerk-react";
@@ -38,6 +39,11 @@ const Sidebar = () => {
         if (traceRef.current) {
             (traceRef.current as HTMLDialogElement).showModal();
         }
+    };
+
+    const handleNewsClick = () => {
+        navigate('/news');
+        setIsOpen(false);
     };
 
     const handleModalDisplayPhone = () => {
@@ -271,7 +277,7 @@ const Sidebar = () => {
                             className="fixed top-0 left-0 h-full w-1/4 min-w-[300px] z-50 
                          backdrop-blur-sm bg-doki-dark-grey/80 pt-16 pb-4"
                         >
-                            <Stack direction="column" spacing={4} className="flex p-4 ml-4">
+                            <Stack direction="column"  className="flex p-4 ml-4 space-y-4 sm:space-y-8">
                                 {isSignedIn && (
                                     <div className="flex items-center space-x-2 cursor-pointer">
                                         <IconButton onClick={handleSubmit}>
@@ -307,6 +313,13 @@ const Sidebar = () => {
                                         <TraceIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
                                     </IconButton>
                                     <span className="text-doki-white font-lato text-md mt-1" onClick={handleModalDisplayPhone}>Anime Scene Trace</span>
+                                </div>
+
+                                <div className="flex items-center space-x-2 cursor-pointer">
+                                    <IconButton onClick={handleNewsClick}>
+                                        <FeedIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                    </IconButton>
+                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleNewsClick}>News</span>
                                 </div>
                                 <div className="cursor-pointer">
                                     <img
