@@ -12,7 +12,7 @@ export const LoadBalance = async (
   }
   const endpointsCopy = [...endpoints];
 
-  for (let i = 0; i < endpointsCopy.length; i++) {
+  while(endpointsCopy.length > 0) {
     const randomIndex = Math.floor(Math.random() * endpointsCopy.length);
     const randomEndpoint = endpointsCopy.splice(randomIndex, 1)[0];
     const url = `${randomEndpoint}${query}`;
@@ -22,13 +22,10 @@ export const LoadBalance = async (
       return response;
     } catch (error) {
       console.error(`Endpoint ${randomEndpoint} failed: ${error}`);
-      if (i === endpointsCopy.length - 1) {
-        throw new Error("All endpoints failed");
-      }
     }
   }
-
-  return {} as AxiosResponse<any, any>;
+  throw new Error("All endpoints failed");
+  // return {} as AxiosResponse<any, any>;
 };
 
 export const consumetZoro = async (
