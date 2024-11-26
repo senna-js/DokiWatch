@@ -15,14 +15,14 @@ import {
     Feed as FeedIcon,
 } from "@mui/icons-material";
 // import styled from "@mui/material/styles/styled";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import TraceAnimeModal from "./TraceAnimeModal";
 import { useAnilistAuth } from "../AnilistContext";
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isSignedIn } = useUser();
+    // const { isSignedIn } = useUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [schedule, setSchedule] = useState([]);
     const modalRef = useRef(null);
@@ -278,14 +278,14 @@ const Sidebar = () => {
                          backdrop-blur-sm bg-doki-dark-grey/80 pt-16 pb-4"
                         >
                             <Stack direction="column"  className="flex p-4 ml-4 space-y-4 sm:space-y-8">
-                                {isSignedIn && (
+                                {/* {isSignedIn && ( */}
                                     <div className="flex items-center space-x-2 cursor-pointer">
                                         <IconButton onClick={handleSubmit}>
                                             <LinkIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
                                         </IconButton>
                                         <span className="text-doki-white font-lato text-md mt-1" onClick={handleSubmit}>Anilist Connect</span>
                                     </div>
-                                )}
+                                {/* )} */}
 
                                 <div className="flex items-center space-x-2 cursor-pointer">
                                     <IconButton onClick={handleHomeClick}>

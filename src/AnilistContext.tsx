@@ -13,6 +13,7 @@ interface AnilistAuth {
   user: AnilistUser | null;
   authState: "loading" | "authenticated" | "unauthenticated";
   authenticate: () => void;
+  unAuthenticate: () => void;
   getAuth: () => void;
   addToList: (mediaId: number, status: MediaListStatus) => Promise<Boolean>;
   getList: (status: MediaListStatus) => Promise<AnimeCardData[]>;
@@ -36,16 +37,17 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   const [user, setUser] = useState<AnilistUser | null>(null);
   const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
+  const unAuthenticate = () => {
+    localStorage.removeItem(storageKey);
+    setAuthState("unauthenticated");
+    setUser(null);
+  };
+
   const setAnilistUser = async (token?: string): Promise<Boolean> => {
     if (user) {
       console.log("User already set");
       return true;
     }
-    const unAuthenticate = () => {
-      localStorage.removeItem(storageKey);
-      setAuthState("unauthenticated");
-      setUser(null);
-    };
     setAuthState("loading");
 
     const retrievedUser = localStorage.getItem(storageKey);
@@ -228,7 +230,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   }, []);
 
   return (
-    <AnilistAuthContext.Provider value={{ user, authState, authenticate, getAuth, addToList, getList }}>
+    <AnilistAuthContext.Provider value={{ user, authState, authenticate, unAuthenticate, getAuth, addToList, getList }}>
       {children}
     </AnilistAuthContext.Provider>
   );

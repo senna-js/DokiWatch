@@ -1,7 +1,7 @@
 import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useUser } from "@clerk/clerk-react"
+// import { useUser } from "@clerk/clerk-react"
 import { AnimeCardData } from "../components/AnimeCard"
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer"
 import { useAnilistAuth } from "../AnilistContext"
@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
 
 const Home = () => {
-  const { isSignedIn } = useUser()
+  // const { isSignedIn } = useUser()
   const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([])
   const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([])
   const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([])
@@ -121,7 +121,7 @@ const Home = () => {
           <AnimeDataStack animeData={topAiringAnime} heading="Top Airing" />
         )}
       </motion.div>
-      {isSignedIn && (
+      {/* {isSignedIn && ( */}
         <div className="mt-16">
           <motion.div
             className="m-7"
@@ -170,7 +170,7 @@ const Home = () => {
             )}
           </motion.div>
         </div>
-      )}
+      {/* )} */}
     </div>
   )
 }
