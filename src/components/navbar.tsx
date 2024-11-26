@@ -10,13 +10,13 @@ import { useNavigate } from "react-router-dom";
 import kofiImage from "../assests/kofi.png";
 import coffeeImage from "../assests/Coffee.png";
 // import { motion } from "framer-motion";
-import { useAnilistAuth } from "../AnilistContext";
+import { useAnilistContext } from "../AnilistContext";
 
 export const Navbar = () => {
   // const [hoveredKoFi, setHoveredKoFi] = useState(false);
   // const [hoveredCoffee, setHoveredCoffee] = useState(false);
   // const [hoveredDiscord, setHoveredDiscord] = useState(false);
-  const { user, authenticate, unAuthenticate, authState } = useAnilistAuth();
+  const { user, authenticate, unAuthenticate, authState } = useAnilistContext();
 
   const handleKoFiClick = () => {
     window.open("https://ko-fi.com/eshan27", "_blank", "noopener,noreferrer");
@@ -257,7 +257,7 @@ export const Navbar = () => {
             onClick={() => setIsChatBubbleOpen((prev) => !prev)}
             className="cursor-pointer"
           >
-            {user?.avatar ? (
+            {(authState === 'authenticated') ? (
               <img
                 src={user.avatar}
                 alt="Profile"
@@ -274,29 +274,31 @@ export const Navbar = () => {
                 <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
               </div>
 
-              {(authState === "unauthenticated") ? (
+              {(authState === "authenticated") ? (
+                <p className="text-sm mb-2">
+                  Connected to Anilist as {user.name}
+                </p>
+
+              ) : (
                 <p className="text-sm mb-2">
                   Connect to Anilist to sync your watchlist.
                 </p>
-              ) : (
-                <p className="text-sm mb-2">
-                  Connected to Anilist as {user?.name}
-                </p>
               )}
-              {(authState === 'unauthenticated') ? (
-                <button
-                  onClick={authenticate}
-                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
-                >
-                  Connect to Anilist
-                </button>
-              ) : (
+              {(authState === 'authenticated') ? (
                 <button
                   onClick={unAuthenticate}
                   className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
                 >
                   Disconnect Anilist
                 </button>
+              ) : (
+                <button
+                  onClick={authenticate}
+                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                >
+                  Connect to Anilist
+                </button>
+
               )}
 
               <button

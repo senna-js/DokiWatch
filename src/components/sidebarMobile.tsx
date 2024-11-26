@@ -18,7 +18,7 @@ import {
 // import { useUser } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import TraceAnimeModal from "./TraceAnimeModal";
-import { useAnilistAuth } from "../AnilistContext";
+import { useAnilistContext } from "../AnilistContext";
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,7 @@ const Sidebar = () => {
     const [isModalDisplayedPhone, setIsModalDisplayedPhone] = useState(false);
     const traceRef = useRef<HTMLDialogElement>(null);
     const traceRefPhone = useRef<HTMLDialogElement>(null);
-    const { authenticate } = useAnilistAuth();
+    const { authenticate } = useAnilistContext();
 
     const handleModalDisplay = () => {
         setIsModalDisplayed(true);
@@ -277,14 +277,14 @@ const Sidebar = () => {
                             className="fixed top-0 left-0 h-full w-1/4 min-w-[300px] z-50 
                          backdrop-blur-sm bg-doki-dark-grey/80 pt-16 pb-4"
                         >
-                            <Stack direction="column"  className="flex p-4 ml-4 space-y-4 sm:space-y-8">
+                            <Stack direction="column" className="flex p-4 ml-4 space-y-4 sm:space-y-8">
                                 {/* {isSignedIn && ( */}
-                                    <div className="flex items-center space-x-2 cursor-pointer">
-                                        <IconButton onClick={handleSubmit}>
-                                            <LinkIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                        </IconButton>
-                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleSubmit}>Anilist Connect</span>
-                                    </div>
+                                <div className="flex items-center space-x-2 cursor-pointer">
+                                    <IconButton onClick={handleSubmit}>
+                                        <LinkIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                    </IconButton>
+                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleSubmit}>Anilist Connect</span>
+                                </div>
                                 {/* )} */}
 
                                 <div className="flex items-center space-x-2 cursor-pointer">

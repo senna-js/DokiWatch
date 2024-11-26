@@ -9,22 +9,32 @@ interface AnilistUser {
   token: string;
 }
 
-interface AnilistAuth {
-  user: AnilistUser | null;
-  authState: "loading" | "authenticated" | "unauthenticated";
+type UnAuthenticatedUser = {
+  user: null
+  authState: "unauthenticated" | "loading"
+}
+type AuthenticatedUser = {
+  user: AnilistUser
+  authState: "authenticated"
+}
+
+interface BaseAnilistContext {
   authenticate: () => void;
   unAuthenticate: () => void;
-  getAuth: () => void;
   addToList: (mediaId: number, status: MediaListStatus) => Promise<Boolean>;
   getList: (status: MediaListStatus) => Promise<AnimeCardData[]>;
 }
 
+type AuthUnion = AuthenticatedUser | UnAuthenticatedUser
+
+type AnilistContext = BaseAnilistContext & AuthUnion
+
 export type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
 
 // Create the context
-const AnilistAuthContext = createContext<AnilistAuth | undefined>(undefined);
+const AnilistAuthContext = createContext<AnilistContext | undefined>(undefined);
 
-export const useAnilistAuth = (): AnilistAuth => {
+export const useAnilistContext = (): AnilistContext => {
   const context = useContext(AnilistAuthContext);
   if (!context) {
     throw new Error("useAnilistAuth must be used within an AnilistAuthProvider");
@@ -34,21 +44,19 @@ export const useAnilistAuth = (): AnilistAuth => {
 
 // Provider component for Anilist Authentication
 export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageKey: string }> = ({ children, storageKey }) => {
-  const [user, setUser] = useState<AnilistUser | null>(null);
-  const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
+  const [authUnion, setAuthUnion] = useState<AuthUnion>({ user: null, authState: "loading" });
 
   const unAuthenticate = () => {
     localStorage.removeItem(storageKey);
-    setAuthState("unauthenticated");
-    setUser(null);
+    setAuthUnion({ user: null, authState: "unauthenticated" });
   };
 
   const setAnilistUser = async (token?: string): Promise<Boolean> => {
-    if (user) {
+    if (authUnion.user) {
       console.log("User already set");
       return true;
     }
-    setAuthState("loading");
+    setAuthUnion({ user: null, authState: "loading" });
 
     const retrievedUser = localStorage.getItem(storageKey);
 
@@ -79,8 +87,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       };
       console.log("Fetched user", fetchedUser);
       localStorage.setItem(storageKey, JSON.stringify(fetchedUser));
-      setUser(fetchedUser);
-      setAuthState("authenticated");
+      setAuthUnion({ user: fetchedUser, authState: "authenticated" });
       return true;
     }
 
@@ -100,8 +107,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     }
 
     console.log("Setting user from local storage", parsedUser);
-    setAuthState("authenticated");
-    setUser(parsedUser);
+    setAuthUnion({ user: parsedUser, authState: "authenticated" });
     return true;
   };
 
@@ -126,12 +132,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   };
 
   const addToList = async (mediaId: number, status: MediaListStatus): Promise<Boolean> => {
-    if (authState !== "authenticated") {
+    if (authUnion.authState !== "authenticated") {
       console.log("Not authenticated");
-      return false;
-    }
-    if (!user) {
-      console.log("Invalid authState");
       return false;
     }
     const query = `
@@ -144,7 +146,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       mediaId: mediaId,
       status: status,
     };
-    const response = await anilistQuery(query, variables, user.token);
+    const response = await anilistQuery(query, variables, authUnion.user.token);
 
     if (response.errors) {
       console.error("Error adding to list", response.errors);
@@ -154,12 +156,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   }
 
   const getList = async (status: MediaListStatus): Promise<AnimeCardData[]> => {
-    if (authState !== "authenticated") {
+    if (authUnion.authState !== "authenticated") {
       console.log("Not authenticated");
-      return [];
-    }
-    if (!user) {
-      console.log("Invalid authState");
       return [];
     }
 
@@ -195,12 +193,12 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     const variables = {
       page: 1,
       perPage: 50,
-      userId: user.id,
+      userId: authUnion.user.id,
       type: "ANIME",
       status: status,
     }
 
-    const response = await anilistQuery(query, variables, user.token);
+    const response = await anilistQuery(query, variables, authUnion.user.token);
 
     const mediaList = response.data.Page.mediaList;
 
@@ -230,7 +228,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   }, []);
 
   return (
-    <AnilistAuthContext.Provider value={{ user, authState, authenticate, unAuthenticate, getAuth, addToList, getList }}>
+    <AnilistAuthContext.Provider value={{ ...authUnion, authenticate, unAuthenticate, addToList, getList }}>
       {children}
     </AnilistAuthContext.Provider>
   );
