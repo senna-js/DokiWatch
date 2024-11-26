@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { AnimeListProvider } from "./AnimeListContext";
 import { Navbar } from "./components/navbar";
 import LandingPage from "./pages/landingPage";
 import { Anime } from "./pages/Anime";
@@ -30,15 +29,14 @@ const App = () => {
   }, [controls, inView]);
 
   return (
-      <AnimeListProvider>
-        <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
-          <div className="absolute w-full h-full bg-doki-purple"></div>
-          <Navbar />
-          <div className="sm:h-[109px] h-[67px]"></div>
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/anime/:id" element={<Anime />} />
-            {/* <Route
+    <div className="min-h-screen text-doki-white relative overflow-x-hidden overflow-y-hidden">
+      <div className="absolute w-full h-full bg-doki-purple"></div>
+      <Navbar />
+      <div className="sm:h-[109px] h-[67px]"></div>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/anime/:id" element={<Anime />} />
+        {/* <Route
               path="/watching"
               element={<AnimeList title="Watching" list="watching" />}
             />
@@ -50,16 +48,15 @@ const App = () => {
               path="/plan-to-watch"
               element={<AnimeList title="Plan to Watch" list="planToWatch" />}
             /> */}
-            <Route path="/search" element={<Search />} />
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/watch/:id" element={<Watch />} />
-            <Route path="/news" element={<AnimeNewsSection/>}/>
-            {/* <Route path="/manga" element={<Manga />} /> */}
-            {/* <Route path="/read/:mangaName" element={<Read />} /> */}
-            {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
-          </Routes>
-        </div>
-      </AnimeListProvider>
+        <Route path="/search" element={<Search />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/watch/:id" element={<Watch />} />
+        <Route path="/news" element={<AnimeNewsSection />} />
+        {/* <Route path="/manga" element={<Manga />} /> */}
+        {/* <Route path="/read/:mangaName" element={<Read />} /> */}
+        {/* <Route path= "/watch/:id" element={<Watchgogo/>}/> */}
+      </Routes>
+    </div>
   );
 };
 

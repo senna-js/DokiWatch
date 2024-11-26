@@ -51,6 +51,16 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     setAuthUnion({ user: null, authState: "unauthenticated" });
   };
 
+  const isUser = (user: unknown): user is AnilistUser => {
+    if (typeof user !== "object" || user === null) return false; // Check for null and type of object
+    if (!("id" in user) || typeof user.id !== "number") return false;
+    if (!("name" in user) || typeof user.name !== "string") return false;
+    if (!("avatar" in user) || typeof user.avatar !== "string") return false;
+    if (!("token" in user) || typeof user.token !== "string") return false;
+    return true;
+  };
+
+
   const setAnilistUser = async (token?: string): Promise<Boolean> => {
     if (authUnion.user) {
       console.log("User already set");
@@ -91,7 +101,12 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       return true;
     }
 
-    const parsedUser: AnilistUser = JSON.parse(retrievedUser);
+    const parsedUser: unknown = JSON.parse(retrievedUser);
+    if (!isUser(parsedUser)) {
+      console.log("Invalid user data in localStorage", parsedUser);
+      unAuthenticate();
+      return false;
+    }
     const decodedToken: any = jwtDecode(parsedUser.token);
 
     if (!decodedToken.exp || decodedToken.exp < Date.now() / 1000) {

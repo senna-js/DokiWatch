@@ -1,28 +1,10 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import dokiGirl from "../assests/doki-girl.webp";
 import dokiGirlPhone from "../assests/doki-girl-phone.png";
-// Mock authentication check (replace with your actual auth logic)
-const isAuthenticated = () => {
-  const user = localStorage.getItem("user");
-  const userObj = JSON.parse(user || "{}");
-  const username = userObj.username;
-  const accessToken = userObj.access_token;
-  console.log(username);
-  return Boolean(username) && Boolean(accessToken); // Returns true if a username is found, false otherwise
-  // return false;
-};
 
 const LandingPage = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated()) {
-      // Redirect to the App component if the user is authenticated
-      navigate("/");
-    }
-  }, [navigate]);
   const handleExploreClick = () => {
     navigate("/home");
   };
