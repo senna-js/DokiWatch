@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebarMobile";
 // import {
 //   SignedIn,
@@ -40,7 +40,20 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(true);
+  const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(false);
+
+  useEffect(()=>{
+    if(authState === 'unauthenticated'){
+      const chatBubble = sessionStorage.getItem('chatBubble')
+      if(chatBubble && chatBubble === 'true')
+        return;
+      setIsChatBubbleOpen(true);
+      sessionStorage.setItem('chatBubble', 'true');
+    }
+    if(authState === 'authenticated'){
+      sessionStorage.removeItem('chatBubble');
+    }
+  },[authState])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
