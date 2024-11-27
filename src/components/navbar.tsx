@@ -270,7 +270,7 @@ export const Navbar = () => {
             onClick={() => setIsChatBubbleOpen((prev) => !prev)}
             className="cursor-pointer"
           >
-            {(authState === 'authenticated') ? (
+            {(authState === 'authenticated' && user?.avatar) ? (
               <img
                 src={user.avatar}
                 alt="Profile"
