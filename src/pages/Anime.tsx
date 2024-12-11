@@ -507,7 +507,7 @@ export const Anime = () => {
                             onClick={() => setDialogOpen(!dialogOpen)}
                             className="inline-flex justify-center w-full rounded-full
 					  bg-doki-light-grey 
-					  shadow-sm px-2 py-2"
+					  shadow-sm px-2 py-2 hover:rotate-90  duration-300"
                           >
                             <svg
                               width="24"

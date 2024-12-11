@@ -57,8 +57,36 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
           Filter
         </h1>
         <hr className="border border-doki-purple mb-2" />
-
-
+        <TextField
+          label="Search for anime"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
+          InputLabelProps={{
+            style: { color: "white" },
+          }}
+          InputProps={{
+            style: { color: "white" },
+          }}
+          style={{
+            borderColor: "white",
+            color: "white",
+          }}
+          classes={{
+            root: "text-field-root",
+          }}
+          inputProps={{
+            autoFocus: true,
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                props.handleSearch(searchTerm);
+                setSearchTerm("");
+              }
+            },
+          }}
+        />
         <h1 className="text-doki-purple text-start text-bold font-lato text-2xl ml-2">
           Genres
         </h1>

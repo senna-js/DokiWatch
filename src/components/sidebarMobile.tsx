@@ -340,7 +340,7 @@ const Sidebar = () => {
 
                 {/* Toggle Button for Mobile */}
 
-                <div className="fixed top-[85vh] left-0 z-0 -translate-y-1/2 sm:ml-[25px] ml-[5px]">
+                <div className="fixed top-[85vh] left-0 z-0 -translate-y-1/2 sm:ml-[25px] ml-[5px] hover:scale-105 duration-300">
                     <IconButton
                         onClick={toggleSidebar}
                         style={{ backgroundColor: "#6E78CB" }}

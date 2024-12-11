@@ -1,4 +1,7 @@
 import { Card, CardMedia, Tooltip, Zoom } from "@mui/material";
+import { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from '@mui/material/styles';
+// import { color } from "framer-motion";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
 
 type MediaStatus = "RELEASING" | "FINISHED" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS";
@@ -21,7 +24,7 @@ export interface AnimeCardData {
     airingAt: number;
   };
   bannerImage: string;
-  genres: string[];
+  genres?: string[];
 }
 
 
@@ -32,22 +35,52 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     navigate(`/anime/${anime.idMal}`);
   };
 
+  const dokiTooltipBackground = "rgba(47, 54, 114, 0.8)"; 
+  const dokiTooltipText = "#DADAE8";  
+
+  const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(() => ({
+    // [`& .${tooltipClasses.arrow}`]: {
+    //   color: dokiTooltipBackground,
+    // },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: dokiTooltipBackground,
+      color: dokiTooltipText,
+      fontSize: "11px",
+      backdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(10px)", // For Safari support
+      border: `1px solid rgba(255, 255, 255, 0.2)`, 
+    },
+  }));
+
+  
+
   return (
-    <Tooltip
+    <CustomTooltip
       TransitionComponent={Zoom}
       title={
         <>
-          <h3>{anime.title.english || anime.title.romaji}</h3>
+          <h3 className="font-bold font-lato text-sm text-white mb-2">{anime.title.english || anime.title.romaji}</h3>
+          <p>Status: {anime.status}</p>
+          <p>Genres: {anime.genres?.join(', ') || 'N/A'}</p>
+
+          {anime.totalEpisodes !== null && (
+            <p>Total Episodes: {anime.totalEpisodes}</p>
+          )}
         </>
       }
       placement="top"
-      arrow
-      sx={{
-        "& .MuiTooltip-tooltip": {},
-        "& .MuiTooltip-arrow": {
-          color: "#f5f5f5",
-        },
-      }}
+      
+    // sx={{
+    //   "& .MuiTooltip-tooltip": {
+    //     backgroundColor: "#2F3672",
+    //     color: "#f5f5f5",
+    //   },
+    //   "& .MuiTooltip-arrow": {
+    //     color: "#f5f5f5",
+    //   },
+    // }}
     >
       <div
         className="my-7 mx-4 w-[201px] h-[280px] 
@@ -121,7 +154,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           </div>
         </div>
       </div>
-    </Tooltip>
+    </CustomTooltip>
   );
 };
 
