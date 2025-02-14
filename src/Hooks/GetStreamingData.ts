@@ -92,9 +92,10 @@ export const getCurrentEpisodeData = async (
     const thumbSrcObj = subData.data.subtitles
       ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
       : null;
-    const dubThumbSrcObj = (dubData && dubData.data && dubData.data.subtitles)
-      ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
-      : null;
+    const dubThumbSrcObj =
+      dubData && dubData.data && dubData.data.subtitles
+        ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+        : null;
     const subtitlesList = subData.data.subtitles
       ? subData.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails")
       : null;
@@ -108,11 +109,12 @@ export const getCurrentEpisodeData = async (
           /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
           "/api-$1"
         ),
-        dub: (dubData && dubData.data) ? 
-          dubData?.data.sources[0].url.replace(
-          /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-          "/api-$1"
-        ) : null,
+        dub: (dubData && dubData.data) ?
+         dubData?.data.sources[0].url.replace(
+                /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+                "/api-$1"
+              )
+            : null,
       },
       thumbnailSrc: thumbSrcObj
         ? thumbSrcObj.url.replace(
@@ -121,8 +123,9 @@ export const getCurrentEpisodeData = async (
           )
         : null,
       dubThumbnailSrc: dubThumbSrcObj
-        ? dubThumbSrcObj.find((sub: any) => sub.lang === "Thumbnails")
-        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb")
+        ? dubThumbSrcObj
+            .find((sub: any) => sub.lang === "Thumbnails")
+            .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb")
         : null,
       subtitles: subtitlesList
         ? subtitlesList.map((sub: any) => ({
@@ -133,15 +136,17 @@ export const getCurrentEpisodeData = async (
             lang: sub.lang,
           }))
         : null,
-      dubSubtitles: dubData?.data.subtitles
-        .filter((sub: any) => sub.lang !== "Thumbnails")
-        .map((sub: any) => ({
-          url: sub.url.replace(
-            "https://s.megastatics.com/subtitle",
-            "/api-sub"
-          ),
-          lang: sub.lang,
-        })),
+      dubSubtitles: dubData && dubData.data && dubData && dubData.data.subtitles
+        ? dubData?.data.subtitles
+            .filter((sub: any) => sub.lang !== "Thumbnails")
+            .map((sub: any) => ({
+              url: sub.url.replace(
+                "https://s.megastatics.com/subtitle",
+                "/api-sub"
+              ),
+              lang: sub.lang,
+            }))
+        : null,
     };
 
     // Remove duplicate subtitles
