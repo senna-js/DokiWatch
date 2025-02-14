@@ -1,19 +1,19 @@
 import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useUser } from "@clerk/clerk-react"
+// import { useUser } from "@clerk/clerk-react"
 import { AnimeCardData } from "../components/AnimeCard"
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer"
-import { useAnilistAuth } from "../AnilistContext"
+import { useAnilistContext } from "../AnilistContext"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
 
 const Home = () => {
-  const { isSignedIn } = useUser()
+  // const { isSignedIn } = useUser()
   const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([])
   const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([])
   const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([])
-  const { authState, getList } = useAnilistAuth()
+  const { authState, getList } = useAnilistContext()
 
 
   // Loading states
@@ -28,23 +28,26 @@ const Home = () => {
         status: "RELEASING",
       }
       const response = await consumetAnilistSearch(params)
-      setTopAiringAnime(response.data.results.map((anime: any) => {
-        const topAnime: AnimeCardData = {
-          id: anime.id,
-          idMal: anime.malId,
-          title: anime.title,
-          color: anime.color,
-          image: anime.image.replace("/large/", "/medium/"),
-          description: anime.description,
-          status: "RELEASING",
-          totalEpisodes: anime.totalEpisodes,
-          currentEpisode: anime.currentEpisode,
-          bannerImage: anime.cover,
-          genres: anime.genres,
-        }
-
-        return topAnime
-      }))
+      const fetchedAnime = response.data.results
+        .filter((anime: any) => anime.cover || anime.image) // Ensure banner exists
+        .map((anime: any) => {
+          const topAnime: AnimeCardData = {
+            id: anime.id,
+            idMal: anime.malId,
+            title: anime.title,
+            color: anime.color,
+            image: anime.image.replace("/large/", "/medium/"),
+            description: anime.description,
+            status: "RELEASING",
+            totalEpisodes: anime.totalEpisodes,
+            currentEpisode: anime.currentEpisode,
+            bannerImage: anime.cover,
+            genres: anime.genres,
+          }
+          console.log("bannerImage", topAnime.bannerImage)
+          return topAnime
+        });
+      setTopAiringAnime(fetchedAnime);
       setLoadingTopAiring(false)
     }
     getTopAiringAnime()
@@ -78,7 +81,7 @@ const Home = () => {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="font-bold font-hpSimplifiedbold hidden sm:hidden md:block ml-5 sm:ml-0"
+            className="font-bold font-hpSimplifiedbold text-white hidden sm:hidden md:block ml-5 sm:ml-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -118,56 +121,56 @@ const Home = () => {
           <AnimeDataStack animeData={topAiringAnime} heading="Top Airing" />
         )}
       </motion.div>
-      {isSignedIn && (
-        <div className="mt-16">
-          <motion.div
-            className="m-7"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            {loadingWatchingAiring ? (
-              // Skeleton for Watching Airing
-              <div className="animate-pulse">
-                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index}>
-                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
-                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
-                    </div>
-                  ))}
-                </div>
+      {/* {isSignedIn && ( */}
+      <div className="mt-16">
+        <motion.div
+          className="m-7"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          {loadingWatchingAiring ? (
+            // Skeleton for Watching Airing
+            <div className="animate-pulse">
+              <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <div key={index}>
+                    <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                    <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
-            )}
-          </motion.div>
-          <motion.div
-            className="m-7 mt-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            {loadingWatchingAired ? (
-              // Skeleton for Watching Aired
-              <div className="animate-pulse">
-                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index}>
-                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
-                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
-                    </div>
-                  ))}
-                </div>
+            </div>
+          ) : (
+            <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
+          )}
+        </motion.div>
+        <motion.div
+          className="m-7 mt-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          {loadingWatchingAired ? (
+            // Skeleton for Watching Aired
+            <div className="animate-pulse">
+              <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <div key={index}>
+                    <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                    <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
-            )}
-          </motion.div>
-        </div>
-      )}
+            </div>
+          ) : (
+            <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
+          )}
+        </motion.div>
+      </div>
+      {/* )} */}
     </div>
   )
 }
@@ -186,18 +189,54 @@ const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Reference to keep track of currentIndex inside setInterval
+  const currentIndexRef = useRef(currentIndex)
+  useEffect(() => {
+    currentIndexRef.current = currentIndex
+  }, [currentIndex])
+
+  // Function to check if the current banner is valid
+  const isValidBanner = (index: number) => {
+    const banner = animeData[index]?.bannerImage;
+    const image = animeData[index]?.image;
+    return (
+      (typeof banner === "string" && banner.trim() !== "") ||
+      (typeof image === "string" && image.trim() !== "")
+    );
+  };
+
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % animeData.length)
-  }
+    let nextIndex = (currentIndexRef.current + 1) % animeData.length;
+    let attempts = 0;
+    while (!isValidBanner(nextIndex) && attempts < animeData.length) {
+      nextIndex = (nextIndex + 1) % animeData.length;
+      attempts++;
+    }
+    setCurrentIndex(nextIndex);
+  };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + animeData.length) % animeData.length)
-  }
+    let prevIndex = (currentIndexRef.current - 1 + animeData.length) % animeData.length;
+    let attempts = 0;
+    while (!isValidBanner(prevIndex) && attempts < animeData.length) {
+      prevIndex = (prevIndex - 1 + animeData.length) % animeData.length;
+      attempts++;
+    }
+    setCurrentIndex(prevIndex);
+  };
 
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [animeData])
+
+  // Initialize to the first valid banner
+  useEffect(() => {
+    if (!isValidBanner(currentIndex)) {
+      nextSlide();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animeData]);
 
   // Function to strip HTML tags from description
   const stripHtmlTags = (html: string) => {
@@ -232,74 +271,93 @@ const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
   return (
     <div className="relative w-full h-[400px] sm:h-[500px] overflow-hidden rounded-none mb-8">
       <AnimatePresence initial={false}>
-        <motion.div
-          key={currentIndex}
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
+        {isValidBanner(currentIndex) ? (
+          <motion.div
+            key={currentIndex}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="absolute inset-0 flex">
-              <div className="md:w-2/3 w-3/2 bg-gradient-to-r from-doki-purple to-transparent flex flex-col justify-end p-8">
-                <div className="text-white">
-                  <h2 className="text-2xl sm:text-4xl font-bold font-lato text-white mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
-                  <div className="hidden custom:flex flex-wrap gap-2 mb-4">
-                    {animeData[currentIndex].genres.map((genre, index) => (
-                      <span onClick={handleGenreClick} key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-doki-white hover:text-doki-purple">
-                        {genre}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="hidden md:line-clamp-3 text-lg font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
-                  <div className="flex space-x-4 mt-4">
-                    {/* Detail Button */}
-                    <button
-                      onClick={navigateToPage}
-                      className="relative text-sm px-4 py-2 font-lato bg-doki-dark-grey text-primary-foreground rounded-[21px] hover:bg-doki-white hover:text-doki-purple transition-colors cursor-pointer z-10 whitespace-nowrap"
-                      aria-label="View Details"
-                    >
-                      Detail &gt;
-                    </button>
-                    {/* Watch Button */}
-                    <button
-                      onClick={handleWatch}
-                      className="relative text-sm px-4 py-2 font-lato bg-doki-dark-grey text-primary-foreground rounded-[21px] hover:bg-doki-white hover:text-doki-purple transition-colors cursor-pointer z-10 flex items-center space-x-1"
-                      aria-label="Watch Anime"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
+
+            <div
+              className="w-full h-full bg-cover bg-center"
+              style={{ backgroundImage: `url(${backgroundImage})` }}
+            >
+              <div className="absolute inset-0 flex">
+                <div className="md:w-2/3 w-3/2 bg-gradient-to-r from-doki-purple to-transparent flex flex-col justify-end p-8">
+                  <div className="text-white">
+                    <h2 className="text-2xl sm:text-4xl font-bold font-lato text-white mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
+                    <div className="hidden custom:flex flex-wrap gap-2 mb-4">
+                      {animeData[currentIndex].genres?.map((genre, index) => (
+                        <span onClick={handleGenreClick} key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-doki-white hover:text-doki-purple">
+                          {genre}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="hidden md:line-clamp-3 text-lg font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
+                    <div className="flex space-x-4 mt-4">
+                      {/* Detail Button */}
+                      <button
+                        onClick={navigateToPage}
+                        className="relative text-sm px-4 py-2 font-lato bg-doki-dark-grey text-primary-foreground rounded-[21px] transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-doki-white before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 hover:text-doki-purple overflow-hidden cursor-pointer z-10 whitespace-nowrap"
+                        aria-label="View Details"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
-                        />
-                      </svg>
-                      <span>Watch</span>
-                    </button>
+                        Details &gt;
+                      </button>
+                      {/* Watch Button */}
+                      <button
+                        onClick={handleWatch}
+                        className="relative text-sm px-4 py-2 font-lato bg-doki-dark-grey transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-doki-white before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 hover:text-doki-purple text-primary-foreground rounded-[21px] overflow-hidden cursor-pointer z-10 flex items-center space-x-1"
+                        aria-label="Watch Anime"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6 z-10"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
+                          />
+                        </svg>
+                        <span className="">Watch</span>
+                        {/* <span className="absolute rounded-xl w-full h-full bg-doki-white -left-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:left-0 duration-500" />
+                        <span className="absolute rounded-xl w-full h-full bg-doki-white -right-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:right-0 duration-500" /> */}
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <div className="w-1/2"></div>
               </div>
-              <div className="w-1/2"></div>
             </div>
-          </div>
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple to-transparent"></div>
-        </motion.div>
+            <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple to-transparent"></div>
+          </motion.div>
+        ) : (
+          // If no valid banner, render nothing or a placeholder
+          <motion.div
+            key="placeholder"
+            className="absolute inset-0 flex items-center justify-center bg-doki-dark-grey"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-white">No Banner Available</span>
+          </motion.div>
+        )}
+
+
       </AnimatePresence>
 
 
@@ -309,7 +367,11 @@ const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
         {animeData.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentIndex(index)}
+            onClick={() => {
+              if (isValidBanner(index)) {
+                setCurrentIndex(index);
+              }
+            }}
             className={`w-3 h-3 rounded-full transition-all
               ${index === currentIndex
                 ? "bg-primary scale-125"
@@ -348,7 +410,7 @@ const BannerCarouselSkeleton = () => (
         <div className="h-12 bg-doki-light-grey rounded-[12px] w-3/4 mb-4"></div>
         <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/2"></div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple/80 to-transparent"></div>
+      {/* <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-doki-purple/80 to-transparent"></div> */}
     </div>
   </div>
 )

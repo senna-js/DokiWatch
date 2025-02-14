@@ -160,14 +160,25 @@ export const Search = () => {
                 perPage
               }
               media(${term}${term ? ',' : ''} sort: POPULARITY_DESC, type: ANIME) {
+                id
                 idMal
                 title {
-                  romaji
-                  english
+                romaji
+                english
                 }
+                description
                 coverImage {
-                  extraLarge
-                  color
+                    extraLarge
+                    color
+                }
+                bannerImage
+                genres
+                status
+                episodes
+                nextAiringEpisode {
+                    episode
+                    timeUntilAiring
+                    airingAt
                 }
               }
             }
@@ -193,12 +204,20 @@ export const Search = () => {
                 if (!item.idMal) {
                     return null;
                 }
-                return {
+                const returnData: AnimeCardData = {
+                    id: item.id,
                     idMal: item.idMal,
                     title: item.title,
                     image: item.coverImage.extraLarge,
-                    color: item.coverImage.color
+                    color: item.coverImage.color,
+                    status: item.status,
+                    genres: item.genres,
+                    totalEpisodes: item.episodes,
+                    description: item.description,
+                    currentEpisode: item.nextAiringEpisode ? item.nextAiringEpisode.episode : null,
+                    bannerImage: item.bannerImage,
                 };
+                return returnData;
             });
             setAnime(animeData.filter((item: AnimeCardData) => item !== null));
 
