@@ -89,7 +89,12 @@ export const getCurrentEpisodeData = async (
   }
 
   if (subData) {
-    const thumbSrcObj = subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails") 
+    const thumbSrcObj = subData.data.subtitles.find(
+      (sub: any) => sub.lang === "Thumbnails"
+    );
+    const subtitlesList = subData.data.subtitles.filter(
+      (sub: any) => sub.lang !== "Thumbnails"
+    );
     const episodeData: CurrEpisodeData = {
       zoroId: id,
       intro: subData.data.intro,
@@ -104,19 +109,24 @@ export const getCurrentEpisodeData = async (
           "/api-$1"
         ),
       },
-      thumbnailSrc: thumbSrcObj? thumbSrcObj.url.replace("https://s.megastatics.com/thumbnails", "/api-thumb") : null,
+      thumbnailSrc: thumbSrcObj
+        ? thumbSrcObj.url.replace(
+            "https://s.megastatics.com/thumbnails",
+            "/api-thumb"
+          )
+        : null,
       dubThumbnailSrc: dubData?.data.subtitles
         .find((sub: any) => sub.lang === "Thumbnails")
         .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),
-      subtitles: subData.data.subtitles
-        .filter((sub: any) => sub.lang !== "Thumbnails")
-        .map((sub: any) => ({
-          url: sub.url.replace(
-            "https://s.megastatics.com/subtitle",
-            "/api-sub"
-          ),
-          lang: sub.lang,
-        })),
+      subtitles: subtitlesList
+        ? subtitlesList.map((sub: any) => ({
+            url: sub.url.replace(
+              "https://s.megastatics.com/subtitle",
+              "/api-sub"
+            ),
+            lang: sub.lang,
+          }))
+        : null,
       dubSubtitles: dubData?.data.subtitles
         .filter((sub: any) => sub.lang !== "Thumbnails")
         .map((sub: any) => ({
@@ -129,9 +139,12 @@ export const getCurrentEpisodeData = async (
     };
 
     // Remove duplicate subtitles
-    episodeData.subtitles = episodeData.subtitles.filter(
-      (sub, index, self) => index === self.findIndex((t) => t.lang === sub.lang)
-    );
+    if (episodeData.subtitles) {
+      episodeData.subtitles = episodeData.subtitles.filter(
+        (sub, index, self) =>
+          index === self.findIndex((t) => t.lang === sub.lang)
+      );
+    }
     episodeData.dubSubtitles = episodeData.dubSubtitles?.filter(
       (sub, index, self) => index === self.findIndex((t) => t.lang === sub.lang)
     );
