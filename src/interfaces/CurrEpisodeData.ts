@@ -4,7 +4,7 @@ export interface CurrEpisodeData {
     sub: string;
     dub?: string;
   };
-  subtitles: {
+  subtitles?: {
     url: string;
     lang: string;
   }[];
@@ -12,7 +12,7 @@ export interface CurrEpisodeData {
     url: string;
     lang: string;
   }[];
-  thumbnailSrc: string;
+  thumbnailSrc?: string;
   dubThumbnailSrc?: string;
   intro: {
     start: number;

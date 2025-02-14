@@ -76,7 +76,7 @@ export const getCurrentEpisodeData = async (
   const dubData =
     dubResponse && results[1].status === "fulfilled" ? results[1].value : null;
 
-  if (!subData) {
+  if (!subData || !subData.data) {
     console.log("Converting episode id");
     const newId = id.includes("$both")
       ? id.replace("$both", "$sub")
@@ -88,7 +88,18 @@ export const getCurrentEpisodeData = async (
     throw new Error("Sub data not found, Dubdata not found");
   }
 
-  if (subData) {
+  if (subData && subData.data) {
+    const thumbSrcObj = subData.data.subtitles
+      ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+      : null;
+    const dubThumbSrcObj =
+      dubData && dubData.data && dubData.data.subtitles
+        ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+        : null;
+    const subtitlesList = subData.data.subtitles
+      ? subData.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails")
+      : null;
+
     const episodeData: CurrEpisodeData = {
       zoroId: id,
       intro: subData.data.intro,
@@ -98,41 +109,53 @@ export const getCurrentEpisodeData = async (
           /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
           "/api-$1"
         ),
-        dub: dubData?.data.sources[0].url.replace(
-          /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
-          "/api-$1"
-        ),
+        dub: (dubData && dubData.data) ?
+         dubData?.data.sources[0].url.replace(
+                /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
+                "/api-$1"
+              )
+            : null,
       },
-      thumbnailSrc: subData.data.subtitles
-        .find((sub: any) => sub.lang === "Thumbnails")
-        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),
-      dubThumbnailSrc: dubData?.data.subtitles
-        .find((sub: any) => sub.lang === "Thumbnails")
-        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),
-      subtitles: subData.data.subtitles
-        .filter((sub: any) => sub.lang !== "Thumbnails")
-        .map((sub: any) => ({
-          url: sub.url.replace(
-            "https://s.megastatics.com/subtitle",
-            "/api-sub"
-          ),
-          lang: sub.lang,
-        })),
-      dubSubtitles: dubData?.data.subtitles
-        .filter((sub: any) => sub.lang !== "Thumbnails")
-        .map((sub: any) => ({
-          url: sub.url.replace(
-            "https://s.megastatics.com/subtitle",
-            "/api-sub"
-          ),
-          lang: sub.lang,
-        })),
+      thumbnailSrc: thumbSrcObj
+        ? thumbSrcObj.url.replace(
+            "https://s.megastatics.com/thumbnails",
+            "/api-thumb"
+          )
+        : null,
+      dubThumbnailSrc: dubThumbSrcObj
+        ? dubThumbSrcObj
+            .find((sub: any) => sub.lang === "Thumbnails")
+            .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb")
+        : null,
+      subtitles: subtitlesList
+        ? subtitlesList.map((sub: any) => ({
+            url: sub.url.replace(
+              "https://s.megastatics.com/subtitle",
+              "/api-sub"
+            ),
+            lang: sub.lang,
+          }))
+        : null,
+      dubSubtitles: dubData && dubData.data && dubData && dubData.data.subtitles
+        ? dubData?.data.subtitles
+            .filter((sub: any) => sub.lang !== "Thumbnails")
+            .map((sub: any) => ({
+              url: sub.url.replace(
+                "https://s.megastatics.com/subtitle",
+                "/api-sub"
+              ),
+              lang: sub.lang,
+            }))
+        : null,
     };
 
     // Remove duplicate subtitles
-    episodeData.subtitles = episodeData.subtitles.filter(
-      (sub, index, self) => index === self.findIndex((t) => t.lang === sub.lang)
-    );
+    if (episodeData.subtitles) {
+      episodeData.subtitles = episodeData.subtitles.filter(
+        (sub, index, self) =>
+          index === self.findIndex((t) => t.lang === sub.lang)
+      );
+    }
     episodeData.dubSubtitles = episodeData.dubSubtitles?.filter(
       (sub, index, self) => index === self.findIndex((t) => t.lang === sub.lang)
     );

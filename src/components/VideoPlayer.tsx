@@ -77,7 +77,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [streamType]);
 
   useEffect(() => {
-    if (trueStreamType === StreamType.sub) {
+    if (trueStreamType === StreamType.sub && currentEpisode.subtitles) {
       currentEpisode.subtitles.forEach((subtitle) => {
         player.current?.textTracks.add(
           new TextTrack({
