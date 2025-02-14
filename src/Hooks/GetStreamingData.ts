@@ -76,7 +76,7 @@ export const getCurrentEpisodeData = async (
   const dubData =
     dubResponse && results[1].status === "fulfilled" ? results[1].value : null;
 
-  if (!subData) {
+  if (!subData || !subData.data) {
     console.log("Converting episode id");
     const newId = id.includes("$both")
       ? id.replace("$both", "$sub")
@@ -88,13 +88,17 @@ export const getCurrentEpisodeData = async (
     throw new Error("Sub data not found, Dubdata not found");
   }
 
-  if (subData) {
-    const thumbSrcObj = subData.data.subtitles.find(
-      (sub: any) => sub.lang === "Thumbnails"
-    );
-    const subtitlesList = subData.data.subtitles.filter(
-      (sub: any) => sub.lang !== "Thumbnails"
-    );
+  if (subData && subData.data) {
+    const thumbSrcObj = subData.data.subtitles
+      ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+      : null;
+    const dubThumbSrcObj = (dubData && dubData.data && dubData.data.subtitles)
+      ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+      : null;
+    const subtitlesList = subData.data.subtitles
+      ? subData.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails")
+      : null;
+
     const episodeData: CurrEpisodeData = {
       zoroId: id,
       intro: subData.data.intro,
@@ -115,9 +119,10 @@ export const getCurrentEpisodeData = async (
             "/api-thumb"
           )
         : null,
-      dubThumbnailSrc: dubData?.data.subtitles
-        .find((sub: any) => sub.lang === "Thumbnails")
-        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),
+      dubThumbnailSrc: dubThumbSrcObj
+        ? dubThumbSrcObj.find((sub: any) => sub.lang === "Thumbnails")
+        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb")
+        : null,
       subtitles: subtitlesList
         ? subtitlesList.map((sub: any) => ({
             url: sub.url.replace(
