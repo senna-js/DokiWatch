@@ -6,7 +6,7 @@ import Content from "../components/ReadMore";
 // import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
 import CharacterCard from "../components/CharacterCard";
-import { useAnilistAuth } from "../AnilistContext";
+import { useAnilistContext } from "../AnilistContext";
 import { MediaListStatus } from '../AnilistContext';
 interface CharacterData {
   mal_id: number | null | undefined;
@@ -27,7 +27,7 @@ export const Anime = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [charAndStaffData, setCharAndStaffData] = useState<CharacterData[]>([]);
-  const { addToList, authState, authenticate } = useAnilistAuth();
+  const { addToList, authState, authenticate } = useAnilistContext();
   const [anilistId, setAnilistId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -507,7 +507,7 @@ export const Anime = () => {
                             onClick={() => setDialogOpen(!dialogOpen)}
                             className="inline-flex justify-center w-full rounded-full
 					  bg-doki-light-grey 
-					  shadow-sm px-2 py-2"
+					  shadow-sm px-2 py-2 hover:rotate-90  duration-300"
                           >
                             <svg
                               width="24"

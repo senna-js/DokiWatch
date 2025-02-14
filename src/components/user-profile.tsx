@@ -1,7 +1,7 @@
-import { UserProfile } from "@clerk/clerk-react";
+// import { UserProfile } from "@clerk/clerk-react";
 
-const UserProfilePage = () => (
-    <UserProfile path="/user-profile" />
-);
+// const UserProfilePage = () => (
+//     <UserProfile path="/user-profile" />
+// );
 
-export default UserProfilePage;
+// export default UserProfilePage;

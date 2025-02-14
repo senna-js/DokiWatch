@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebarMobile";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignOutButton,
-} from "@clerk/clerk-react";
+// import {
+//   SignedIn,
+//   SignedOut,
+//   SignInButton,
+//   SignOutButton,
+// } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import kofiImage from "../assests/kofi.png";
 import coffeeImage from "../assests/Coffee.png";
 // import { motion } from "framer-motion";
-import { useAnilistAuth } from "../AnilistContext";
+import { useAnilistContext } from "../AnilistContext";
 
 export const Navbar = () => {
   // const [hoveredKoFi, setHoveredKoFi] = useState(false);
   // const [hoveredCoffee, setHoveredCoffee] = useState(false);
   // const [hoveredDiscord, setHoveredDiscord] = useState(false);
-  const { user, authenticate, authState } = useAnilistAuth();
+  const { user, authenticate, unAuthenticate, authState } = useAnilistContext();
 
   const handleKoFiClick = () => {
     window.open("https://ko-fi.com/eshan27", "_blank", "noopener,noreferrer");
@@ -40,7 +40,20 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isGroupOpen, setIsGroupOpen] = useState(false);
-  const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(true);
+  const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(false);
+
+  useEffect(()=>{
+    if(authState === 'unauthenticated'){
+      const chatBubble = sessionStorage.getItem('chatBubble')
+      if(chatBubble && chatBubble === 'true')
+        return;
+      setIsChatBubbleOpen(true);
+      sessionStorage.setItem('chatBubble', 'true');
+    }
+    if(authState === 'authenticated'){
+      sessionStorage.removeItem('chatBubble');
+    }
+  },[authState])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -251,46 +264,66 @@ export const Navbar = () => {
         </button>
       </div>
       <div className="flex gap-2 sm:gap-4 items-center">
-        <SignedIn>
-          <div className="relative">
-            <div
-              onClick={() => setIsChatBubbleOpen((prev) => !prev)}
-              className="cursor-pointer"
-            >
-              {user?.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt="Profile"
-                  className="sm:h-10 sm:w-10 h-8 w-8 rounded-full cursor-pointer"
-                />
+        {/* <SignedIn> */}
+        <div className="relative">
+          <div
+            onClick={() => setIsChatBubbleOpen((prev) => !prev)}
+            className="cursor-pointer"
+          >
+            {(authState === 'authenticated' && user?.avatar) ? (
+              <img
+                src={user.avatar}
+                alt="Profile"
+                className="sm:h-10 sm:w-10 h-8 w-8 rounded-full cursor-pointer"
+              />
+            ) : (
+              <DefaultProfileIcon />
+            )}
+          </div>
+          {(isChatBubbleOpen && authState !== 'loading') && (
+            <div className="absolute mt-4 top-12 right-0 bg-doki-dark-grey text-doki-white border border-gray-700 p-4 shadow-lg w-64 font-lato rounded-[12px]">
+
+              <div className="absolute top-[-8px] right-4">
+                <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
+              </div>
+
+              {(authState === "authenticated") ? (
+                <p className="text-sm mb-2">
+                  Connected to Anilist as {user.name}
+                </p>
+
               ) : (
-                <DefaultProfileIcon />
-              )}
-            </div>
-            {isChatBubbleOpen && (authState === 'unauthenticated') && (
-              <div className="absolute mt-4 top-12 right-0 bg-doki-dark-grey text-doki-white border border-gray-700 p-4 shadow-lg w-64 font-lato rounded-[12px]">
-                <div className="absolute top-[-8px] right-4">
-                  <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-b-[8px] border-transparent border-b-doki-dark-grey"></div>
-                </div>
                 <p className="text-sm mb-2">
                   Connect to Anilist to sync your watchlist.
                 </p>
+              )}
+              {(authState === 'authenticated') ? (
+                <button
+                  onClick={unAuthenticate}
+                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                >
+                  Disconnect Anilist
+                </button>
+              ) : (
                 <button
                   onClick={authenticate}
                   className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
                 >
                   Connect to Anilist
                 </button>
-                <button
-                  onClick={() => setIsChatBubbleOpen(false)}
-                  className="mt-2 ml-4 text-sm text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out"
-                >
-                  Close
-                </button>
-              </div>
-            )}
-          </div>
-          <div
+
+              )}
+
+              <button
+                onClick={() => setIsChatBubbleOpen(false)}
+                className="mt-2 ml-4 text-sm text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out"
+              >
+                Close
+              </button>
+            </div>
+          )}
+        </div>
+        {/* <div
             className="text-sm sm:text-sm
           whitespace-nowrap bg-doki-dark-grey text-doki-white 
           border border-gray-700 rounded-[22px] p-2.5 sm:p-3.5 
@@ -298,18 +331,18 @@ export const Navbar = () => {
           hover:bg-doki-light-grey hover:text-doki-purple hover:scale-105 transform transition duration-150 ease-in-out cursor-pointer"
           >
             <SignOutButton />
-          </div>
-        </SignedIn>
+          </div> */}
+        {/* </SignedIn> */}
 
-        <SignedOut>
-          <div
-            className="bg-doki-dark-grey text-doki-white border border-gray-700 rounded-[22px] p-2.5 
+        {/* <SignedOut>
+        <div
+          className="bg-doki-dark-grey text-doki-white border border-gray-700 rounded-[22px] p-2.5 
           sm:p-3.5 font-lato inline-block 
           hover:bg-doki-light-grey hover:text-doki-purple hover:scale-105 transform transition duration-150 ease-in-out"
-          >
-            <SignInButton />
-          </div>
-        </SignedOut>
+        >
+          <SignInButton />
+        </div>
+        </SignedOut> */}
       </div>
     </div>
   );

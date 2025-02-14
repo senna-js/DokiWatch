@@ -80,13 +80,13 @@ export const AdvancedSearch = (props: AdvancedSearchProps) => {
           inputProps={{
             autoFocus: true,
             onKeyDown: (e) => {
-              if (e.key === "Enter") {props.handleSearch(searchTerm);
+              if (e.key === "Enter") {
+                props.handleSearch(searchTerm);
                 setSearchTerm("");
               }
             },
           }}
         />
-
         <h1 className="text-doki-purple text-start text-bold font-lato text-2xl ml-2">
           Genres
         </h1>
