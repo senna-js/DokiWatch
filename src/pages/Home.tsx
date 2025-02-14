@@ -42,7 +42,7 @@ const Home = () => {
           bannerImage: anime.cover,
           genres: anime.genres,
         }
-        console.log("bannerImage", topAnime.bannerImage)
+
         return topAnime
       }))
       setLoadingTopAiring(false)
@@ -59,9 +59,6 @@ const Home = () => {
 
       const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.status === "RELEASING")
       const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.status === "FINISHED")
-
-      console.log("Releasing", watchingAiringAnimeData)
-      console.log("Released", watchingAiredAnimeData)
 
       setWatchingAiringAnime(watchingAiringAnimeData)
       setWatchingAiredAnime(watchingAiredAnimeData)

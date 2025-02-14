@@ -4,31 +4,34 @@ const endpoints: string[] = import.meta.env.VITE_CONSUMET_API_ENDPOINTS.split(
   ","
 );
 
-export const LoadBalance = async (
-  query: string | null
+const LoadBalance = async (
+  query: string | null,
+  retryCount: number = 0
 ): Promise<AxiosResponse<any, any>> => {
   if (!query) {
     throw new Error("No query provided");
   }
-  const endpointsCopy = [...endpoints];
 
-  for (let i = 0; i < endpointsCopy.length; i++) {
-    const randomIndex = Math.floor(Math.random() * endpointsCopy.length);
-    const randomEndpoint = endpointsCopy.splice(randomIndex, 1)[0];
-    const url = `${randomEndpoint}${query}`;
+  while (retryCount > 0) {
+    const endpointsCopy = [...endpoints];
 
-    try {
-      const response = await axios.get(url);
-      return response;
-    } catch (error) {
-      console.error(`Endpoint ${randomEndpoint} failed: ${error}`);
-      if (i === endpointsCopy.length - 1) {
-        throw new Error("All endpoints failed");
+    while (endpointsCopy.length > 0) {
+      const randomIndex = Math.floor(Math.random() * endpointsCopy.length);
+      const randomEndpoint = endpointsCopy.splice(randomIndex, 1)[0];
+      const url = `${randomEndpoint}${query}`;
+
+      try {
+        const response = await axios.get(url);
+        return response;
+      } catch (error) {
+        console.warn(`Endpoint ${randomEndpoint} failed for query: ${query}: ${error}`);
       }
     }
-  }
 
-  return {} as AxiosResponse<any, any>;
+    console.warn(`All endpoints failed, ${retryCount} retries left`);
+    retryCount--;
+  }
+  throw new Error(`All endpoints failed, retry limit reached, query: ${query}`);
 };
 
 export const consumetZoro = async (
@@ -36,7 +39,7 @@ export const consumetZoro = async (
 ): Promise<AxiosResponse<any, any>> => {
   const loadBalancingQuery = query ? `/anime/zoro/${query}` : null;
 
-  return LoadBalance(loadBalancingQuery);
+  return LoadBalance(loadBalancingQuery,3);
 };
 
 export const consumetAnilistSearch = async (
@@ -56,7 +59,7 @@ export const consumetAnilistSearch = async (
   });
   const query = "/meta/anilist/advanced-search?" + searchParams.toString();
 
-  return LoadBalance(query);
+  return LoadBalance(query,3);
 };
 export interface ConsumetAnilistSearchParams {
   query?: string;
