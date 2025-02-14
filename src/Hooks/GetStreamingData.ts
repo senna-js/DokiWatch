@@ -89,6 +89,7 @@ export const getCurrentEpisodeData = async (
   }
 
   if (subData) {
+    const thumbSrcObj = subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails") 
     const episodeData: CurrEpisodeData = {
       zoroId: id,
       intro: subData.data.intro,
@@ -103,9 +104,7 @@ export const getCurrentEpisodeData = async (
           "/api-$1"
         ),
       },
-      thumbnailSrc: subData.data.subtitles
-        .find((sub: any) => sub.lang === "Thumbnails")
-        .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),
+      thumbnailSrc: thumbSrcObj? thumbSrcObj.url.replace("https://s.megastatics.com/thumbnails", "/api-thumb") : null,
       dubThumbnailSrc: dubData?.data.subtitles
         .find((sub: any) => sub.lang === "Thumbnails")
         .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb"),

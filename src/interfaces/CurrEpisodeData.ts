@@ -12,7 +12,7 @@ export interface CurrEpisodeData {
     url: string;
     lang: string;
   }[];
-  thumbnailSrc: string;
+  thumbnailSrc?: string;
   dubThumbnailSrc?: string;
   intro: {
     start: number;
