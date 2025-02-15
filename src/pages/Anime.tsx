@@ -6,8 +6,7 @@ import Content from "../components/ReadMore";
 // import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
 import CharacterCard from "../components/CharacterCard";
-import { useAnilistContext } from "../AnilistContext";
-import { MediaListStatus } from '../AnilistContext';
+import { useAnilistContext, MediaListStatus, anilistQuery } from "../AnilistContext";
 interface CharacterData {
   mal_id: number | null | undefined;
   characterName: string;
@@ -124,110 +123,85 @@ export const Anime = () => {
                         id
     }}`;
     const variables = { id: parseInt(params.id || "0") };
-    axios
-      .post(
-        `https://graphql.anilist.co`,
-        { query, variables },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        const data = response.data.data.Media;
-        setAnilistId(data.id);
-        // data.alID = data.id;
-        var query = `
-    query($id: Int) {
-      Media(id: $id) {
-        id
-        characters(page: 1, sort: [ROLE, RELEVANCE, ID]) {
-          edges {
-            id
-            role
-            voiceActorRoles(sort: [RELEVANCE, ID], language: JAPANESE) {
-              voiceActor {
+    anilistQuery(query, variables, undefined, [variables.id]).then((response) => {
+      const data = response.data.Media;
+      setAnilistId(data.id);
+      // data.alID = data.id;
+      const query = `
+            query($id: Int) {
+              Media(id: $id) {
                 id
-                name {
-                  userPreferred
+                characters(page: 1, sort: [ROLE, RELEVANCE, ID]) {
+                  edges {
+                    id
+                    role
+                    voiceActorRoles(sort: [RELEVANCE, ID], language: JAPANESE) {
+                      voiceActor {
+                        id
+                        name {
+                          userPreferred
+                        }
+                        image {
+                          large
+                        }
+                        siteUrl
+                      }
+                    }
+                    node {
+                      id
+                      name {
+                        userPreferred
+                      }
+                      image {
+                        large
+                      }
+                      siteUrl
+                    }
+                  }
                 }
-                image {
-                  large
-                }
-                siteUrl
               }
             }
-            node {
-              id
-              name {
-                userPreferred
-              }
-              image {
-                large
-              }
-              siteUrl
-            }
+        `;
+
+      // Define query variables
+      const variables = { id: parseInt(data.id) };
+
+      // Make the API request using axios
+      anilistQuery(query, variables,undefined,[variables.id]).then((response) => {
+        console.log(response.data);
+        const charactersData = response.data.Media.characters.edges.map(
+          (characterData: {
+            node: any;
+            voiceActorRoles: string | any[];
+            role: any;
+          }) => {
+            const character = characterData.node;
+            const voiceActor =
+              characterData.voiceActorRoles.length > 0
+                ? characterData.voiceActorRoles[0].voiceActor
+                : null;
+
+            return {
+              characterName: character.name.userPreferred,
+              mal_id: character.id,
+              role: characterData.role,
+              characterImage: character.image.large,
+              characterUrl: character.siteUrl,
+              staffName: voiceActor
+                ? voiceActor.name.userPreferred
+                : null,
+              staffImage: voiceActor ? voiceActor.image.large : null,
+              staffUrl: voiceActor ? voiceActor.siteUrl : null,
+            };
           }
-        }
-      }
-    }
-`;
-
-        // Define query variables
-        var variables = { id: parseInt(data.id) };
-
-        // Define the config for the API request
-        const url = "https://graphql.anilist.co";
-        const options = {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        };
-
-        // Make the API request using axios
-        axios
-          .post(url, { query: query, variables: variables }, options)
-          .then((response) => {
-            console.log(response.data);
-            // Assuming the response data is stored in `response.data`
-            const charactersData =
-              response.data.data.Media.characters.edges.map(
-                (characterData: {
-                  node: any;
-                  voiceActorRoles: string | any[];
-                  role: any;
-                }) => {
-                  const character = characterData.node;
-                  const voiceActor =
-                    characterData.voiceActorRoles.length > 0
-                      ? characterData.voiceActorRoles[0].voiceActor
-                      : null;
-
-                  return {
-                    characterName: character.name.userPreferred,
-                    mal_id: character.id,
-                    role: characterData.role,
-                    characterImage: character.image.large,
-                    characterUrl: character.siteUrl,
-                    staffName: voiceActor
-                      ? voiceActor.name.userPreferred
-                      : null,
-                    staffImage: voiceActor ? voiceActor.image.large : null,
-                    staffUrl: voiceActor ? voiceActor.siteUrl : null,
-                  };
-                }
-              );
-            console.log(charactersData);
-            // Set the formatted data (assuming setCharAndStaffData is a function that saves it)
-            setCharAndStaffData(charactersData);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
+        );
+        console.log(charactersData);
+        // Set the formatted data (assuming setCharAndStaffData is a function that saves it)
+        setCharAndStaffData(charactersData);
+      }).catch((error) => {
+        console.error("Error fetching data:", error);
       });
+    });
 
     // axios
     //   .get(`https://api.jikan.moe/v4/anime/${params.id}/characters`)
@@ -719,9 +693,9 @@ export const Anime = () => {
                       <path
                         d="M45 25L26 7L7 25"
                         stroke="#2F3672"
-                        stroke-width="9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="9"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   </button>
@@ -740,9 +714,9 @@ export const Anime = () => {
                       <path
                         d="M45 7L26 25L7 7"
                         stroke="#2F3672"
-                        stroke-width="9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="9"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   </button>
