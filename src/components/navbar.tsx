@@ -288,9 +288,18 @@ export const Navbar = () => {
               </div>
 
               {(authState === "authenticated") ? (
-                <p className="text-sm mb-2">
+                <>
+                <p className="text-sm mb-2 ml-3">
                   Connected to Anilist as {user.name}
                 </p>
+                <p 
+                  onClick={() => navigate('/user')} 
+                  className="mb-2 mx-3 text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out cursor-pointer"
+                >
+                  Go to Profile &rarr;
+                </p>
+                
+              </>
 
               ) : (
                 <p className="text-sm mb-2">

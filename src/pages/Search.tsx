@@ -216,6 +216,8 @@ export const Search = () => {
                     description: item.description,
                     currentEpisode: item.nextAiringEpisode ? item.nextAiringEpisode.episode : null,
                     bannerImage: item.bannerImage,
+                    progress: 0,
+                    episodes: ""
                 };
                 return returnData;
             });
