@@ -124,56 +124,56 @@ const Home = () => {
           <AnimeDataStack animeData={topAiringAnime} heading="Top Airing" />
         )}
       </motion.div>
-      {/* {isSignedIn && ( */}
-      <div className="mt-16">
-        <motion.div
-          className="m-7"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          {loadingWatchingAiring ? (
-            // Skeleton for Watching Airing
-            <div className="animate-pulse">
-              <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index}>
-                    <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
-                    <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
-                  </div>
-                ))}
+      {authState === 'authenticated' && (
+        <div className="mt-16">
+          <motion.div
+            className="m-7"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            {loadingWatchingAiring ? (
+              // Skeleton for Watching Airing
+              <div className="animate-pulse">
+                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index}>
+                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
-          )}
-        </motion.div>
-        <motion.div
-          className="m-7 mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          {loadingWatchingAired ? (
-            // Skeleton for Watching Aired
-            <div className="animate-pulse">
-              <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index}>
-                    <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
-                    <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
-                  </div>
-                ))}
+            ) : (
+              <AnimeDataStack animeData={watchingAiringAnime} heading="Watching" subheading={{ text: "Airing", color: "bg-green-300" }} />
+            )}
+          </motion.div>
+          <motion.div
+            className="m-7 mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            {loadingWatchingAired ? (
+              // Skeleton for Watching Aired
+              <div className="animate-pulse">
+                <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index}>
+                      <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
+                      <div className="h-6 bg-doki-dark-grey rounded-[12px] mt-2"></div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
-          )}
-        </motion.div>
-      </div>
-      {/* )} */}
+            ) : (
+              <AnimeDataStack animeData={watchingAiredAnime} heading="Watching" subheading={{ text: "Aired", color: "bg-blue-500" }} />
+            )}
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }
