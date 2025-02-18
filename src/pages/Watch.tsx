@@ -16,6 +16,7 @@ export const Watch: React.FC = () => {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [userProgress, setUserProgress] = useState<number>(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
@@ -69,6 +70,44 @@ export const Watch: React.FC = () => {
     if (currentEpisodeNumber < animeData.episodes.length)
       prefetchNextEpisode(forceRefetch);
   }
+
+  const getUserProgress = async (mediaId: number) => {
+    try {
+      const user = localStorage.getItem("user");
+      if (!user) return;
+      
+      const accessToken = JSON.parse(user).access_token;
+      const query = `
+        query ($mediaId: Int) {
+          MediaList(mediaId: $mediaId) {
+            progress
+          }
+        }
+      `;
+  
+      const response = await axios.post(
+        "https://graphql.anilist.co",
+        {
+          query,
+          variables: { mediaId }
+        },
+        {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          }
+        }
+      );
+  
+      const progress = response.data.data.MediaList?.progress || 0;
+      setUserProgress(progress);
+      return progress;
+    } catch (error) {
+      console.error("Error fetching user progress:", error);
+      return 0;
+    }
+  };
 
   useEffect(() => {
     if (!animeData || !currentEpisodeNumber)
@@ -146,7 +185,8 @@ export const Watch: React.FC = () => {
 
       const variables = {
         mediaId: mediaID,
-        progress: parseInt(searchParams.get("ep") ?? ""),
+        // progress: parseInt(searchParams.get("ep") ?? ""),
+        progress: progress, // Use the progress value passed as an argument
       };
 
       console.log("variables", variables);
@@ -196,11 +236,13 @@ export const Watch: React.FC = () => {
     );
 
     // Extract the mediaId and progress if found, otherwise set to null
-    const mediaId = foundItem ? foundItem.mediaId : null;
-    const progress = foundItem ? foundItem.progress : null;
+    // const mediaId = foundItem ? foundItem.mediaId : null;
+    // const progress = foundItem ? foundItem.progress : null;
+    const mediaId = foundItem?.mediaId;
+    const progress = await getUserProgress(mediaId);
 
     // Update mid to use the found mediaId for further processing
-    mid = mediaId;
+    // mid = mediaId;
 
     if (
       percentageWatched >= 80 &&
@@ -209,27 +251,38 @@ export const Watch: React.FC = () => {
       currentEpisodeNumber &&
       currentEpisodeNumber > progress
     ) {
-      let success = await updateAnilist(
-        parseInt(searchParams.get("ep") as string),
-        mid
-      );
+      // let success = await updateAnilist(
+      //   parseInt(searchParams.get("ep") as string),
+      //   mid
+      // );
+      let success = await updateAnilist(currentEpisodeNumber, mediaId);
 
+      // if (success) {
+      //   // If the update was successful, update the mediaIdList with the new progress
+      //   const updatedList = mediaIdList.map(
+      //     (item: { mal_id: number; mediaId: number; progress: number }) => {
+      //       if (item.mediaId === mid) {
+      //         return { ...item, progress: currentEpisodeNumber };
+      //       }
+      //       return item;
+      //     }
+      //   );
+
+      //   // Save the updated list back to session storage
+      //   sessionStorage.setItem("mediaIdList", JSON.stringify(updatedList));
+      //   console.log("Media list updated successfully with new progress.");
+      // }
       if (success) {
-        // If the update was successful, update the mediaIdList with the new progress
-        const updatedList = mediaIdList.map(
-          (item: { mal_id: number; mediaId: number; progress: number }) => {
-            if (item.mediaId === mid) {
-              return { ...item, progress: currentEpisodeNumber };
-            }
-            return item;
+        setUserProgress(currentEpisodeNumber);
+        // Update mediaIdList...
+        const updatedList = mediaIdList.map((item: { mal_id: number; mediaId: number; progress: number }) => {
+          if (item.mediaId === mediaId) {
+            return { ...item, progress: currentEpisodeNumber };
           }
-        );
-
-        // Save the updated list back to session storage
+          return item;
+        });
         sessionStorage.setItem("mediaIdList", JSON.stringify(updatedList));
-        console.log("Media list updated successfully with new progress.");
       }
-
       setIsQueried(true); // Ensure this block is only executed once
     }
   };

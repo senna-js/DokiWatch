@@ -178,6 +178,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
       Page(page: $page, perPage: $perPage) {
         mediaList(userId: $userId, type: $type, status: $status) {
+        progress
           media {
             id
             idMal
@@ -229,6 +230,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
         nextAiringEpisode: media.media.nextAiringEpisode,
         bannerImage: media.media.bannerImage,
         genres: media.media.genres,
+        progress: media.progress || 0,
+        episodes: media.media.episodes?.toString() || "?",
       };
       return anime;
     });

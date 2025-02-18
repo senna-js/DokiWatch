@@ -38,7 +38,13 @@ const User = () => {
             const watchingAnime = await getList("CURRENT")
             const sortedAnime = watchingAnime.sort((a, b) =>
                 (b.updatedAt || 0) - (a.updatedAt || 0)
-            )
+            ).map((anime) => ({
+                ...anime,
+                episodes: anime.totalEpisodes?.toString() || '?',
+                progress: anime.progress || 0
+            }))
+            console.log('Watching anime data:', sortedAnime) // Debug log
+            console.log('Progress:', sortedAnime[0].progress) // Debug log
             setContinueWatching(sortedAnime)
             setLoading(false)
         }
@@ -60,8 +66,13 @@ const User = () => {
         cleanTitle = cleanTitle.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         cleanTitle = cleanTitle.replace(/[^\x00-\x7F]/g, " ")
 
-        const nextEpisode = (anime.progress ?? 0) + 1
-        const navString = `/watch/${anime.idMal}?id=${cleanTitle}&ep=${nextEpisode}`
+        const currentEpisode = (anime.progress === 0) ? 1 : (anime.progress ?? 0)
+        
+        // If current episode would exceed total episodes, stay on the last episode
+        const targetEpisode = anime.totalEpisodes ?
+            Math.min(currentEpisode, anime.totalEpisodes) :
+            currentEpisode
+        const navString = `/watch/${anime.idMal}?id=${cleanTitle}&ep=${targetEpisode}`
         navigate(navString)
     }
 
@@ -178,16 +189,17 @@ const User = () => {
                                                 {anime.nextAiringEpisode && (
                                                     <div className="absolute top-2 right-2">
                                                         <span className="bg-doki-purple/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
-                                                            EP {anime.nextAiringEpisode.episode}
+                                                            NEXT EP {anime.nextAiringEpisode.episode}
                                                         </span>
                                                     </div>
                                                 )}
                                                 <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
                                                     <div className="w-full bg-doki-light-grey/30 rounded-full h-1.5">
                                                         <div
-                                                            className="bg-doki-purple h-1.5 rounded-full transition-all duration-300"
+                                                            className="bg-doki-white h-1.5 rounded-full transition-all duration-300"
                                                             style={{
-                                                                width: `${((Number(anime.progress) / (Number(anime.episodes) || Number(anime.progress) || 1)) * 100).toFixed(2)}%`
+                                                                // width: `${((Number(anime.progress) / (Number(anime.episodes) || Number(anime.progress) || 1)) * 100).toFixed(2)}%`
+                                                                width: `${((Number(anime.progress) / (Number(anime.totalEpisodes) || 1)) * 100).toFixed(2)}%`
                                                             }}
                                                         />
                                                     </div>
@@ -199,10 +211,13 @@ const User = () => {
                                                 </h3>
                                                 <div className="flex justify-between items-center mt-1">
                                                     <span className="text-doki-purple font-hpSimplifiedbold text-xs">
-                                                        EP {anime.progress || 0} / {anime.episodes || '?'}
+                                                        EP {anime.progress || 0} / {anime.totalEpisodes || '?'}
                                                     </span>
                                                     <span className="text-doki-purple font-hpSimplifiedbold text-xs">
-                                                        {anime.status}
+                                                        {anime.status === "FINISHED" ? "FINISHED" :
+                                                            anime.nextAiringEpisode ?
+                                                                `EP ${anime.nextAiringEpisode.episode} in ${Math.ceil(anime.nextAiringEpisode.timeUntilAiring / 86400)}d` :
+                                                                "TBA"}
                                                     </span>
                                                 </div>
                                             </div>
