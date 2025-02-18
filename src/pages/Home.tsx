@@ -63,9 +63,6 @@ const Home = () => {
       const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "RELEASING")
       const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "FINISHED")
 
-      console.log("Releasing", watchingAiringAnimeData)
-      console.log("Released", watchingAiredAnimeData)
-
       setWatchingAiringAnime(watchingAiringAnimeData)
       setWatchingAiredAnime(watchingAiredAnimeData)
       setLoadingWatchingAiring(false)
