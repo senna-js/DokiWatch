@@ -42,18 +42,18 @@ export const Navbar = () => {
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const [isChatBubbleOpen, setIsChatBubbleOpen] = useState(false);
 
-  useEffect(()=>{
-    if(authState === 'unauthenticated'){
+  useEffect(() => {
+    if (authState === 'unauthenticated') {
       const chatBubble = sessionStorage.getItem('chatBubble')
-      if(chatBubble && chatBubble === 'true')
+      if (chatBubble && chatBubble === 'true')
         return;
       setIsChatBubbleOpen(true);
       sessionStorage.setItem('chatBubble', 'true');
     }
-    if(authState === 'authenticated'){
+    if (authState === 'authenticated') {
       sessionStorage.removeItem('chatBubble');
     }
-  },[authState])
+  }, [authState])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -267,6 +267,7 @@ export const Navbar = () => {
         {/* <SignedIn> */}
         <div className="relative">
           <div
+            role="button"
             onClick={() => setIsChatBubbleOpen((prev) => !prev)}
             className="cursor-pointer"
           >
@@ -289,17 +290,20 @@ export const Navbar = () => {
 
               {(authState === "authenticated") ? (
                 <>
-                <p className="text-sm mb-2 ml-3">
-                  Connected to Anilist as {user.name}
-                </p>
-                <p 
-                  onClick={() => navigate('/user')} 
-                  className="mb-2 mx-3 text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out cursor-pointer"
-                >
-                  Go to Profile &rarr;
-                </p>
-                
-              </>
+                  <p className="text-sm mb-2 ml-3">
+                    Connected to Anilist as {user.name}
+                  </p>
+                  <a
+                    onClick={() => {
+                      setIsChatBubbleOpen(false)
+                      navigate('/user')
+                    }}
+                    className="mb-2 mx-3 text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out cursor-pointer"
+                  >
+                    Go to Profile &rarr;
+                  </a>
+
+                </>
 
               ) : (
                 <p className="text-sm mb-2">
@@ -309,7 +313,7 @@ export const Navbar = () => {
               {(authState === 'authenticated') ? (
                 <button
                   onClick={unAuthenticate}
-                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                  className="mt-2 bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
                 >
                   Disconnect Anilist
                 </button>

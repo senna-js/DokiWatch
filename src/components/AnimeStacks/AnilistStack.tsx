@@ -1,12 +1,12 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { AnimeCardData } from "../AnimeCard";
+import { AnilistUserAnimeData } from "../../interfaces/AnilistAnimeData";
 import { useAnilistContext } from "../../AnilistContext";
 import { AnimeDataStack } from "./AnimeDataStack";
 
 export const AnilistStack: React.FC<StackType> = ({ status }) => {
-  const [animeData, setAnimeData] = useState<AnimeCardData[]>([]); // State to hold the data
+  const [animeData, setAnimeData] = useState<AnilistUserAnimeData[]>([]); // State to hold the data
   const { authState, getList } = useAnilistContext();
 
   useEffect(() => {
@@ -19,6 +19,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
   }, [authState]);
 
   return (
+    // TODO: Data is being lost here
     <AnimeDataStack animeData={animeData} heading="Watching" subheading={{ color: "bg-green-300", text: "Airing" }} />
   );
 };

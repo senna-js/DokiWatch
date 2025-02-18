@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { AnimeCardData } from "../components/AnimeCard"
+import { AnilistUserAnimeData } from "../interfaces/AnilistAnimeData"
 import { useAnilistContext } from "../AnilistContext"
 import { Navigate, useNavigate } from "react-router-dom"
 import { Tooltip, Zoom } from "@mui/material";
@@ -10,7 +10,7 @@ import Pagination from "../components/Pagination"
 
 const User = () => {
     const { authState, user, getList } = useAnilistContext()
-    const [continueWatching, setContinueWatching] = useState<AnimeCardData[]>([])
+    const [continueWatching, setContinueWatching] = useState<AnilistUserAnimeData[]>([])
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 20
@@ -60,7 +60,7 @@ const User = () => {
     const currentItems = continueWatching.slice(indexOfFirstItem, indexOfLastItem)
     const totalPages = Math.ceil(continueWatching.length / itemsPerPage)
 
-    const handleAnimeClick = (anime: AnimeCardData) => {
+    const handleAnimeClick = (anime: AnilistUserAnimeData) => {
         let cleanTitle = anime.title.english || anime.title.romaji
         cleanTitle = cleanTitle.replace(/"/g, " ")
         cleanTitle = cleanTitle.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -128,13 +128,14 @@ const User = () => {
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 {currentItems.map((anime) => (
                                     <CustomTooltip
+                                        key={anime.id}
                                         TransitionComponent={Zoom}
                                         title={
                                             <>
                                                 <h3 className="font-bold font-lato text-sm text-white mb-2">
                                                     {anime.title.english || anime.title.romaji}
                                                 </h3>
-                                                <p>Status: {anime.status}</p>
+                                                <p>Status: {anime.runningStatus}</p>
                                                 <p>Genres: {anime.genres?.join(', ') || 'N/A'}</p>
                                                 {anime.totalEpisodes !== null && (
                                                     <p>Total Episodes: {anime.totalEpisodes}</p>
@@ -214,7 +215,7 @@ const User = () => {
                                                         EP {anime.progress || 0} / {anime.totalEpisodes || '?'}
                                                     </span>
                                                     <span className="text-doki-purple font-hpSimplifiedbold text-xs">
-                                                        {anime.status === "FINISHED" ? "FINISHED" :
+                                                        {anime.runningStatus === "FINISHED" ? "FINISHED" :
                                                             anime.nextAiringEpisode ?
                                                                 `EP ${anime.nextAiringEpisode.episode} in ${Math.ceil(anime.nextAiringEpisode.timeUntilAiring / 86400)}d` :
                                                                 "TBA"}

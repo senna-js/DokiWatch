@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { Stack } from "@mui/material"
 import { AnimeCard } from "../components/AnimeCard"
-import { AnimeCardData } from "../components/AnimeCard"
+import { AnilistAnimeData } from "../interfaces/AnilistAnimeData"
 import { AdvancedSearch } from "../components/AdvancedSearch"
 import Pagination from "../components/Pagination"
 import { motion } from "framer-motion";
@@ -13,7 +13,7 @@ const genres = ["Action", "Adventure", "Comedy", "Drama", "Ecchi", "Fantasy", "H
 export const Search = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     var genreTerm, genreNotTerm, term;
-    const [anime, setAnime] = useState<AnimeCardData[]>([])
+    const [anime, setAnime] = useState<AnilistAnimeData[]>([])
     const [genreSelections, setGenreSelections] = useState<number[]>(Array(genres.length).fill(0));
     const [searchTerm, setSearchTerm] = useState(searchParams.get("search"));
     const [loading, setLoading] = useState(true);
@@ -200,28 +200,26 @@ export const Search = () => {
         }).then(response => {
             // Log the data to the console
             console.log(response.data);
-            const animeData: AnimeCardData[] = response.data.data.Page.media.map((item: any) => {
+            const animeData: AnilistAnimeData[] = response.data.data.Page.media.map((item: any) => {
                 if (!item.idMal) {
                     return null;
                 }
-                const returnData: AnimeCardData = {
+                const returnData: AnilistAnimeData = {
                     id: item.id,
                     idMal: item.idMal,
                     title: item.title,
                     image: item.coverImage.extraLarge,
                     color: item.coverImage.color,
-                    status: item.status,
+                    runningStatus: item.status,
                     genres: item.genres,
                     totalEpisodes: item.episodes,
                     description: item.description,
                     currentEpisode: item.nextAiringEpisode ? item.nextAiringEpisode.episode : null,
                     bannerImage: item.bannerImage,
-                    progress: 0,
-                    episodes: ""
                 };
                 return returnData;
             });
-            setAnime(animeData.filter((item: AnimeCardData) => item !== null));
+            setAnime(animeData.filter((item: AnilistAnimeData) => item !== null));
 
             // Update total pages from API response
             const pageInfo = response.data.data.Page.pageInfo;

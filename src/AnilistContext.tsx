@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { AnimeCardData } from "./components/AnimeCard";
+import { MediaListStatus, AnilistUserAnimeData, MediaStatus } from "./interfaces/AnilistAnimeData";
 
 interface AnilistUser {
   id: number;
@@ -22,14 +22,12 @@ interface BaseAnilistContext {
   authenticate: () => void;
   unAuthenticate: () => void;
   addToList: (mediaId: number, status: MediaListStatus) => Promise<Boolean>;
-  getList: (status: MediaListStatus) => Promise<AnimeCardData[]>;
+  getList: (status: MediaListStatus) => Promise<AnilistUserAnimeData[]>;
 }
 
 type AuthUnion = AuthenticatedUser | UnAuthenticatedUser
 
 type AnilistContext = BaseAnilistContext & AuthUnion
-
-export type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";
 
 // Create the context
 const AnilistAuthContext = createContext<AnilistContext | undefined>(undefined);
@@ -168,7 +166,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     return true;
   }
 
-  const getList = async (status: MediaListStatus): Promise<AnimeCardData[]> => {
+  const getList = async (status: MediaListStatus): Promise<AnilistUserAnimeData[]> => {
     if (authUnion.authState !== "authenticated") {
       console.log("Not authenticated");
       return [];
@@ -216,22 +214,26 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
 
     const mediaList = response.data.Page.mediaList;
 
-    const fetchedAnimeData: AnimeCardData[] = mediaList.map((media: any) => {
-      const anime: AnimeCardData = {
+    const fetchedAnimeData: AnilistUserAnimeData[] = mediaList.map((media: any) => {
+      const runningStatus: MediaStatus = media.media.status;
+      const currentEpisode: number = runningStatus === 'RELEASING' ? (media.media.nextAiringEpisode?.episode - 1)
+        : (runningStatus === 'NOT_YET_RELEASED' ? 0 : media.media.episodes)//last episode if finished or cancelled
+
+      const anime: AnilistUserAnimeData = {
         id: media.media.id,
         idMal: media.media.idMal,
         title: media.media.title,
         image: media.media.coverImage.large,
         color: media.media.coverImage.color,
         description: media.media.description,
-        status: media.media.status,
+        runningStatus: runningStatus,
+        userStatus: status,
         totalEpisodes: media.media.episodes || null,
-        currentEpisode: (media.media.nextAiringEpisode?.episode - 1) || media.media.episodes,
+        currentEpisode: currentEpisode,
         nextAiringEpisode: media.media.nextAiringEpisode,
         bannerImage: media.media.bannerImage,
         genres: media.media.genres,
-        progress: media.progress || 0,
-        episodes: media.media.episodes?.toString() || "?",
+        progress: media.progress,
       };
       return anime;
     });
