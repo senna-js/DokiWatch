@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom"; // Assuming you're using react-r
 
 type MediaStatus = "RELEASING" | "FINISHED" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS";
 export interface AnimeCardData {
+  progress: number; // Added progress property
+  episodes: string; // Added episodes property
   id: number;
   idMal: number;
   title: {
@@ -25,6 +27,7 @@ export interface AnimeCardData {
   };
   bannerImage: string;
   genres?: string[];
+  updatedAt?: number; // Added updatedAt property
 }
 
 
@@ -35,8 +38,8 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     navigate(`/anime/${anime.idMal}`);
   };
 
-  const dokiTooltipBackground = "rgba(47, 54, 114, 0.8)"; 
-  const dokiTooltipText = "#DADAE8";  
+  const dokiTooltipBackground = "rgba(47, 54, 114, 0.8)";
+  const dokiTooltipText = "#DADAE8";
 
   const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -50,11 +53,11 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       fontSize: "11px",
       backdropFilter: "blur(10px)",
       WebkitBackdropFilter: "blur(10px)", // For Safari support
-      border: `1px solid rgba(255, 255, 255, 0.2)`, 
+      border: `1px solid rgba(255, 255, 255, 0.2)`,
     },
   }));
 
-  
+
 
   return (
     <CustomTooltip
@@ -71,7 +74,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
         </>
       }
       placement="top"
-      
+
     // sx={{
     //   "& .MuiTooltip-tooltip": {
     //     backgroundColor: "#2F3672",

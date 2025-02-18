@@ -121,7 +121,6 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
       return false;
     }
 
-    console.log("Setting user from local storage", parsedUser);
     setAuthUnion({ user: parsedUser, authState: "authenticated" });
     return true;
   };
@@ -134,7 +133,6 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
 
   const getAuth = async () => {
     if (await setAnilistUser()) {
-      console.log("found in local storage or already set")
       return;
     }
     const fragment = window.location.hash.substring(1);
@@ -180,6 +178,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
       Page(page: $page, perPage: $perPage) {
         mediaList(userId: $userId, type: $type, status: $status) {
+        progress
           media {
             id
             idMal
@@ -231,6 +230,8 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
         nextAiringEpisode: media.media.nextAiringEpisode,
         bannerImage: media.media.bannerImage,
         genres: media.media.genres,
+        progress: media.progress || 0,
+        episodes: media.media.episodes?.toString() || "?",
       };
       return anime;
     });
@@ -249,36 +250,65 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
   );
 };
 
+interface AnilistQueryCacheObject {
+  value: any;
+  deps: any[];
+}
+
 //fix the cache and make it more robust
 /**
  * @param deps dependencies for the cache, if any of the dependencies change, the cache will be invalidated,
  * empty array to always use cache, dont define to never use cache. 
  */
 export const anilistQuery = async (query: string, variables: any, accessToken?: string, deps?: any[]): Promise<any> => {
-  const setStorage = (key: string, value: any) => {
-    if (!deps) return;
-    const obj = { value, deps };
-    sessionStorage.setItem(key, JSON.stringify(obj));
+
+  const clearCache = (key: string) => {
+    sessionStorage.removeItem(key);
   }
 
-  const getStorage = (key: string): { value: any, deps: any[] } | null => {
-    if (!deps) return null;
+  const getAnilistQueryCacheList = (key: string): AnilistQueryCacheObject[] | null => {
     const retrievedObject = sessionStorage.getItem(key);
-    if (retrievedObject) {
-      return JSON.parse(retrievedObject);
+
+    if (!retrievedObject) return null;
+    const parsedList = JSON.parse(retrievedObject);
+
+    if (!Array.isArray(parsedList)) {
+      clearCache(key);
+      return null;
     }
+
+    const AnilistQueryCacheList = parsedList as AnilistQueryCacheObject[];
+    return AnilistQueryCacheList;
+  }
+
+  const setStorage = (key: string, value: any, deps?: any[]) => {
+    if (!deps) return;
+    const cachedObject = getStorage(key, deps);
+    if (cachedObject) return;
+    const obj: AnilistQueryCacheObject = { value, deps };
+
+    const AnilistQueryCacheList = getAnilistQueryCacheList(key) || [];
+    AnilistQueryCacheList.push(obj);
+    sessionStorage.setItem(key, JSON.stringify(AnilistQueryCacheList));
+  }
+
+  const getStorage = (key: string, deps?: any[]): { value: any, deps: any[] } | null => {
+    if (!deps) return null;
+    const AnilistQueryCacheList = getAnilistQueryCacheList(key);
+    if (!AnilistQueryCacheList) return null;
+
+    for (const cacheObj of AnilistQueryCacheList) {
+      if (deps.every((dep, index) => dep === cacheObj.deps[index])) {
+        console.log("Found cache", cacheObj);
+        return cacheObj;
+      }
+    }
+
     return null;
   }
 
-  const storedData = getStorage(query);
-
-  if (storedData && deps) {
-    console.log("Found in cache", storedData);
-
-    if (deps.some((dep, i) => dep !== storedData.deps[i])) {
-      console.log("Cache mismatch", deps, storedData.deps);
-    }
-
+  const storedData = getStorage(query, deps);
+  if (storedData) {
     return storedData.value;
   }
 
@@ -297,7 +327,7 @@ export const anilistQuery = async (query: string, variables: any, accessToken?: 
 
   const json = response.json();
   if (response.ok) {
-    json.then(data => setStorage(query, data));
+    json.then(data => setStorage(query, data, deps));
   }
   return json;
 };

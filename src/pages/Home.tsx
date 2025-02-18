@@ -43,6 +43,8 @@ const Home = () => {
             currentEpisode: anime.currentEpisode,
             bannerImage: anime.cover,
             genres: anime.genres,
+            progress: 0,
+            episodes: ""
           }
           console.log("bannerImage", topAnime.bannerImage)
           return topAnime
