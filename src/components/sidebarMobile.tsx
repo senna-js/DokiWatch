@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import {
     IconButton,
     Tooltip,
@@ -266,108 +267,120 @@ const Sidebar = () => {
                     </div>
                 </dialog>
                 <TraceAnimeModal traceRef={traceRefPhone} isModalDisplayed={isModalDisplayedPhone} closeModal={handleModalClosePhone} toggleSidebar={toggleSidebar} />
-                {isOpen && (
-                    <>
-                        <div className="fixed inset-0 z-40 backdrop-blur-md"></div>
-                        <motion.div
-                            initial={{ x: "-100%" }}
-                            animate={{ x: isOpen ? 0 : -250 }}
-                            exit={{ x: "-100%" }}
-                            // transition={{ type: "spring", stiffness: 300 }}
-                            className="fixed top-0 left-0 h-full w-1/4 min-w-[300px] z-50 
-                         backdrop-blur-sm bg-doki-dark-grey/80 pt-16 pb-4"
-                        >
-                            <Stack direction="column" className="flex p-4 ml-4 space-y-4 sm:space-y-5">
-                                {/* {isSignedIn && ( */}
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={handleSubmit}>
-                                        <LinkIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleSubmit}>Anilist Connect</span>
-                                </div>
-                                {/* )} */}
+                <AnimatePresence>
+                    {isOpen && (
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="fixed inset-0 z-40 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ x: "-100%" }}
+                                animate={{ x: 0 }}
+                                exit={{ x: "-100%" }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 30
+                                }}
+                                className="fixed top-0 left-0 h-full w-1/4 min-w-[300px] z-50 
+                                     backdrop-blur-sm bg-doki-dark-grey/80 pt-16 pb-4"
+                            >
+                                <Stack direction="column" className="flex p-4 ml-4 space-y-4 sm:space-y-5">
+                                    {/* {isSignedIn && ( */}
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={handleSubmit}>
+                                            <LinkIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleSubmit}>Anilist Connect</span>
+                                    </div>
+                                    {/* )} */}
 
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={handleHomeClick}>
-                                        <HomeIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleHomeClick}>Home</span>
-                                </div>
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={handleHomeClick}>
+                                            <HomeIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleHomeClick}>Home</span>
+                                    </div>
 
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={handleSearchClick}>
-                                        <SearchIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleSearchClick}>Browse</span>
-                                </div>
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={handleSearchClick}>
+                                            <SearchIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleSearchClick}>Browse</span>
+                                    </div>
 
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={openModalPhone}>
-                                        <ScheduleIcon className="text-doki-purple" sx={{ fontSize: 32 }} id="schedule" />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={openModalPhone}>Schedule</span>
-                                </div>
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={openModalPhone}>
+                                            <ScheduleIcon className="text-doki-purple" sx={{ fontSize: 32 }} id="schedule" />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={openModalPhone}>Schedule</span>
+                                    </div>
 
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={handleModalDisplayPhone}>
-                                        <TraceIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleModalDisplayPhone}>Anime Scene Trace</span>
-                                </div>
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={handleModalDisplayPhone}>
+                                            <TraceIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleModalDisplayPhone}>Anime Scene Trace</span>
+                                    </div>
 
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={handleNewsClick}>
-                                        <FeedIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
-                                    </IconButton>
-                                    <span className="text-doki-white font-lato text-md mt-1" onClick={handleNewsClick}>Anime News</span>
-                                </div>
-                                <div className="flex items-center space-x-2 cursor-pointer">
-                                    <IconButton onClick={() => {
-                                        navigate('/user');
-                                        setIsOpen(false);
-                                    }}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            className="text-doki-purple"
-                                            style={{ width: 32, height: 32 }}
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                                            />
-                                        </svg>
-                                    </IconButton>
-                                    <span
-                                        className="text-doki-white font-lato text-md mt-1"
-                                        onClick={() => {
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={handleNewsClick}>
+                                            <FeedIcon className="text-doki-purple" sx={{ fontSize: 32 }} />
+                                        </IconButton>
+                                        <span className="text-doki-white font-lato text-md mt-1" onClick={handleNewsClick}>Anime News</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 cursor-pointer">
+                                        <IconButton onClick={() => {
                                             navigate('/user');
                                             setIsOpen(false);
-                                        }}
-                                    >
-                                        Profile
-                                    </span>
-                                </div>
-                                <div className="cursor-pointer">
-                                    <img
-                                        src="/Navbar_logo.png"
-                                        alt="Doki Watch"
-                                        className="w-full h-full sm:w-2/3 sm:h-auto cursor-pointer mt-10 sm:mt-12 mx-auto my-auto p-2"
-                                        draggable="true"
+                                        }}>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                className="text-doki-purple"
+                                                style={{ width: 32, height: 32 }}
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                                />
+                                            </svg>
+                                        </IconButton>
+                                        <span
+                                            className="text-doki-white font-lato text-md mt-1"
+                                            onClick={() => {
+                                                navigate('/user');
+                                                setIsOpen(false);
+                                            }}
+                                        >
+                                            Profile
+                                        </span>
+                                    </div>
+                                    <div className="cursor-pointer">
+                                        <img
+                                            src="/Navbar_logo.png"
+                                            alt="Doki Watch"
+                                            className="w-full h-full sm:w-2/3 sm:h-auto cursor-pointer mt-10 sm:mt-12 mx-auto my-auto p-2"
+                                            draggable="true"
 
-                                    />
-                                </div>
-                            </Stack>
+                                        />
+                                    </div>
+                                </Stack>
 
-                            <button className="fixed top-0 left-4 z-50 font-lato text-doki-white ml-4 mt-4" onClick={toggleSidebar}>&lt; Close Menu</button>
-                            <hr className="fixed top-16 left-0 w-full border-doki-purple border-1" />
-                        </motion.div>
-                    </>
-                )}
+                                <button className="fixed top-0 left-4 z-50 font-lato text-doki-white ml-4 mt-4" onClick={toggleSidebar}>&lt; Close Menu</button>
+                                <hr className="fixed top-16 left-0 w-full border-doki-purple border-1" />
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
 
                 {/* Toggle Button for Mobile */}
 
