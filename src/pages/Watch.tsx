@@ -16,7 +16,6 @@ export const Watch: React.FC = () => {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
-  const [userProgress, setUserProgress] = useState<number>(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
@@ -70,44 +69,6 @@ export const Watch: React.FC = () => {
     if (currentEpisodeNumber < animeData.episodes.length)
       prefetchNextEpisode(forceRefetch);
   }
-
-  const getUserProgress = async (mediaId: number) => {
-    try {
-      const user = localStorage.getItem("user");
-      if (!user) return;
-      
-      const accessToken = JSON.parse(user).access_token;
-      const query = `
-        query ($mediaId: Int) {
-          MediaList(mediaId: $mediaId) {
-            progress
-          }
-        }
-      `;
-  
-      const response = await axios.post(
-        "https://graphql.anilist.co",
-        {
-          query,
-          variables: { mediaId }
-        },
-        {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          }
-        }
-      );
-  
-      const progress = response.data.data.MediaList?.progress || 0;
-      setUserProgress(progress);
-      return progress;
-    } catch (error) {
-      console.error("Error fetching user progress:", error);
-      return 0;
-    }
-  };
 
   useEffect(() => {
     if (!animeData || !currentEpisodeNumber)
@@ -185,8 +146,7 @@ export const Watch: React.FC = () => {
 
       const variables = {
         mediaId: mediaID,
-        // progress: parseInt(searchParams.get("ep") ?? ""),
-        progress: progress, // Use the progress value passed as an argument
+        progress: parseInt(searchParams.get("ep") ?? ""),
       };
 
       console.log("variables", variables);
@@ -236,13 +196,11 @@ export const Watch: React.FC = () => {
     );
 
     // Extract the mediaId and progress if found, otherwise set to null
-    // const mediaId = foundItem ? foundItem.mediaId : null;
-    // const progress = foundItem ? foundItem.progress : null;
-    const mediaId = foundItem?.mediaId;
-    const progress = await getUserProgress(mediaId);
+    const mediaId = foundItem ? foundItem.mediaId : null;
+    const progress = foundItem ? foundItem.progress : null;
 
     // Update mid to use the found mediaId for further processing
-    // mid = mediaId;
+    mid = mediaId;
 
     if (
       percentageWatched >= 80 &&
@@ -251,38 +209,27 @@ export const Watch: React.FC = () => {
       currentEpisodeNumber &&
       currentEpisodeNumber > progress
     ) {
-      // let success = await updateAnilist(
-      //   parseInt(searchParams.get("ep") as string),
-      //   mid
-      // );
-      let success = await updateAnilist(currentEpisodeNumber, mediaId);
+      let success = await updateAnilist(
+        parseInt(searchParams.get("ep") as string),
+        mid
+      );
 
-      // if (success) {
-      //   // If the update was successful, update the mediaIdList with the new progress
-      //   const updatedList = mediaIdList.map(
-      //     (item: { mal_id: number; mediaId: number; progress: number }) => {
-      //       if (item.mediaId === mid) {
-      //         return { ...item, progress: currentEpisodeNumber };
-      //       }
-      //       return item;
-      //     }
-      //   );
-
-      //   // Save the updated list back to session storage
-      //   sessionStorage.setItem("mediaIdList", JSON.stringify(updatedList));
-      //   console.log("Media list updated successfully with new progress.");
-      // }
       if (success) {
-        setUserProgress(currentEpisodeNumber);
-        // Update mediaIdList...
-        const updatedList = mediaIdList.map((item: { mal_id: number; mediaId: number; progress: number }) => {
-          if (item.mediaId === mediaId) {
-            return { ...item, progress: currentEpisodeNumber };
+        // If the update was successful, update the mediaIdList with the new progress
+        const updatedList = mediaIdList.map(
+          (item: { mal_id: number; mediaId: number; progress: number }) => {
+            if (item.mediaId === mid) {
+              return { ...item, progress: currentEpisodeNumber };
+            }
+            return item;
           }
-          return item;
-        });
+        );
+
+        // Save the updated list back to session storage
         sessionStorage.setItem("mediaIdList", JSON.stringify(updatedList));
+        console.log("Media list updated successfully with new progress.");
       }
+
       setIsQueried(true); // Ensure this block is only executed once
     }
   };
@@ -317,7 +264,7 @@ export const Watch: React.FC = () => {
   };
   return (
     <div className="mx-4 2xl:mr-36">
-     <div id="episodes" className="flex w-full
+      <div id="episodes" className="flex w-full
      flex-col-reverse lg:flex-row gap-3 lg:gap-1 justify-center h-fit items-stretch">
         <div className="flex flex-col py-2 bg-doki-light-grey text-doki-purple h-fit 
         max-h-[560px] sm:max-h-[624px] sm:h-[624px] w-full lg:w-72 mx-1 sm:mx-0 font-lato sm:border-r-slate-500 backdrop-blur-lg text-center 
@@ -332,8 +279,8 @@ export const Watch: React.FC = () => {
                 key={index}
                 className={`relative flex justify-start items-center h-14 
                   ${episode.number == currentEpisodeNumber
-                  ? "bg-doki-light-grey"
-                  : "bg-doki-light-grey hover:bg-doki-white"
+                    ? "bg-doki-light-grey"
+                    : "bg-doki-light-grey hover:bg-doki-white"
                   } transition-colors duration-150 ease-in-out`}
                 onClick={() => {
                   handleWatchEpisode(episode.number);
@@ -346,8 +293,8 @@ export const Watch: React.FC = () => {
                   className={`w-1 relative 
                     bg-transparent h-full transition-opacity 
                     duration-500 ease-in-out ${episode.number == currentEpisodeNumber
-                    ? "opacity-100"
-                    : "opacity-0"
+                      ? "opacity-100"
+                      : "opacity-0"
                     }`}
                 ></div>
                 <div className="relative z-10  ml-2 
@@ -379,22 +326,22 @@ export const Watch: React.FC = () => {
             items-center justify-center mb-1 mx-1 sm:mx-0 px-4 mt-1 sm:mt-0 relative">
               <div className="flex flex-col sm:flex-row justify-center items-center bg-transparent
                     sm:mt-0 sm:bg-doki-dark-grey sm:py-1.5 2xl:h-3/4 rounded-xl">
-                      {/* Find the current episode and display its title */}
-                      <p className="whitespace-nowrap text-xs sm:text-sm font-lato 
+                {/* Find the current episode and display its title */}
+                <p className="whitespace-nowrap text-xs sm:text-sm font-lato 
                       font-semibold text-doki-purple p-3 sm:p-2 truncate">
-                        CURRENT EPISODE:{" "}
-                      </p>
-                      <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs 
+                  CURRENT EPISODE:{" "}
+                </p>
+                <p className="truncate whitespace-normal sm:whitespace-nowrap text-xs 
                       sm:text-sm mr-2 flex items-center font-lato
                       sm:px-1 p-2 rounded-full font-semibold">
-                        {currentEpisodeNumber} -{" "}
-                        {
-                          animeData?.episodes.find(
-                            (episode) => episode.number === currentEpisodeNumber
-                          )?.title
-                        }
-                      </p>
-                    </div>
+                  {currentEpisodeNumber} -{" "}
+                  {
+                    animeData?.episodes.find(
+                      (episode) => episode.number === currentEpisodeNumber
+                    )?.title
+                  }
+                </p>
+              </div>
             </div>
           </div>
         </div>
