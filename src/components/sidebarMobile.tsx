@@ -356,7 +356,7 @@ const Sidebar = () => {
                                     <img
                                         src="/Navbar_logo.png"
                                         alt="Doki Watch"
-                                        className="w-full h-full sm:w-2/3 sm:h-auto cursor-pointer mt-20 sm:mt-12 mx-auto my-auto p-2"
+                                        className="w-full h-full sm:w-2/3 sm:h-auto cursor-pointer mt-10 sm:mt-12 mx-auto my-auto p-2"
                                         draggable="true"
 
                                     />
