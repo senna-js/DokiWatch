@@ -18,11 +18,14 @@ type AuthenticatedUser = {
   authState: "authenticated"
 }
 
+type MediaListSort = "SCORE_DESC" | "PROGRESS" | "PROGRESS_DESC" | "MEDIA_POPULARITY_DESC" |
+ "UPDATED_TIME_DESC" | "ADDED_TIME_DESC" | "FINISHED_ON_DESC" | "STARTED_ON_DESC"
+
 interface BaseAnilistContext {
   authenticate: () => void;
   unAuthenticate: () => void;
   addToList: (mediaId: number, status: MediaListStatus) => Promise<Boolean>;
-  getList: (status: MediaListStatus) => Promise<AnilistUserAnimeData[]>;
+  getList: (status: MediaListStatus, page: number, perPage: number, sort: MediaListSort) => Promise<AnilistUserAnimeData[]>;
 }
 
 type AuthUnion = AuthenticatedUser | UnAuthenticatedUser
@@ -166,48 +169,47 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
     return true;
   }
 
-  const getList = async (status: MediaListStatus): Promise<AnilistUserAnimeData[]> => {
+  const getList = async (status: MediaListStatus, page: number, perPage: number, sort: MediaListSort): Promise<AnilistUserAnimeData[]> => {
     if (authUnion.authState !== "authenticated") {
       console.log("Not authenticated");
       return [];
     }
 
-    const query = `
-    query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus) {
-      Page(page: $page, perPage: $perPage) {
-        mediaList(userId: $userId, type: $type, status: $status) {
-        progress
-          media {
-            id
-            idMal
-            title {
-              romaji
-              english
-            }
-            description
-            coverImage {
-              large
-              color
-            }
-            bannerImage
-            genres
-            status
-            episodes
-            nextAiringEpisode {
-              episode
-              timeUntilAiring
-              airingAt
-            }
-          }
-        }
-      }
-    }`;
+    const query = `query MediaListCollection($page: Int, $perPage: Int, $userId: Int, $type: MediaType, $status: MediaListStatus, $sort: [MediaListSort]) {
+                    Page(page: $page, perPage: $perPage) {
+                      mediaList(userId: $userId, type: $type, status: $status, sort: $sort) {
+                        media {
+                          id
+                          idMal
+                          title {
+                            romaji
+                            english
+                          }
+                          description
+                          coverImage {
+                            large
+                            color
+                          }
+                          status
+                          episodes
+                          nextAiringEpisode {
+                            episode
+                            timeUntilAiring
+                            airingAt
+                          }
+                          bannerImage
+                        }
+                        progress
+                      }
+                    }
+                  }`
     const variables = {
-      page: 1,
-      perPage: 50,
+      page,
+      perPage,
       userId: authUnion.user.id,
       type: "ANIME",
-      status: status,
+      status,
+      sort
     }
 
     const response = await anilistQuery(query, variables, authUnion.user.token);

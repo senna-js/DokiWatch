@@ -2,7 +2,7 @@ import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack"
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 // import { useUser } from "@clerk/clerk-react"
-import { AnilistUserAnimeData,AnilistAnimeData } from "../interfaces/AnilistAnimeData"
+import { AnilistUserAnimeData, AnilistAnimeData } from "../interfaces/AnilistAnimeData"
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer"
 import { useAnilistContext } from "../AnilistContext"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -58,7 +58,7 @@ const Home = () => {
       setLoadingWatchingAiring(true)
       setLoadingWatchingAired(true)
 
-      const watchingAnimeData = await getList("CURRENT")
+      const watchingAnimeData = await getList("CURRENT", 1, 50, "UPDATED_TIME_DESC")
 
       const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "RELEASING")
       const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "FINISHED")

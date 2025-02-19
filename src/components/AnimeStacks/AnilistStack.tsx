@@ -11,7 +11,7 @@ export const AnilistStack: React.FC<StackType> = ({ status }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedAnimeData = await getList(status);
+      const fetchedAnimeData = await getList(status, 1, 50, "UPDATED_TIME_DESC");
 
       setAnimeData(fetchedAnimeData);
     };
