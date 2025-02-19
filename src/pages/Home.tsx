@@ -2,7 +2,7 @@ import { AnimeDataStack } from "../components/AnimeStacks/AnimeDataStack"
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 // import { useUser } from "@clerk/clerk-react"
-import { AnimeCardData } from "../components/AnimeCard"
+import { AnilistUserAnimeData,AnilistAnimeData } from "../interfaces/AnilistAnimeData"
 import { consumetAnilistSearch, ConsumetAnilistSearchParams } from "../Hooks/LoadBalancer"
 import { useAnilistContext } from "../AnilistContext"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -10,9 +10,9 @@ import { useNavigate } from "react-router-dom"
 
 const Home = () => {
   // const { isSignedIn } = useUser()
-  const [topAiringAnime, setTopAiringAnime] = useState<AnimeCardData[]>([])
-  const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnimeCardData[]>([])
-  const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnimeCardData[]>([])
+  const [topAiringAnime, setTopAiringAnime] = useState<AnilistAnimeData[]>([])
+  const [watchingAiringAnime, setWatchingAiringAnime] = useState<AnilistUserAnimeData[]>([])
+  const [watchingAiredAnime, setWatchingAiredAnime] = useState<AnilistUserAnimeData[]>([])
   const { authState, getList } = useAnilistContext()
 
 
@@ -31,20 +31,18 @@ const Home = () => {
       const fetchedAnime = response.data.results
         .filter((anime: any) => anime.cover || anime.image) // Ensure banner exists
         .map((anime: any) => {
-          const topAnime: AnimeCardData = {
+          const topAnime: AnilistAnimeData = {
             id: anime.id,
             idMal: anime.malId,
             title: anime.title,
             color: anime.color,
             image: anime.image.replace("/large/", "/medium/"),
             description: anime.description,
-            status: "RELEASING",
+            runningStatus: "RELEASING",
             totalEpisodes: anime.totalEpisodes,
             currentEpisode: anime.currentEpisode,
             bannerImage: anime.cover,
-            genres: anime.genres,
-            progress: 0,
-            episodes: ""
+            genres: anime.genres
           }
           console.log("bannerImage", topAnime.bannerImage)
           return topAnime
@@ -62,8 +60,8 @@ const Home = () => {
 
       const watchingAnimeData = await getList("CURRENT")
 
-      const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.status === "RELEASING")
-      const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.status === "FINISHED")
+      const watchingAiringAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "RELEASING")
+      const watchingAiredAnimeData = watchingAnimeData.filter((anime) => anime.runningStatus === "FINISHED")
 
       setWatchingAiringAnime(watchingAiringAnimeData)
       setWatchingAiredAnime(watchingAiredAnimeData)
@@ -177,7 +175,7 @@ const Home = () => {
   )
 }
 
-const BannerCarousel = ({ animeData }: { animeData: AnimeCardData[] }) => {
+const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
   const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < 510)

@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from "react";
 import { AnimeCard } from "../AnimeCard";
-import { AnimeCardData } from "../AnimeCard";
+import { AnilistAnimeData } from "../../interfaces/AnilistAnimeData";
 
 interface AnimeDataStackProps {
-  animeData: AnimeCardData[];
+  animeData: AnilistAnimeData[];
   heading: string;
   subheading?: {
     text: string;

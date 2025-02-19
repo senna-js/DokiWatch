@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { AnimeCardData } from "../components/AnimeCard"
+import { AnilistUserAnimeData, MediaListStatus } from "../interfaces/AnilistAnimeData"
 import { useAnilistContext } from "../AnilistContext"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Tooltip, Zoom } from "@mui/material";
 import { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from '@mui/material/styles';
 import Pagination from "../components/Pagination"
+import dokiGirl from "../assests/doki-girl.webp";
+import dokiGirlPhone from "../assests/doki-girl-phone.png";
 
 const User = () => {
-    const { authState, user, getList } = useAnilistContext()
-    const [continueWatching, setContinueWatching] = useState<AnimeCardData[]>([])
+    const { authState, user, getList, authenticate } = useAnilistContext()
+    const [activeList, setActiveList] = useState<MediaListStatus>("CURRENT")
+    const [animeList, setAnimeList] = useState<AnilistUserAnimeData[]>([])
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 20
@@ -32,42 +35,108 @@ const User = () => {
         },
     }));
 
+    if (authState === 'unauthenticated') {
+        return (
+            <div className="relative w-full h-screen overflow-x-hidden overflow-y-hidden">
+                {/* Desktop background */}
+                <div className="hidden sm:block">
+                    <img
+                        src={dokiGirl}
+                        alt="Background"
+                        className="absolute top-0 left-0 w-full h-full object-cover"
+                    />
+                </div>
+                {/* Mobile background */}
+                <div className="sm:hidden">
+                    <img
+                        src={dokiGirlPhone}
+                        alt="Background"
+                        className="absolute top-0 left-0 w-full h-full object-cover"
+                    />
+                </div>
+
+                <motion.div
+                    className="relative font-lato flex flex-col items-center justify-center min-h-[80vh]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex flex-wrap flex-col items-center text-center space-y-4">
+                        <motion.h1
+                            className="text-3xl sm:text-4xl font-bold text-doki-white mb-2"
+                            initial={{ y: -20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            Connect to AniList
+                        </motion.h1>
+                        <motion.p
+                            className="font-hpSimplifiedbold text-doki-light-grey mb-8"
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                        >
+                            Connect your AniList account to sync and manage your anime watchlist
+                        </motion.p>
+                        <motion.button
+                            onClick={authenticate}
+                            className="flex justify-center mt-6 bg-doki-purple
+              border-2 border-doki-light-grey
+               text-doki-light-grey rounded-[12px] sm:text-base text-xs  md:w-40 sm:w-32 w-28
+               cursor-pointer shadow-md p-1
+                hover:bg-doki-light-grey font-lato
+                 hover:text-doki-purple transform transition duration-150 ease-in-out"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                        >
+                            Connect to AniList
+                        </motion.button>
+                    </div>
+                </motion.div>
+            </div>
+        );
+    }
+
     useEffect(() => {
-        const getContinueWatching = async () => {
+        const getAnimeList = async () => {
             if (authState !== 'authenticated') return
-            const watchingAnime = await getList("CURRENT")
-            const sortedAnime = watchingAnime.sort((a, b) =>
+            setLoading(true)
+            const fetchedAnime = await getList(activeList)
+            const sortedAnime = fetchedAnime.sort((a, b) =>
                 (b.updatedAt || 0) - (a.updatedAt || 0)
             ).map((anime) => ({
                 ...anime,
                 episodes: anime.totalEpisodes?.toString() || '?',
                 progress: anime.progress || 0
             }))
-            console.log('Watching anime data:', sortedAnime) // Debug log
-            console.log('Progress:', sortedAnime[0].progress) // Debug log
-            setContinueWatching(sortedAnime)
+            setAnimeList(sortedAnime)
             setLoading(false)
         }
-        getContinueWatching()
-    }, [authState])
+        getAnimeList()
+    }, [authState, activeList])
 
-    if (authState === 'unauthenticated') {
-        return <Navigate to="/" replace />
-    }
+    const listTypes: { status: MediaListStatus; title: string }[] = [
+        { status: "CURRENT", title: "Continue Watching" },
+        { status: "COMPLETED", title: "Completed" },
+        { status: "PLANNING", title: "Plan to Watch" },
+        { status: "DROPPED", title: "Dropped" },
+        { status: "PAUSED", title: "On Hold" }
+    ]
 
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = continueWatching.slice(indexOfFirstItem, indexOfLastItem)
-    const totalPages = Math.ceil(continueWatching.length / itemsPerPage)
+    const currentItems = animeList.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
+    const totalPages = Math.ceil(animeList.length / itemsPerPage)
 
-    const handleAnimeClick = (anime: AnimeCardData) => {
+    const handleAnimeClick = (anime: AnilistUserAnimeData) => {
         let cleanTitle = anime.title.english || anime.title.romaji
         cleanTitle = cleanTitle.replace(/"/g, " ")
         cleanTitle = cleanTitle.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         cleanTitle = cleanTitle.replace(/[^\x00-\x7F]/g, " ")
 
         const currentEpisode = (anime.progress === 0) ? 1 : (anime.progress ?? 0)
-        
+
         // If current episode would exceed total episodes, stay on the last episode
         const targetEpisode = anime.totalEpisodes ?
             Math.min(currentEpisode, anime.totalEpisodes) :
@@ -99,6 +168,25 @@ const User = () => {
                 </div>
             </motion.div>
 
+            <div className="relative font-lato flex gap-4 mx-7 overflow-x-auto scrollHide">
+                {listTypes.map(({ status, title }) => (
+                    <button
+                        key={status}
+                        onClick={() => {
+                            setActiveList(status)
+                            setCurrentPage(1)
+                        }}
+                        className={`px-4 py-2 rounded-full transition-colors duration-200 whitespace-nowrap
+                            ${activeList === status
+                                ? "bg-doki-purple text-white border border-doki-white"
+                                : "bg-doki-dark-grey text-doki-purple hover:bg-doki-light-grey border border-doki-purple"
+                            }`}
+                    >
+                        {title}
+                    </button>
+                ))}
+            </div>
+
             <motion.div
                 className="relative m-7"
                 initial={{ opacity: 0, y: 20 }}
@@ -107,7 +195,7 @@ const User = () => {
             >
                 <div className="relative container bg-doki-light-grey rounded-[16px] p-6">
                     <h2 className="text-3xl font-lato font-bold text-doki-purple mb-6">
-                        Continue Watching ({continueWatching.length})
+                        {listTypes.find(lt => lt.status === activeList)?.title} ({animeList.length})
                     </h2>
 
                     <hr className="border border-doki-purple mb-4" />
@@ -128,13 +216,14 @@ const User = () => {
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 {currentItems.map((anime) => (
                                     <CustomTooltip
+                                        key={anime.id}
                                         TransitionComponent={Zoom}
                                         title={
                                             <>
                                                 <h3 className="font-bold font-lato text-sm text-white mb-2">
                                                     {anime.title.english || anime.title.romaji}
                                                 </h3>
-                                                <p>Status: {anime.status}</p>
+                                                <p>Status: {anime.runningStatus}</p>
                                                 <p>Genres: {anime.genres?.join(', ') || 'N/A'}</p>
                                                 {anime.totalEpisodes !== null && (
                                                     <p>Total Episodes: {anime.totalEpisodes}</p>
@@ -214,7 +303,7 @@ const User = () => {
                                                         EP {anime.progress || 0} / {anime.totalEpisodes || '?'}
                                                     </span>
                                                     <span className="text-doki-purple font-hpSimplifiedbold text-xs">
-                                                        {anime.status === "FINISHED" ? "FINISHED" :
+                                                        {anime.runningStatus === "FINISHED" ? "FINISHED" :
                                                             anime.nextAiringEpisode ?
                                                                 `EP ${anime.nextAiringEpisode.episode} in ${Math.ceil(anime.nextAiringEpisode.timeUntilAiring / 86400)}d` :
                                                                 "TBA"}

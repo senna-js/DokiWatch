@@ -3,33 +3,7 @@ import { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from '@mui/material/styles';
 // import { color } from "framer-motion";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
-
-type MediaStatus = "RELEASING" | "FINISHED" | "NOT_YET_RELEASED" | "CANCELLED" | "HIATUS";
-export interface AnimeCardData {
-  progress: number; // Added progress property
-  episodes: string; // Added episodes property
-  id: number;
-  idMal: number;
-  title: {
-    romaji: string;
-    english: string;
-  };
-  image: string;
-  color: string;
-  description: string;
-  status: MediaStatus;
-  totalEpisodes: number | null;
-  currentEpisode: number | null;
-  nextAiringEpisode?: {
-    episode: number;
-    timeUntilAiring: number;
-    airingAt: number;
-  };
-  bannerImage: string;
-  genres?: string[];
-  updatedAt?: number; // Added updatedAt property
-}
-
+import { AnilistAnimeData } from "../interfaces/AnilistAnimeData";
 
 export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   const navigate = useNavigate();
@@ -65,8 +39,8 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       title={
         <>
           <h3 className="font-bold font-lato text-sm text-white mb-2">{anime.title.english || anime.title.romaji}</h3>
-          <p>Status: {anime.status}</p>
-          <p>Genres: {anime.genres?.join(', ') || 'N/A'}</p>
+          <p>Status: {anime.runningStatus}</p>
+          <p>Genres: {anime.genres.join(', ') || 'N/A'}</p>
 
           {anime.totalEpisodes !== null && (
             <p>Total Episodes: {anime.totalEpisodes}</p>
@@ -162,5 +136,5 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
 };
 
 interface AnimeCardProps {
-  anime: AnimeCardData;
+  anime: AnilistAnimeData;
 }

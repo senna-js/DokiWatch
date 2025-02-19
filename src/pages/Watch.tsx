@@ -1,29 +1,27 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
-import axios from "axios";
 import "./Watch.css";
 import { CurrEpisodeData } from "../interfaces/CurrEpisodeData";
 import { VideoPlayer } from "../components/VideoPlayer";
-import { DiscussionEmbed } from "disqus-react";
-import { CommentCount } from 'disqus-react';
+// import { DiscussionEmbed } from "disqus-react";
+// import { CommentCount } from 'disqus-react';
 import { AnimeWatchData, getAnimeData, getCurrentEpisodeData } from "../Hooks/GetStreamingData";
-
+import { anilistQuery, useAnilistContext } from "../AnilistContext";
 export const Watch: React.FC = () => {
   const [animeData, setAnimeData] = useState<AnimeWatchData>();
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>();
   const [currentEpisode, setCurrentEpisode] = useState<CurrEpisodeData>();
-  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
-  const [playedSeconds, setPlayedSeconds] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
+  // const [isCommentsVisible, setIsCommentsVisible] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user,authState } = useAnilistContext()
   const params = useParams();
-  const { id: pathId } = useParams();
+
   // Toggle function
-  const toggleCommentsVisibility = () => {
-    setIsCommentsVisible(!isCommentsVisible);
-  };
+  // const toggleCommentsVisibility = () => {
+  //   setIsCommentsVisible((prev) => !prev);
+  // };
 
   useEffect(() => {
     if (!params.id) {
@@ -87,157 +85,6 @@ export const Watch: React.FC = () => {
     console.log(currentEpisode);
   }, [currentEpisode]);
 
-  const [isQueried, setIsQueried] = useState(false);
-  // const queryAnilist = async () => {
-  //   var user = localStorage.getItem("user");
-  //   var accessToken = JSON.parse(user as string).access_token;
-  //   const query = `
-  //     query ($username: String ,$mediaId: Int) {
-  //           MediaList(userName: $username,mediaId: $mediaId){
-  //           id
-  //           status
-  //           progress
-  //         }
-  //     }`;
-  //   const variables = {
-  //     username: JSON.parse(localStorage.getItem("user") as string).username,
-  //     mediaId: parseInt(pathId ?? ""),
-  //   };
-  //   console.log("variables", variables);
-  //   const response = await axios.post(
-  //     "https://graphql.anilist.co",
-  //     {
-  //       query,
-  //       variables,
-  //     },
-  //     {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     }
-  //   );
-
-  //   // Access the response data
-  //   const data = response.data;
-  //   console.log(data);
-  //   if (data.data.MediaList.status === "CURRENT") {
-  //     return data.data.MediaList.progress;
-  //   } else {
-  //     console.log("Not watching this anime", data.data.MediaList.status);
-  //   }
-  // };
-  const updateAnilist = async (progress: number, mediaID: number) => {
-    try {
-      var user = localStorage.getItem("user");
-      var accessToken = JSON.parse(user as string).access_token;
-      const query = `
-      mutation ($mediaId: Int, $progress: Int) {
-        SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
-          id
-          status
-          progress
-        }
-      }
-    `;
-
-      console.log(typeof mediaID);
-
-      const variables = {
-        mediaId: mediaID,
-        progress: parseInt(searchParams.get("ep") ?? ""),
-      };
-
-      console.log("variables", variables);
-
-      const response = await axios.post(
-        "https://graphql.anilist.co",
-        {
-          query,
-          variables,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      // Access the response data
-      const data = response.data;
-      console.log(data);
-
-      return true; // Indicate that the operation was successful
-    } catch (error) {
-      console.error("An error occurred while updating Anilist:", error);
-      return false; // Indicate that an error occurred
-    }
-  };
-
-  const handleProgress = async (state: { playedSeconds: number }) => {
-    //save playedSeconds in sessionStorage and 
-    //update mongodb when user leaves page or changes episode
-    setPlayedSeconds(state.playedSeconds);
-    const percentageWatched = totalDuration
-      ? (state.playedSeconds / totalDuration) * 100
-      : 0;
-
-    let mid = parseInt(pathId ?? "");
-    const mediaIdList = JSON.parse(
-      sessionStorage.getItem("mediaIdList") || "[]"
-    );
-
-    // Find the object that matches the given mal_id
-    const foundItem = mediaIdList.find(
-      (item: { mal_id: number; progress: number }) => item.mal_id === mid
-    );
-
-    // Extract the mediaId and progress if found, otherwise set to null
-    const mediaId = foundItem ? foundItem.mediaId : null;
-    const progress = foundItem ? foundItem.progress : null;
-
-    // Update mid to use the found mediaId for further processing
-    mid = mediaId;
-
-    if (
-      percentageWatched >= 80 &&
-      !isQueried &&
-      !isNaN(mid) &&
-      currentEpisodeNumber &&
-      currentEpisodeNumber > progress
-    ) {
-      let success = await updateAnilist(
-        parseInt(searchParams.get("ep") as string),
-        mid
-      );
-
-      if (success) {
-        // If the update was successful, update the mediaIdList with the new progress
-        const updatedList = mediaIdList.map(
-          (item: { mal_id: number; mediaId: number; progress: number }) => {
-            if (item.mediaId === mid) {
-              return { ...item, progress: currentEpisodeNumber };
-            }
-            return item;
-          }
-        );
-
-        // Save the updated list back to session storage
-        sessionStorage.setItem("mediaIdList", JSON.stringify(updatedList));
-        console.log("Media list updated successfully with new progress.");
-      }
-
-      setIsQueried(true); // Ensure this block is only executed once
-    }
-  };
-
-  const handleDuration = (duration: number) => {
-    setTotalDuration(duration);
-  };
-
   const handleWatchEpisode = (episodeId: number) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("ep", episodeId.toString());
@@ -262,6 +109,29 @@ export const Watch: React.FC = () => {
       handleWatchEpisode(currentEpisodeNumber + 1);
     }
   };
+
+  const handleStart = () => {
+    if (!animeData || !currentEpisodeNumber || authState !== "authenticated") {
+      console.error("Invalid handleStart function call", animeData, currentEpisodeNumber,authState)
+      return
+    }
+
+    console.log("Started playing");
+    const query = `mutation Mutation($progress: Int, $mediaId: Int) {
+                    SaveMediaListEntry(progress: $progress, mediaId: $mediaId) {
+                      progress
+                    }
+                  }`
+    const variables = { progress: currentEpisodeNumber, mediaId: animeData.alID }
+
+    
+    anilistQuery(query, variables, user.token)
+  }
+
+  const handleEnd = () => {
+    //TODO add autoplay next flag in ui
+    handleNext();
+  }
   return (
     <div className="mx-4 2xl:mr-36">
       <div id="episodes" className="flex w-full
@@ -317,8 +187,8 @@ export const Watch: React.FC = () => {
               handleNextEpisode={handleNext}
               hasPreviousEpisode={(currentEpisodeNumber || 0) > 1}
               hasNextEpisode={(currentEpisodeNumber || 0) < (animeData?.episodes.length || 0)}
-              onProgress={handleProgress}
-              onDuration={handleDuration}
+              onStart={handleStart}
+              onEnd={handleEnd}
               fetchEpisodes={fetchEpisodes}
             />
             <div className="bg-doki-light-grey rounded-br-[22px] rounded-bl-[22px] 
