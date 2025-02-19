@@ -44,7 +44,7 @@ const Home = () => {
             bannerImage: anime.cover,
             genres: anime.genres
           }
-          console.log("bannerImage", topAnime.bannerImage)
+          
           return topAnime
         });
       setTopAiringAnime(fetchedAnime);

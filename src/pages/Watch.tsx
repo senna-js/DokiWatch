@@ -130,6 +130,12 @@ export const Watch: React.FC = () => {
 
   const handleEnd = () => {
     //TODO add autoplay next flag in ui
+    if(!animeData || !currentEpisodeNumber){
+      console.error("Invalid handleEnd function call", animeData, currentEpisodeNumber)
+      return
+    }
+    if (currentEpisodeNumber === animeData.episodes.length)
+      return;
     handleNext();
   }
   return (

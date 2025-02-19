@@ -19,7 +19,7 @@ export interface AnilistAnimeData {
     airingAt: number;
   };
   bannerImage: string;
-  genres: string[];
+  genres?: string[];
   updatedAt?: number; // Added updatedAt property
 }
 
