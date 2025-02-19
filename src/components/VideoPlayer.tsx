@@ -39,13 +39,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   hasNextEpisode,
   handlePreviousEpisode,
   handleNextEpisode,
-  onProgress,
-  onDuration,
+  onStart,
+  onEnd,
   fetchEpisodes,
 }) => {
   const player = useRef<MediaPlayerInstance>(null);
   const remote = useMediaRemote(player);
-  const { currentTime, duration } = useMediaStore(player);
+  const { currentTime } = useMediaStore(player);
   const [streamType, setStreamType] = useState<StreamType>(
     JSON.parse(localStorage.getItem("streamType") || "0")
   );
@@ -57,17 +57,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     console.warn("changed player");
   }, [player]);
 
-  // Handle duration changes
-  useEffect(() => {
-    if (duration) {
-      onDuration(duration);
-    }
-  }, [duration]);
-
-  // Handle progress tracking
-  useEffect(() => {
-    if (currentTime) onProgress({ playedSeconds: currentTime });
-  }, [currentTime]);
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("streamType") || "{}") !== streamType)
       localStorage.setItem("streamType", JSON.stringify(streamType));
@@ -188,9 +177,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]}
             ref={player}
             onHlsError={handleError}
+            onCanPlay={onStart}
+            onEnd={onEnd}
             load="eager"
             posterLoad="eager"
-            logLevel="debug"
+            logLevel="silent"
             storage={storage}
             autoPlay
           >
@@ -203,6 +194,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </MediaProvider>
             <DefaultVideoLayout
               icons={defaultLayoutIcons}
+              seekStep={5}
               slots={{
                 googleCastButton: null,
                 settingsMenu: (
@@ -244,20 +236,7 @@ interface VideoPlayerProps {
   hasNextEpisode: boolean;
   handlePreviousEpisode: () => void;
   handleNextEpisode: () => void;
-  onProgress: (state: { playedSeconds: number }) => void;
-  onDuration: (duration: number) => void;
+  onStart: () => void;
+  onEnd: () => void;
   fetchEpisodes: (forceRefetch: boolean) => void;
 }
-// interface VideoPlayerProps {
-//   currentEpisode: currEpisodeData;
-//   hasPreviousEpisode: boolean;
-//   hasNextEpisode: boolean;
-//   handlePreviousEpisode: () => void;
-//   handleNextEpisode: () => void;
-//   mediaID?: number;
-//   currentEpisodeNumber: number;
-//   progress?: number;
-//   updateAnilist: (mediaId: number, episode: number) => void;
-//   onProgress: (state: { playedSeconds: number }) => void;
-//   onDuration: (duration: number) => void;
-// }
