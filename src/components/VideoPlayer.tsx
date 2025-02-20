@@ -92,9 +92,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         );
       });
     }
-    const textTrack = player.current?.textTracks.getById("English");
-    if (textTrack)
-      textTrack.mode = "showing";
+    // const textTrack = player.current?.textTracks.getById("English");
+    // if (textTrack)
+    //   textTrack.mode = "showing";
     return () => {
       player.current?.textTracks.clear();
     };
