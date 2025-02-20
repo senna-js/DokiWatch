@@ -40,7 +40,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
         <>
           <h3 className="font-bold font-lato text-sm text-white mb-2">{anime.title.english || anime.title.romaji}</h3>
           <p>Status: {anime.runningStatus}</p>
-          <p>Genres: {anime.genres.join(', ') || 'N/A'}</p>
+          <p>Genres: {anime.genres?.join(', ') || 'N/A'}</p>
 
           {anime.totalEpisodes !== null && (
             <p>Total Episodes: {anime.totalEpisodes}</p>

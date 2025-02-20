@@ -6,7 +6,8 @@ import Content from "../components/ReadMore";
 // import { useAnimeList } from "../AnimeListContext";
 import { Tooltip, Zoom } from "@mui/material";
 import CharacterCard from "../components/CharacterCard";
-import { useAnilistContext, MediaListStatus, anilistQuery } from "../AnilistContext";
+import { useAnilistContext, anilistQuery } from "../AnilistContext";
+import { MediaListStatus } from "../interfaces/AnilistAnimeData";
 interface CharacterData {
   mal_id: number | null | undefined;
   characterName: string;
@@ -406,14 +407,14 @@ export const Anime = () => {
                   >
                     <div className="pb-4 items-center flex gap-2 flex-wrap">
                       {animeData?.genres.map((genre: any) => (
-                        <span
+                        <button
                           onClick={handleGenreClick}
                           key={genre.mal_id}
                           className="cursor-pointer bg-doki-dark-grey font-lato text-doki-white 
 					px-2 py-1 rounded-full hover:bg-doki-white hover:text-doki-purple"
                         >
                           {genre.name}
-                        </span>
+                        </button>
                       ))}
                     </div>
                     <div className="pb-4 flex gap-2 flex-wrap">
@@ -581,6 +582,7 @@ export const Anime = () => {
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                         {relationData.map((relation) => (
                           <div
+                            role="button"
                             key={relation.id}
                             className="relative flex flex-col items-center cursor-pointer group"
                             onClick={() => handleTitleClick(relation.id)}
