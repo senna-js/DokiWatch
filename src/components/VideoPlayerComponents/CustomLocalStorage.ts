@@ -1,6 +1,6 @@
 import { LocalMediaStorage, SerializedVideoQuality } from "@vidstack/react";
 
-const INVALIDATE_TIME = 32 * 24 * 60 * 60 * 1000; // 32 days
+const INVALIDATE_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 interface timeObject {
   time: number;
