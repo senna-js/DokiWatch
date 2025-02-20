@@ -89,15 +89,34 @@ export const getCurrentEpisodeData = async (
   }
 
   if (subData && subData.data) {
-    const thumbSrcObj = subData.data.subtitles
-      ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+    const thumbSrcObj: { url: string; lang: string } | null = subData.data
+      .subtitles
+      ? subData.data.subtitles.find(
+          (sub: { url: string; lang: string }) =>
+            sub.lang.toLowerCase() === "thumbnails"
+        )
       : null;
-    const dubThumbSrcObj =
+    const dubThumbSrcObj: { url: string; lang: string } | null =
       dubData && dubData.data && dubData.data.subtitles
-        ? subData.data.subtitles.find((sub: any) => sub.lang === "Thumbnails")
+        ? subData.data.subtitles.find(
+            (sub: { url: string; lang: string }) =>
+              sub.lang.toLowerCase() === "thumbnails"
+          )
         : null;
-    const subtitlesList = subData.data.subtitles
-      ? subData.data.subtitles.filter((sub: any) => sub.lang !== "Thumbnails")
+    const subtitlesList: { url: string; lang: string }[] | null = subData.data
+      .subtitles
+      ? subData.data.subtitles.filter(
+          (sub: { url: string; lang: string }) =>
+            sub.lang.toLowerCase() !== "thumbnails"
+        )
+      : null;
+
+    const dubSubtitlesList: { url: string; lang: string }[] | null = dubData?.data
+      .subtitles
+      ? subData.data.subtitles.filter(
+          (sub: { url: string; lang: string }) =>
+            sub.lang.toLowerCase() !== "thumbnails"
+        )
       : null;
 
     const episodeData: CurrEpisodeData = {
@@ -109,44 +128,30 @@ export const getCurrentEpisodeData = async (
           /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
           "/api-$1"
         ),
-        dub: (dubData && dubData.data) ?
-         dubData?.data.sources[0].url.replace(
+        dub:
+          dubData && dubData.data
+            ? dubData?.data.sources[0].url.replace(
                 /https?:\/\/e([abcdef]).netmagcdn.com:2228\/hls-playback/,
                 "/api-$1"
               )
             : null,
       },
-      thumbnailSrc: thumbSrcObj
-        ? thumbSrcObj.url.replace(
-            "https://s.megastatics.com/thumbnails",
-            "/api-thumb"
-          )
-        : null,
-      dubThumbnailSrc: dubThumbSrcObj
-        ? dubThumbSrcObj
-            .find((sub: any) => sub.lang === "Thumbnails")
-            .url.replace("https://s.megastatics.com/thumbnails", "/api-thumb")
-        : null,
-      subtitles: subtitlesList
-        ? subtitlesList.map((sub: any) => ({
-            url: sub.url.replace(
-              "https://s.megastatics.com/subtitle",
-              "/api-sub"
-            ),
-            lang: sub.lang,
-          }))
-        : null,
-      dubSubtitles: dubData && dubData.data && dubData && dubData.data.subtitles
-        ? dubData?.data.subtitles
-            .filter((sub: any) => sub.lang !== "Thumbnails")
-            .map((sub: any) => ({
-              url: sub.url.replace(
-                "https://s.megastatics.com/subtitle",
-                "/api-sub"
-              ),
-              lang: sub.lang,
-            }))
-        : null,
+      thumbnailSrc: thumbSrcObj?.url.replace(
+        "https://s.megastatics.com/thumbnails",
+        "/api-thumb"
+      ),
+      dubThumbnailSrc: dubThumbSrcObj?.url.replace(
+        "https://s.megastatics.com/thumbnails",
+        "/api-thumb"
+      ),
+      subtitles: subtitlesList?.map((sub: {url:string,lang:string}) => ({
+        url: sub.url.replace("https://s.megastatics.com/subtitle", "/api-sub"),
+        lang: sub.lang,
+      })),
+      dubSubtitles: dubSubtitlesList?.map((sub:{url:string,lang:string}) =>({
+        url: sub.url.replace("https://s.megastatics.com/subtitle", "/api-sub"),
+        lang: sub.lang,
+      }))
     };
 
     // Remove duplicate subtitles

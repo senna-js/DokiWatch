@@ -9,7 +9,7 @@ import {
   type MediaPlayerInstance,
   MediaProvider,
   TextTrack,
-  Poster,
+  // Poster,
   HLSErrorEvent
 } from "@vidstack/react";
 import {
@@ -26,7 +26,7 @@ import {
   type VTTJSON,
 } from "./VideoPlayerComponents/ThumbnailsHandler";
 import axios from "axios";
-import loadingSpinner from "../assests/Loading-Spinner.webp";
+// import loadingSpinner from "../assests/Loading-Spinner.webp";
 
 enum StreamType {
   sub,
@@ -52,6 +52,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [trueStreamType, setTrueStreamType] = useState<StreamType>(streamType);
   const [thumbnails, setThumbnails] = useState<VTTJSON[]>();
   const [storage, setStorage] = useState<CustomLocalStorage>();
+  // const [showPoster, setShowPoster] = useState(true);
 
   useEffect(() => {
     console.warn("changed player");
@@ -159,10 +160,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleError = (error: HLSErrorEvent) => {
     //@ts-ignore
-    if (error.type === "networkError" && (error.details == "manifestLoadError" || error.details == "fragLoadError") && error.fatal) {
+    if (error.type === "networkError" && (error.details === "manifestLoadError" || error.details === "fragLoadError") && error.fatal) {
       console.log("ManifestLoadError", error)
       fetchEpisodes(true)
     }
+    //@ts-ignore
+    else if (error.type === 'mediaError' && (error.details === 'bufferStalledError' || error.details === 'bufferNudgeOnStall') && !error.fatal)
+      console.log("Buffering", error)
     else
       console.log("Unregistered Error", error)
   }
@@ -177,7 +181,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             src={[currentEpisode.sources.sub, currentEpisode.sources.dub][trueStreamType]}
             ref={player}
             onHlsError={handleError}
-            onCanPlay={onStart}
+            onCanPlay={() => {
+              // setShowPoster(false)
+              onStart()
+            }}
             onEnd={onEnd}
             load="eager"
             posterLoad="eager"
@@ -186,11 +193,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             autoPlay
           >
             <MediaProvider role="button">
-              <Poster
-                className="vds-poster"
-                src={loadingSpinner}
-                alt="Loading Screen"
-              />
+              {/* {showPoster &&
+                <Poster
+                  className="vds-poster"
+                  src={loadingSpinner}
+                  alt="Loading Screen"
+                />
+              } */}
             </MediaProvider>
             <DefaultVideoLayout
               icons={defaultLayoutIcons}

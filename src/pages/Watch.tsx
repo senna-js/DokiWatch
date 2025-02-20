@@ -79,12 +79,6 @@ export const Watch: React.FC = () => {
     fetchEpisodes();
   }, [animeData, currentEpisodeNumber]);
 
-  useEffect(() => {
-    if (!currentEpisode || !animeData || !currentEpisodeNumber)
-      return;
-    console.log(currentEpisode);
-  }, [currentEpisode]);
-
   const handleWatchEpisode = (episodeId: number) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("ep", episodeId.toString());
