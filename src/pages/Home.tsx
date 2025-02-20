@@ -44,7 +44,7 @@ const Home = () => {
             bannerImage: anime.cover,
             genres: anime.genres
           }
-          
+
           return topAnime
         });
       setTopAiringAnime(fetchedAnime);
@@ -291,9 +291,9 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
                     <h2 className="text-2xl sm:text-4xl font-bold font-lato text-white mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
                     <div className="hidden custom:flex flex-wrap gap-2 mb-4">
                       {animeData[currentIndex].genres?.map((genre, index) => (
-                        <span onClick={handleGenreClick} key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-doki-white hover:text-doki-purple">
+                        <button onClick={handleGenreClick} key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-doki-white hover:text-doki-purple">
                           {genre}
-                        </span>
+                        </button>
                       ))}
                     </div>
                     <p className="hidden md:line-clamp-3 text-lg font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>

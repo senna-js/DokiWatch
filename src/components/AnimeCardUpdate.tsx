@@ -60,6 +60,7 @@ export const AnimeCardUpdate: React.FC<AnimeCardProps> = ({ anime }) => {
         >
             <motion.div
                 key={anime.id}
+                role="button"
                 onClick={() => handleAnimeClick(anime)}
                 className="bg-doki-dark-grey rounded-[12px] overflow-hidden cursor-pointer group"
                 initial={{ opacity: 0 }}
