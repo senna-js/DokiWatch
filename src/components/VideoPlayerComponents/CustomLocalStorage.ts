@@ -146,7 +146,7 @@ export class CustomLocalStorage extends LocalMediaStorage {
     this.debounce = true;
     setTimeout(() => {
       this.debounce = false;
-    }, 1000);
+    }, 5000);
     return Promise.resolve();
   }
 }
