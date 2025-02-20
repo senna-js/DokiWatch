@@ -6,6 +6,9 @@ interface timeObject {
   time: number;
   invalidateTime: number;
 }
+
+type timeData = { [key: string]: timeObject };
+
 const getStorageObject = (key: string, subKey: string) => {
   const storage = localStorage.getItem(key);
   return storage ? JSON.parse(storage)[subKey] : null;
@@ -32,7 +35,7 @@ const isTimeObject = (timeObj: unknown): timeObj is timeObject => {
 
 const cleanTimeObject = (key: string) => {
   const timeDataObject = getStorageObject(key, "time") || {};
-  const newtimeDataObject: { [key: string]: timeObject } = {};
+  const newtimeDataObject: timeData = {};
 
   for (const epId in timeDataObject) {
     const timeData: unknown = timeDataObject[epId];
@@ -65,6 +68,15 @@ export class CustomLocalStorage extends LocalMediaStorage {
     this.epId = epId;
     cleanTimeObject(this.key);
   }
+
+  clearCurrentEpisodeTime (): Promise<void> {
+    const timeObj: timeData = getStorageObject(this.key, "time") || {};
+  
+    if (timeObj[this.epId]) delete timeObj[this.epId];
+    setStorageObject(this.key, "time", timeObj);
+    return Promise.resolve();
+  }
+
   getVolume(): Promise<number | null> {
     const volume = getStorageObject(this.key, "volume");
     return Promise.resolve(volume);
@@ -126,21 +138,22 @@ export class CustomLocalStorage extends LocalMediaStorage {
     return Promise.resolve();
   }
   getTime(): Promise<number | null> {
-    const time: { [key: string]: timeObject } = getStorageObject(this.key, "time") || {};
+    const time: { [key: string]: timeObject } =
+      getStorageObject(this.key, "time") || {};
     return Promise.resolve(time[this.epId].time || 0);
   }
   private debounce = false;
   setTime(time: number, ended: boolean): Promise<void> {
     if (ended) {
-      const timeObj: { [key: string]: timeObject } = getStorageObject(this.key, "time") || {};
+      const timeObj: timeData = getStorageObject(this.key, "time") || {};
       delete timeObj[this.epId];
       setStorageObject(this.key, "time", timeObj);
       return Promise.resolve();
     }
     if (this.debounce) return Promise.resolve();
-    const timeObj: { [key: string]: timeObject } = getStorageObject(this.key, "time") || {};
+    const timeObj: timeData = getStorageObject(this.key, "time") || {};
 
-    timeObj[this.epId] = {time, invalidateTime: Date.now() + INVALIDATE_TIME};
+    timeObj[this.epId] = { time, invalidateTime: Date.now() + INVALIDATE_TIME };
     setStorageObject(this.key, "time", timeObj);
 
     this.debounce = true;

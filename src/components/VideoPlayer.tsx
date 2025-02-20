@@ -185,7 +185,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               // setShowPoster(false)
               onStart()
             }}
-            onEnd={onEnd}
+            onEnd={async () => {
+              if (!storage) {
+                console.error("Storage is not set")
+                return;
+              }
+              await storage.clearCurrentEpisodeTime();
+              onEnd()
+            }}
             load="eager"
             posterLoad="eager"
             logLevel="silent"
@@ -225,7 +232,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                     hasPreviousEpisode={hasPreviousEpisode}
                     hasNextEpisode={hasNextEpisode}
                     handlePreviousEpisode={handlePreviousEpisode}
-                    handleNextEpisode={handleNextEpisode}
+                    handleNextEpisode={async () => {
+                      if (!storage) {
+                        console.error("Storage is not set")
+                        return;
+                      }
+                      await storage.clearCurrentEpisodeTime();
+                      handleNextEpisode()
+                    }}
                   />
                 ),
                 // captions: null,
