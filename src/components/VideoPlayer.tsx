@@ -92,13 +92,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         );
       });
     }
-    // const textTrack = player.current?.textTracks.getById("English");
-    // if (textTrack)
-    //   textTrack.mode = "showing";
+
     return () => {
       player.current?.textTracks.clear();
     };
   }, [currentEpisode.subtitles, currentEpisode.dubSubtitles, trueStreamType]);
+
+  useEffect(() => {
+    setStorage(new CustomLocalStorage("vidstack-storage", currentEpisode.zoroId, player.current?.textTracks))
+  }, [currentEpisode.zoroId, player.current?.textTracks])
 
   useEffect(() => {
     const fetchThumbnails = async (src: string) => {
@@ -127,10 +129,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     currentEpisode.dubThumbnailSrc,
     trueStreamType,
   ]);
-
-  useEffect(() => {
-    setStorage(new CustomLocalStorage("vidstack-storage", currentEpisode.zoroId))
-  }, [currentEpisode.zoroId])
 
   const loadSkipButton: boolean =
     (currentTime > currentEpisode.intro.start &&
