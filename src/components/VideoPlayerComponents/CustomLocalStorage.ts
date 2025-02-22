@@ -138,8 +138,10 @@ export class CustomLocalStorage extends LocalMediaStorage {
     return Promise.resolve();
   }
   getTime(): Promise<number | null> {
-    const time: { [key: string]: timeObject } =
-      getStorageObject(this.key, "time") || {};
+    const time: { [key: string]: timeObject } | null =
+      getStorageObject(this.key, "time") || null;
+    if(!time) return Promise.resolve(0);
+    if(!time[this.epId]) return Promise.resolve(0);
     return Promise.resolve(time[this.epId].time || 0);
   }
   private debounce = false;
