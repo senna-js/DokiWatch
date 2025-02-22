@@ -192,6 +192,7 @@ export const AnilistAuthProvider: React.FC<{ children: React.ReactNode, storageK
                           }
                           status
                           episodes
+                          genres
                           nextAiringEpisode {
                             episode
                             timeUntilAiring
