@@ -1,4 +1,4 @@
-import { LocalMediaStorage, SerializedVideoQuality } from "@vidstack/react";
+import { LocalMediaStorage, SerializedVideoQuality,TextTrackList } from "@vidstack/react";
 
 const INVALIDATE_TIME = 7 * 24 * 60 * 60 * 1000; // 7 days
 
@@ -61,17 +61,19 @@ const cleanTimeObject = (key: string) => {
 export class CustomLocalStorage extends LocalMediaStorage {
   private key: string;
   private epId: string;
+  private textTracks?: TextTrackList;
 
-  constructor(key: string, epId: string) {
+  constructor(key: string, epId: string, textTracks?: TextTrackList) {
     super();
     this.key = key;
     this.epId = epId;
+    this.textTracks = textTracks;
     cleanTimeObject(this.key);
   }
 
-  clearCurrentEpisodeTime (): Promise<void> {
+  clearCurrentEpisodeTime(): Promise<void> {
     const timeObj: timeData = getStorageObject(this.key, "time") || {};
-  
+
     if (timeObj[this.epId]) delete timeObj[this.epId];
     setStorageObject(this.key, "time", timeObj);
     return Promise.resolve();
@@ -120,11 +122,14 @@ export class CustomLocalStorage extends LocalMediaStorage {
   }
   getCaptions(): Promise<boolean | null> {
     const captions = getStorageObject(this.key, "captions");
+    const englishTrack = this.textTracks?.getById("English");
+    if (englishTrack && captions) englishTrack.mode = "showing";
+
     return Promise.resolve(captions);
   }
 
-  setCaptions(enabled: boolean): Promise<void> {
-    setStorageObject(this.key, "captions", enabled);
+  setCaptions(captions: boolean): Promise<void> {
+    setStorageObject(this.key, "captions", captions);
     return Promise.resolve();
   }
 
@@ -140,8 +145,8 @@ export class CustomLocalStorage extends LocalMediaStorage {
   getTime(): Promise<number | null> {
     const time: { [key: string]: timeObject } | null =
       getStorageObject(this.key, "time") || null;
-    if(!time) return Promise.resolve(0);
-    if(!time[this.epId]) return Promise.resolve(0);
+    if (!time) return Promise.resolve(0);
+    if (!time[this.epId]) return Promise.resolve(0);
     return Promise.resolve(time[this.epId].time || 0);
   }
   private debounce = false;
