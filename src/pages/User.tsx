@@ -14,6 +14,38 @@ const User = () => {
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 20
+    const listTypes: { status: MediaListStatus; title: string }[] = [
+        { status: "CURRENT", title: "Continue Watching" },
+        { status: "COMPLETED", title: "Completed" },
+        { status: "PLANNING", title: "Plan to Watch" },
+        { status: "DROPPED", title: "Dropped" },
+        { status: "PAUSED", title: "On Hold" }
+    ]
+
+    const currentItems = animeList.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
+    const totalPages = Math.ceil(animeList.length / itemsPerPage)
+
+
+    useEffect(() => {
+        const getAnimeList = async () => {
+            if (authState !== 'authenticated') return
+            setLoading(true)
+            const fetchedAnime = await getList(activeList, 1, 50, "UPDATED_TIME_DESC")
+            const sortedAnime = fetchedAnime.sort((a, b) =>
+                (b.updatedAt || 0) - (a.updatedAt || 0)
+            ).map((anime) => ({
+                ...anime,
+                episodes: anime.totalEpisodes?.toString() || '?',
+                progress: anime.progress || 0
+            }))
+            setAnimeList(sortedAnime)
+            setLoading(false)
+        }
+        getAnimeList()
+    }, [authState, activeList])
 
     if (authState === 'unauthenticated') {
         return (
@@ -76,38 +108,6 @@ const User = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        const getAnimeList = async () => {
-            if (authState !== 'authenticated') return
-            setLoading(true)
-            const fetchedAnime = await getList(activeList, 1, 50, "UPDATED_TIME_DESC")
-            const sortedAnime = fetchedAnime.sort((a, b) =>
-                (b.updatedAt || 0) - (a.updatedAt || 0)
-            ).map((anime) => ({
-                ...anime,
-                episodes: anime.totalEpisodes?.toString() || '?',
-                progress: anime.progress || 0
-            }))
-            setAnimeList(sortedAnime)
-            setLoading(false)
-        }
-        getAnimeList()
-    }, [authState, activeList])
-
-    const listTypes: { status: MediaListStatus; title: string }[] = [
-        { status: "CURRENT", title: "Continue Watching" },
-        { status: "COMPLETED", title: "Completed" },
-        { status: "PLANNING", title: "Plan to Watch" },
-        { status: "DROPPED", title: "Dropped" },
-        { status: "PAUSED", title: "On Hold" }
-    ]
-
-    const currentItems = animeList.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    )
-    const totalPages = Math.ceil(animeList.length / itemsPerPage)
 
     return (
         <div className="sm:mx-[75px] md:mx-[150px]">
