@@ -20,7 +20,6 @@ export interface AnilistAnimeData {
   };
   bannerImage: string;
   genres?: string[];
-  updatedAt?: number; // Added updatedAt property
 }
 
 export type MediaListStatus = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING";

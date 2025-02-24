@@ -5,7 +5,7 @@ import { useAnilistContext } from "../AnilistContext"
 import Pagination from "../components/Pagination"
 import dokiGirl from "../assests/doki-girl.webp";
 import dokiGirlPhone from "../assests/doki-girl-phone.png";
-import { AnimeCardUpdate } from "../components/AnimeCardUpdate"
+import { UserAnimeCard } from "../components/UserAnimeCard"
 
 const User = () => {
     const { authState, user, getList, authenticate } = useAnilistContext()
@@ -34,14 +34,7 @@ const User = () => {
             if (authState !== 'authenticated') return
             setLoading(true)
             const fetchedAnime = await getList(activeList, 1, 50, "UPDATED_TIME_DESC")
-            const sortedAnime = fetchedAnime.sort((a, b) =>
-                (b.updatedAt || 0) - (a.updatedAt || 0)
-            ).map((anime) => ({
-                ...anime,
-                episodes: anime.totalEpisodes?.toString() || '?',
-                progress: anime.progress || 0
-            }))
-            setAnimeList(sortedAnime)
+            setAnimeList(fetchedAnime)
             setLoading(false)
         }
         getAnimeList()
@@ -179,7 +172,7 @@ const User = () => {
                         <>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                                 {currentItems.map((anime) => (
-                                    <AnimeCardUpdate key={anime.id} anime={anime} />
+                                    <UserAnimeCard key={anime.id} anime={anime} />
                                 ))}
                             </div>
 

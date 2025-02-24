@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { AnilistUserAnimeData } from "../interfaces/AnilistAnimeData";
 import { useNavigate } from "react-router-dom";
 
-export const AnimeCardUpdate: React.FC<AnimeCardProps> = ({ anime }) => {
+export const UserAnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
     const navigate = useNavigate();
 
     const dokiTooltipBackground = "rgba(47, 54, 114, 0.8)";
