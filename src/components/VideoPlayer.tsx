@@ -10,8 +10,7 @@ import {
   MediaProvider,
   TextTrack,
   // Poster,
-  HLSErrorEvent,
-  Gesture
+  HLSErrorEvent
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
