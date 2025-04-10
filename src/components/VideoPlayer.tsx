@@ -10,7 +10,8 @@ import {
   MediaProvider,
   TextTrack,
   // Poster,
-  HLSErrorEvent
+  HLSErrorEvent,
+  Gesture
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
@@ -26,6 +27,7 @@ import {
   type VTTJSON,
 } from "./VideoPlayerComponents/ThumbnailsHandler";
 import axios from "axios";
+import { handlePlayerMouse } from "./VideoPlayerComponents/handlePlayerMouse";
 // import loadingSpinner from "../assests/Loading-Spinner.webp";
 
 enum StreamType {
@@ -56,6 +58,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     console.warn("changed player");
+    handlePlayerMouse();
   }, [player]);
 
   useEffect(() => {
