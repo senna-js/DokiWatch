@@ -9,9 +9,7 @@ import {
   type MediaPlayerInstance,
   MediaProvider,
   TextTrack,
-  // Poster,
-  HLSErrorEvent,
-  Gesture
+  HLSErrorEvent
 } from "@vidstack/react";
 import {
   defaultLayoutIcons,
@@ -56,10 +54,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [storage, setStorage] = useState<CustomLocalStorage>();
   // const [showPoster, setShowPoster] = useState(true);
 
-  useEffect(() => {
-    console.warn("changed player");
-    handlePlayerMouse();
-  }, [player]);
+  // useEffect(() => {
+  //   console.warn("changed player");
+  //   handlePlayerMouse();
+  // }, [player]);
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("streamType") || "{}") !== streamType)
@@ -184,6 +182,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onHlsError={handleError}
             onCanPlay={() => {
               // setShowPoster(false)
+              handlePlayerMouse();
               onStart()
             }}
             onEnd={async () => {

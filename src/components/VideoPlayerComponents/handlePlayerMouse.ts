@@ -1,6 +1,12 @@
 export const handlePlayerMouse = () => {
     const videoElement = document.querySelector("video");
-    if(!videoElement) return;
+    if(!videoElement) {
+        console.error("Video element not found");
+        return;
+    }
+
+    videoElement.tabIndex = 0
+    videoElement.ariaHidden = "false";
 
     videoElement.classList.remove('cursor-none');
 
@@ -13,6 +19,7 @@ export const handlePlayerMouse = () => {
         timeout = window.setTimeout(() => {
             videoElement.classList.add('cursor-none');
             console.log('cursor-none added');
+
         }, 2000);
     };
 
