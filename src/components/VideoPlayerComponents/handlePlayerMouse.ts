@@ -12,6 +12,7 @@ export const handlePlayerMouse = () => {
         clearTimeout(timeout);
         timeout = window.setTimeout(() => {
             videoElement.classList.add('cursor-none');
+            console.log('cursor-none added');
         }, 2000);
     };
 
