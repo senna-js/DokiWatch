@@ -24,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     const getTopAiringAnime = async () => {
       const params: ConsumetAnilistSearchParams = {
-        sort: ["POPULARITY_DESC"],
+        sort: ["UPDATED_AT_DESC"],
         status: "RELEASING",
       }
       const response = await consumetAnilistSearch(params)
@@ -75,13 +75,13 @@ const Home = () => {
     <div className="sm:mx-[75px] md:mx-[150px]">
       <div className="relative">
         <motion.div
-          className="absolute hidden sm:block top-4 left-4 z-10 sm:left-0 sm:-mx-32"
+          className="absolute z-10 hidden sm:block top-4 left-4 sm:left-0 sm:-mx-32"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="font-bold font-hpSimplifiedbold text-white hidden sm:hidden md:block ml-5 sm:ml-0"
+            className="hidden ml-5 font-bold text-white font-hpSimplifiedbold sm:hidden md:block sm:ml-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -106,9 +106,9 @@ const Home = () => {
       >
         {loadingTopAiring ? (
           // Skeleton for Top Airing
-          <div className="animate-pulse mt-8">
+          <div className="mt-8 animate-pulse">
             <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index}>
                   <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
@@ -133,7 +133,7 @@ const Home = () => {
               // Skeleton for Watching Airing
               <div className="animate-pulse">
                 <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
                       <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
@@ -147,7 +147,7 @@ const Home = () => {
             )}
           </motion.div>
           <motion.div
-            className="m-7 mt-16"
+            className="mt-16 m-7"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
@@ -156,7 +156,7 @@ const Home = () => {
               // Skeleton for Watching Aired
               <div className="animate-pulse">
                 <div className="h-8 bg-doki-light-grey rounded-[12px] w-1/3 mb-4"></div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <div key={index}>
                       <div className="h-64 bg-doki-dark-grey rounded-[12px] mb-4"></div>
@@ -282,22 +282,22 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
           >
 
             <div
-              className="w-full h-full bg-cover bg-center"
+              className="w-full h-full bg-center bg-cover"
               style={{ backgroundImage: `url(${backgroundImage})` }}
             >
               <div className="absolute inset-0 flex">
-                <div className="md:w-2/3 w-3/2 bg-gradient-to-r from-doki-purple to-transparent flex flex-col justify-end p-8">
+                <div className="flex flex-col justify-end p-8 md:w-2/3 w-3/2 bg-gradient-to-r from-doki-purple to-transparent">
                   <div className="text-white">
-                    <h2 className="text-2xl sm:text-4xl font-bold font-lato text-white mb-2">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
-                    <div className="hidden custom:flex flex-wrap gap-2 mb-4">
+                    <h2 className="mb-2 text-2xl font-bold text-white sm:text-4xl font-lato">{animeData[currentIndex].title.english || animeData[currentIndex].title.romaji}</h2>
+                    <div className="flex-wrap hidden gap-2 mb-4 custom:flex">
                       {animeData[currentIndex].genres?.map((genre, index) => (
-                        <button onClick={handleGenreClick} key={index} className="inline-block bg-primary/80 text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 cursor-pointer hover:bg-doki-white hover:text-doki-purple">
+                        <button onClick={handleGenreClick} key={index} className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-semibold rounded-full cursor-pointer bg-primary/80 text-primary-foreground hover:bg-doki-white hover:text-doki-purple">
                           {genre}
                         </button>
                       ))}
                     </div>
-                    <p className="hidden md:line-clamp-3 text-lg font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
-                    <div className="flex space-x-4 mt-4">
+                    <p className="hidden text-lg md:line-clamp-3 font-hpSimplifiedbold">{stripHtmlTags(animeData[currentIndex].description)}</p>
+                    <div className="flex mt-4 space-x-4">
                       {/* Detail Button */}
                       <button
                         onClick={navigateToPage}
@@ -318,7 +318,7 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
                           stroke="currentColor"
-                          className="w-6 h-6 z-10"
+                          className="z-10 w-6 h-6"
                         >
                           <path
                             strokeLinecap="round"
@@ -332,8 +332,8 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
                           />
                         </svg>
                         <span className="">Watch</span>
-                        {/* <span className="absolute rounded-xl w-full h-full bg-doki-white -left-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:left-0 duration-500" />
-                        <span className="absolute rounded-xl w-full h-full bg-doki-white -right-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:right-0 duration-500" /> */}
+                        {/* <span className="absolute top-0 w-full h-full duration-500 -rotate-45 rounded-xl bg-doki-white -left-32 group-hover:rotate-0 group-hover:left-0" />
+                        <span className="absolute top-0 w-full h-full duration-500 -rotate-45 rounded-xl bg-doki-white -right-32 group-hover:rotate-0 group-hover:right-0" /> */}
                       </button>
                     </div>
                   </div>
@@ -363,7 +363,7 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
 
 
       {/* Navigation dots - Vertical on mobile, horizontal on desktop */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 md:flex-row md:gap-3 md:bottom-4 md:left-2/3 md:translate-x-1/2 md:top-auto">
+      <div className="absolute flex flex-col gap-2 -translate-y-1/2 right-4 top-1/2 md:flex-row md:gap-3 md:bottom-4 md:left-2/3 md:translate-x-1/2 md:top-auto">
         {animeData.map((_, index) => (
           <button
             key={index}
@@ -393,7 +393,7 @@ const BannerCarousel = ({ animeData }: { animeData: AnilistAnimeData[] }) => {
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-doki-dark-grey/50 text-white p-2 rounded-lg hover:bg-black/75 transition-colors"
+          className="absolute p-2 text-white transition-colors -translate-y-1/2 rounded-lg right-4 top-1/2 bg-doki-dark-grey/50 hover:bg-black/75"
           aria-label="Next slide"
         >
           <ChevronRight className="w-6 h-6" />

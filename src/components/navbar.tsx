@@ -19,12 +19,12 @@ export const Navbar = () => {
   const { user, authenticate, unAuthenticate, authState } = useAnilistContext();
 
   const handleKoFiClick = () => {
-    window.open("https://ko-fi.com/eshan27", "_blank", "noopener,noreferrer");
+    window.open("#", "_blank", "noopener,noreferrer");
   };
 
   const handleCoffeeClick = () => {
     window.open(
-      "https://www.buymeacoffee.com/eshan2703",
+      "#",
       "_blank",
       "noopener,noreferrer"
     );
@@ -32,7 +32,7 @@ export const Navbar = () => {
 
   const handleDiscordClick = () => {
     window.open(
-      "https://discord.gg/tpEhcq2vc6",
+      "#",
       "_blank",
       "noopener,noreferrer"
     );
@@ -81,7 +81,7 @@ export const Navbar = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="h-10 w-10 text-gray-500"
+      className="w-10 h-10 text-gray-500"
     >
       <path
         strokeLinecap="round"
@@ -131,19 +131,19 @@ export const Navbar = () => {
           onDrop={(e) => e.preventDefault()}
         />
       </div>
-      <div className="sm:hidden flex items-center">
+      <div className="flex items-center sm:hidden">
         <button
           onClick={() => navigate("/search")}
           className="bg-doki-light-grey text-doki-purple/[.67] text-[15px] 
           rounded-[12px] p-1 font-lato font-bold cursor-pointer
           inline-flex items-center"
         >
-          <span className="px-auto mx-2 whitespace-nowrap font-lato">
+          <span className="mx-2 px-auto whitespace-nowrap font-lato">
             Search here...
           </span>
         </button>
       </div>
-      <div className="flex-1 mx-2 sm:mx-4 hidden sm:block">
+      <div className="flex-1 hidden mx-2 sm:mx-4 sm:block">
         <div className="relative">
           <input
             className="block w-full pl-4 pr-3 py-2 bg-doki-light-grey rounded-[16px] h-[48px]
@@ -188,7 +188,7 @@ export const Navbar = () => {
             <li>
               <button
                 onClick={handleCoffeeClick}
-                className="relative bg-transparent p-0 border-none cursor-pointer mb-4"
+                className="relative p-0 mb-4 bg-transparent border-none cursor-pointer"
               >
                 <img
                   src={coffeeImage}
@@ -200,7 +200,7 @@ export const Navbar = () => {
             <li>
               <button
                 onClick={handleKoFiClick}
-                className="relative bg-transparent p-0 border-none cursor-pointer mb-4"
+                className="relative p-0 mb-4 bg-transparent border-none cursor-pointer"
               >
                 <img
                   src={kofiImage}
@@ -212,7 +212,7 @@ export const Navbar = () => {
             <li>
               <button
                 onClick={handleDiscordClick}
-                className="relative p-0 border-none cursor-pointer mb-4"
+                className="relative p-0 mb-4 border-none cursor-pointer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -235,9 +235,7 @@ export const Navbar = () => {
         </details>
       </div>
       <div
-        className="hidden 
-      sm:flex sm:justify-evenly sm:gap-7 sm:items-center sm:bg-doki-dark-grey sm:rounded-full
-       sm:pl-4 sm:pr-4 sm:pt-2 sm:pb-2 sm:mr-3"
+        className="hidden sm:flex sm:justify-evenly sm:gap-7 sm:items-center sm:bg-doki-dark-grey sm:rounded-full sm:pl-4 sm:pr-4 sm:pt-2 sm:pb-2 sm:mr-3"
       >
         <button onClick={handleKoFiClick}>
           <img src={coffeeImage} alt="Buy Me a Coffee" className="w-6 ml-2" />
@@ -263,7 +261,7 @@ export const Navbar = () => {
           </svg>
         </button>
       </div>
-      <div className="flex gap-2 sm:gap-4 items-center">
+      <div className="flex items-center gap-2 sm:gap-4">
         {/* <SignedIn> */}
         <div className="relative">
           <div
@@ -275,7 +273,7 @@ export const Navbar = () => {
               <img
                 src={user.avatar}
                 alt="Profile"
-                className="sm:h-10 sm:w-10 h-8 w-8 rounded-full cursor-pointer"
+                className="w-8 h-8 rounded-full cursor-pointer sm:h-10 sm:w-10"
               />
             ) : (
               <DefaultProfileIcon />
@@ -290,7 +288,7 @@ export const Navbar = () => {
 
               {(authState === "authenticated") ? (
                 <>
-                  <p className="text-sm mb-2 ml-3">
+                  <p className="mb-2 ml-3 text-sm">
                     Connected to Anilist as {user.name}
                   </p>
                   <a
@@ -298,7 +296,7 @@ export const Navbar = () => {
                       setIsChatBubbleOpen(false)
                       navigate('/user')
                     }}
-                    className="mb-2 mx-3 text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out cursor-pointer"
+                    className="mx-3 mb-2 transition duration-150 ease-in-out cursor-pointer text-doki-purple hover:text-doki-light-grey"
                   >
                     Go to Profile &rarr;
                   </a>
@@ -306,21 +304,21 @@ export const Navbar = () => {
                 </>
 
               ) : (
-                <p className="text-sm mb-2">
+                <p className="mb-2 text-sm">
                   Connect to Anilist to sync your watchlist.
                 </p>
               )}
               {(authState === 'authenticated') ? (
                 <button
                   onClick={unAuthenticate}
-                  className="mt-2 bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                  className="px-4 py-2 mt-2 text-white transition duration-150 ease-in-out rounded-full bg-doki-purple hover:bg-doki-light-grey hover:text-doki-purple"
                 >
                   Disconnect Anilist
                 </button>
               ) : (
                 <button
                   onClick={authenticate}
-                  className="bg-doki-purple text-white rounded-full px-4 py-2 hover:bg-doki-light-grey hover:text-doki-purple transition duration-150 ease-in-out"
+                  className="px-4 py-2 text-white transition duration-150 ease-in-out rounded-full bg-doki-purple hover:bg-doki-light-grey hover:text-doki-purple"
                 >
                   Connect to Anilist
                 </button>
@@ -329,7 +327,7 @@ export const Navbar = () => {
 
               <button
                 onClick={() => setIsChatBubbleOpen(false)}
-                className="mt-2 ml-4 text-sm text-doki-purple hover:text-doki-light-grey transition duration-150 ease-in-out"
+                className="mt-2 ml-4 text-sm transition duration-150 ease-in-out text-doki-purple hover:text-doki-light-grey"
               >
                 Close
               </button>
